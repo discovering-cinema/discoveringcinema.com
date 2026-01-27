@@ -23,12 +23,13 @@ export async function GET() {
         title: frontmatter.title || file.replace(/\.mdx$/, ''),
         date: frontmatter.date ? new Date(frontmatter.date) : new Date(),
         description: frontmatter.description || '',
+        image: frontmatter.image || '',
       };
     })
     .sort((a, b) => b.date.getTime() - a.date.getTime());
 
   const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>${SITE_TITLE}</title>
     <link>${SITE_URL}</link>
@@ -38,13 +39,23 @@ export async function GET() {
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     ${posts
       .map((post) => {
+        const imageUrl = post.image ? `${SITE_URL}${post.image}` : '';
+        const imageHtml = imageUrl
+          ? `<p><img src="${imageUrl}" alt="${post.title}" /></p>`
+          : '';
+
         return `
     <item>
       <title><![CDATA[${post.title}]]></title>
       <link>${SITE_URL}/journal/${post.slug}</link>
       <guid isPermaLink="true">${SITE_URL}/journal/${post.slug}</guid>
       <pubDate>${post.date.toUTCString()}</pubDate>
-      <description><![CDATA[${post.description}]]></description>
+      <description><![CDATA[${imageHtml}${post.description}]]></description>
+      ${
+        imageUrl
+          ? `<enclosure url="${imageUrl}" length="0" type="image/jpeg" />`
+          : ''
+      }
     </item>`;
       })
       .join('')}
