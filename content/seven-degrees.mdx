@@ -1,0 +1,127 @@
+---
+title: 'Seven Degrees of Collaboration: Beyond Kevin Bacon'
+date: 2026-01-01
+description: 'Looking beyond the poster. Current discovery algorithms emphasise the big-named cast and crew. They see the Director and the Stars, but miss the Crafts. We are building a new kind of graph – one that traces the careers of the thousands of invisible artisans who shape the art form – to prove that the best way to find your next favorite film is to follow the crew, not the cast.'
+image: '/images/journal/seven-degrees.jpg'
+slug: 'seven-degrees'
+series: 'The Open Cinema Project'
+order: 1
+lastWatched: 'The Imaginary (2023) ★★★★☆'
+tags:
+  - Methodology
+  - Graph Theory
+  - Discovery
+---
+
+We’ve all played the game. Six Degrees of Kevin Bacon.
+
+It’s a fun party trick that proves Hollywood is smaller than it looks. You connect Actor A to Actor B through a chain of co-stars. But as a tool for discovering cinema, the game has a flaw: it usually stops at the faces on the poster.
+
+If you loved Sicario, a traditional "Kevin Bacon" logic might link you to Avengers: Infinity War because Josh Brolin is in both. Mathematically, it’s correct. Culturally, it’s useless. The two films share a face, but they share almost no creative DNA.
+
+At **Discovering Cinema**, we are working on a hypothesis: that to find the true connections between films, we need to map the crew, not just the cast. We need to go beyond Kevin Bacon.
+
+We are designing an engine based on **Active Discovery**. Here is the logic behind the experiment.
+
+## The Curiosity for Craft
+
+We are building this for anyone who wants to peel back the curtain.
+
+You might be a dedicated cinephile, or you might just be someone who loves a good story. The distinction doesn't matter. What matters is the desire to learn about the hands that shape the work - especially the ones we aren't usually conscious of.
+
+We often credit the Director or the Lead Actor for a film's impact, but our emotional response is frequently engineered by someone else entirely. It might be the Production Designer who decided the world should look lived-in and grimy. It might be the Editor who decided to hold a shot for three uncomfortable seconds longer than usual.
+
+For this viewer, a recommendation engine shouldn't just say "Watch This." It should say "Watch This, Because…" It should help make the invisible visible.
+
+## The Signal-to-Noise Problem
+
+If you view cinema as a graph - where **Films** are nodes and **People** are the edges connecting them - you immediately run into an engineering problem: Noise.
+
+A modern blockbuster has over 2,000 people in the credits. If we treated every credit as a valid edge in our graph, every film would be connected to almost every other film via a "Second Unit Assistant Grip" or a "Digital Asset Coordinator." The graph becomes a giant, indistinguishable blob.
+
+To make the graph traversable, we have to apply dimensionality reduction. However, we cannot just limit this to the famous names, or we fail our mission to highlight the craft.
+
+We are experimenting with a standard called the **"Collaborative Core."** Instead of a fixed top-seven list, we ingest the **Department Heads** across the entire spectrum of production. This ensures that every creative discipline is represented by its primary author:
+
+- **Direction & Writing**
+- **Performance** (Key Cast & Casting Director)
+- **Visuals** (Cinematographer, Production Designer, Costume Designer)
+- **Structure** (Editor)
+- **Audio** (Composer, Sound Designer)
+- **Spectacle** (VFX Supervisor, Stunt Coordinator, Makeup Dept Head)
+
+This heuristic balances the engineering need for a clean graph with the philosophical need to respect the labor. It filters out the assistants to clarify the map, but it keeps the map wide enough to let you explore the full machinery of the film.
+
+## Following the Thread
+
+Most recommendation engines rely on probabilistic models: "People who bought X also bought Y." This is efficient, but it removes the user's agency. It creates a passive experience.
+
+We are testing a **Deterministic** approach. We don't predict the next movie; we ask the user to choose the path.
+
+When you finish a film in our system, you aren't shown a generic grid of "More Like This." You are shown the "Collaborative Core" - the disciplines listed above (provided the data exists). The discovery process requires you to make a conscious choice about what you enjoyed.
+
+- Did you love the period costumes? Follow the **Costume Designer**.
+- Did you love the soundscape? Follow the **Sound Designer**.
+
+This basic interaction changes the relationship between the user and the algorithm. You aren't being fed content; you are pulling a thread to see where it leads.
+
+## The "Anchor & Explore" Algorithm
+
+Once a user selects a creator - say, Costume Designer Jacqueline Durran - we face a new ranking challenge. She has dozens of credits. Which five do we show?
+
+If we only list her most popular films, we risk just showing the user movies they have already seen. If we show her most obscure films, we risk alienating the user with content they can't access.
+
+To balance this, we are experimenting with a **Stratified Slotting** strategy. However, unlike traditional algorithms that try to guess your taste immediately, we treat personalization as something that must be earned.
+
+1. **The Cold Start (Discovery Mode)** If this is your first time using the interface, we don't pretend to know you. We display the creator's filmography sorted by Prominence and Critical Reception. We show you their best work, period.
+2. **The Warm State (The Anchor)** As you continue to follow threads - clicking on a Sci-Fi film here, a 1970s Thriller there - we begin to understand your preferences naturally. Once we have enough signal, we activate Slot 1: The Anchor.
+   This result is designed to be a bridge. We intersect the creator's filmography with your observed preferences. For example, if you have been exploring Period Dramas, and you click Jacqueline Durran, Slot 1 prioritizes Pride & Prejudice. It connects the new person to your established history.
+3. **The Explorers** The remaining slots (2–5) always remain un-personalized. We deliberately turn off the "Taste Filter" here. We sort these films purely by quality and distinctiveness. This ensures that even as the system learns what you like, it never stops showing you what you might like.
+
+## The Dead End Problem
+
+A graph-based system introduces a risk that Netflix doesn't have: You can get stuck. In designing the graph logic, we have anticipated three specific "Gravity Wells" where the graph stops working, and we are engineering specific escape hatches for them.
+
+1. **The Franchise Loop** Graph theory naturally clusters similar items. If you follow Harrison Ford from Star Wars, the strongest mathematical links are The Empire Strikes Back and Return of the Jedi. If the engine serves you these, you are trapped in a franchise bubble.
+
+   _The Fix:_ We apply a **Diversity Penalty**. If a result shares a "Franchise ID" with the source film, it is heavily down-weighted in the "Explorer" slots. This forces the graph to prioritize films like Witness or Blade Runner, ensuring you move laterally through his career, not just vertically through his sequels.
+
+2. **The One-Hit Wonder** Sometimes you follow a Cinematographer only to find they shot one work of genius and then vanished into commercials. The graph leads to a dead end.
+
+   _The Fix:_ We are designing a **"Departmental Shift."** If a creator has no other feature credits, the system acknowledges the dead end but suggests a lateral move: "No other films found. Try following the Director or Editor of this film instead."
+
+3. **The Data Void** Because we rely on open data (Wikidata), there will be gaps. You might find an obscure 1970s film where the credit list is incomplete.
+
+   _The Fix:_ Adaptation. Our interface is designed to only render the threads that exist. If we don't know who the Editor was, we don't show a broken link. However, because we rely on community data, we view these gaps as an opportunity. We intend to highlight these "incomplete" films, inviting users to visit Wikidata and fix the map for the next explorer.
+
+## The Case for Scarcity: One Move a Day
+
+We are doing something that might seem counterintuitive for a web application. We are limiting how much you can use it.
+
+In the age of the "Infinite Scroll," we have been conditioned to believe that access to everything, all the time is the ultimate goal. But in practice, infinite choice often leads to "Analysis Paralysis" - the 45 minutes you spend doom-scrolling through Netflix, terrified of picking the wrong movie, only to give up and go to sleep.
+
+We want to cure the Paradox of Choice.
+
+At **Discovering Cinema**, you don't get infinite searches. You get **One Move per Day**.
+
+Here is the rule: **The chain never breaks**.
+
+When you sign up, you pick a seed film. That is Day 1. You follow a thread to a new film - say, by following the Cinematographer. That new film becomes your starting point for Day 2.
+
+## Why?
+
+1. **High Stakes:** When you know that today's choice is tomorrow's starting line, you stop browsing and start thinking. You won't click a link randomly; you will read the dossier. You will ask, "Do I really want to go down this path?"
+2. **The Narrative:** This isn't about finding one movie; it's about building a lineage. On Day 365, you will be able to look back and see the exact path that took you from The Godfather to Paddington 2. You will see a year-long story of your own curiosity.
+3. **The Ritual:** We don't want to be the app you binge. We want to be the daily ritual - the five minutes you spend over morning coffee, deciding where to steer your ship next.
+
+We are building a tool for **Savoring**, not gorging.
+
+## A Statement of Intent
+
+We don't claim that this method is superior to the industrial-scale algorithms running on your streaming services. Those systems are built to keep you watching for as long as possible.
+
+Our goal is different. We are optimizing for **Context**.
+
+We believe that by making the connections visible - by showing you exactly _why_ a film is recommended - we can build a tool that doesn't just help you find a movie for Friday night, but helps you understand your own taste a little better.
+
+We are currently building the architecture to power this graph, and we invite you to follow along as we test the hypothesis.
