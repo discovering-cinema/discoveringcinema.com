@@ -1,9 +1,105 @@
-<!doctype html>
-<html lang="en-gb">
-    <head>
-        <title>Discovering Cinema</title>
-    </head>
-    <body>
-        <h1>Discovering Cinema</h1>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovering Cinema | The Vision</title>
+    <meta name="description" content="We are curators, not critics. An archive of the films that matter, and a lab for new ways to discover them. Coming soon.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://discoveringcinema.com/">
+    <meta property="og:title" content="Discovering Cinema">
+    <meta property="og:description" content="Discovery, not just search. A new home for film lovers.">
+    <meta property="og:image" content="https://discoveringcinema.com/social-share.jpg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['"Courier New"', 'Courier', 'monospace'],
+                    },
+                    colors: {
+                        'cinema-black': '#050505',
+                        'terminal-green': '#00ff41',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-cinema-black text-neutral-200 font-mono min-h-screen flex flex-col items-center py-12 px-6 leading-relaxed antialiased">
+
+<div class="w-full max-w-[600px] mt-[5vh]">
+
+    <header class="mb-16 text-center border-b border-neutral-800 pb-8">
+        <h1 class="text-2xl tracking-[0.2em] uppercase font-bold text-white">
+            Discovering Cinema
+        </h1>
+        <div class="text-xs text-neutral-400 mt-2 uppercase tracking-wider">
+            The Vision
+        </div>
+    </header>
+
+    <main class="space-y-12">
+
+        <div class="manifesto-item">
+            <h2 class="text-lg text-white mb-2 uppercase tracking-wide font-bold">01. Expand the Frame</h2>
+            <p class="text-base text-neutral-200">
+                We exist to help you discover incredible cinema and expand your taste. Through a series of experimental projects and data visualizations, we are building new pathways into film history—finding the threads that connect the movies you love to the movies you haven't seen yet.
+            </p>
+        </div>
+
+        <div class="manifesto-item">
+            <h2 class="text-lg text-white mb-2 uppercase tracking-wide font-bold">02. Beyond the Catalogue</h2>
+            <p class="text-base text-neutral-200">
+                Streaming platforms are limited by what they own. If a film's license expires, it disappears from your feed. This rules out thousands of films that aren't currently being streamed. We are building tools that look beyond commercial catalogues to map the entire landscape of cinema, not just what's "Now Playing."
+            </p>
+        </div>
+
+        <div class="manifesto-item">
+            <h2 class="text-lg text-white mb-2 uppercase tracking-wide font-bold">03. Scale Agnostic</h2>
+            <p class="text-base text-neutral-200">
+                Discovery should be based on impact, not marketing spend. We are designing algorithms that treat a $200 million blockbuster and a $2,000 micro-budget debut as equals. If the film is good, our tools will help it find its audience, regardless of the budget behind it.
+            </p>
+        </div>
+
+        <div class="manifesto-item">
+            <h2 class="text-lg text-white mb-2 uppercase tracking-wide font-bold">04. Open Architecture</h2>
+            <p class="text-base text-neutral-200">
+                We believe in transparency. We are building these tools in the open so anyone can see how they work, suggest improvements, or build upon them.
+            </p>
+            <div class="mt-6">
+                <a href="https://github.com/discovering-cinema" target="_blank" class="text-terminal-green border-b border-terminal-green hover:bg-terminal-green/10 transition-colors duration-300 pb-0.5 text-sm font-bold">
+                    &gt;&gt; VIEW SOURCE ON GITHUB
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="mt-16 p-8 border border-neutral-700 text-center rounded-sm">
+        <p class="mb-6 text-sm text-neutral-200">
+            We are actively building the foundation. If you are interested in helping out—whether with code, data, or words—we want to hear from you.
+        </p>
+
+        <a href="mailto:editor@discoveringcinema.com?subject=Getting Involved&body=Hi, I'm interested in helping out with Discovering Cinema..."
+           class="inline-block bg-neutral-200 text-black px-8 py-4 uppercase font-bold tracking-widest hover:bg-white transition-colors text-sm">
+            Get Involved
+        </a>
+
+        <p class="mt-4 text-[10px] text-neutral-400 uppercase">
+            (Or just say hello.)
+        </p>
+    </div>
+
+    <footer class="mt-16 text-neutral-500 text-xs text-center">
+        <p>EST. 2026</p>
+        <p class="mt-2">&copy; Discovering Cinema&trade;</p>
+    </footer>
+
+</div>
+
+</body>
 </html>
