@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import 'katex/dist/katex.min.css';
 import Footer from '@/app/components/Footer';
@@ -44,6 +45,7 @@ export default function RootLayout({
       <body className="antialiased">
         <main>{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
