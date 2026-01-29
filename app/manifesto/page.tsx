@@ -88,9 +88,9 @@ export default function ManifestoPage() {
           ))}
 
           <section className="rounded-lg border border-zinc-200 bg-zinc-50/50 p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
-            <h3 className="font-serif text-xl text-zinc-900 dark:text-zinc-100">
+            <h2 className="font-serif text-xl text-zinc-900 dark:text-zinc-100">
               What We Are Not
-            </h3>
+            </h2>
             <ul className="mt-6 space-y-3">
               {[
                 'We are not a streaming service.',

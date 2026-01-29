@@ -102,9 +102,9 @@ export default function Home() {
                       />
                     )}
                   </div>
-                  <h3 className="font-serif text-xl font-normal text-zinc-900 transition-colors group-hover:text-teal-500 dark:text-zinc-100 dark:group-hover:text-teal-400">
+                  <h2 className="font-serif text-xl font-normal text-zinc-900 transition-colors group-hover:text-teal-500 dark:text-zinc-100 dark:group-hover:text-teal-400">
                     {post.title}
-                  </h3>
+                  </h2>
                   {post.date && (
                     <time className="mt-1 block text-sm text-zinc-600 dark:text-zinc-400">
                       {post.date.toLocaleDateString('en-US', {
