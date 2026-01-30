@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import 'katex/dist/katex.min.css';
 import Footer from '@/app/components/Footer';
@@ -48,6 +49,10 @@ export default function RootLayout({
         <Footer />
         <Analytics />
         <SpeedInsights />
+        {process.env.NODE_ENV === 'production' &&
+          process.env.NEXT_PUBLIC_GA_ID && (
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+          )}
       </body>
     </html>
   );
