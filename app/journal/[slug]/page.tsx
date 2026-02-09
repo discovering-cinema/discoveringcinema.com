@@ -66,6 +66,7 @@ export default async function Page({
 
   // Series logic
   let seriesPosts: { title: string; slug: string; current: boolean }[] = [];
+  let nextPost: { title: string; slug: string } | null = null;
   if (frontmatter.series) {
     const seriesName = frontmatter.series;
     const allFiles = fs.readdirSync(contentDir);
@@ -89,6 +90,11 @@ export default async function Page({
         slug: post.slug,
         current: post.slug === slug,
       }));
+
+    const currentIndex = seriesPosts.findIndex((post) => post.current);
+    if (currentIndex !== -1 && currentIndex < seriesPosts.length - 1) {
+      nextPost = seriesPosts[currentIndex + 1];
+    }
   }
 
   const jsonLd: WithContext<BlogPosting> = {
@@ -193,6 +199,32 @@ export default async function Page({
           )}
 
           <Post />
+          {nextPost && (
+            <div className="mt-12 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 not-prose">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-2">
+                Next in series
+              </h3>
+              <Link
+                href={`/journal/${nextPost.slug}`}
+                className="group flex items-center justify-between gap-4"
+              >
+                <span className="text-xl font-serif text-zinc-900 dark:text-zinc-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                  {nextPost.title}
+                </span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-6 h-6 text-zinc-400 dark:text-zinc-500 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-transform group-hover:translate-x-1"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          )}
           <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
             <AuthorBio lastWatched={frontmatter?.lastWatched} />
           </div>
