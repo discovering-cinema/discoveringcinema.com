@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="mx-auto max-w-2xl px-6 py-8">
+    <header className="py-8">
       <nav className="flex items-center justify-between">
         <Link
           href="/"

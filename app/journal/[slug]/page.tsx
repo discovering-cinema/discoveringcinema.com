@@ -124,14 +124,19 @@ export default async function Page({
   return (
     <>
       <Header />
-      <div className="mx-auto max-w-2xl py-8 px-6">
+      <div className="py-8">
         <JsonLd data={jsonLd} />
-        <article className="prose prose-zinc dark:prose-invert prose-h1:font-serif prose-h1:font-normal prose-h1:tracking-tight prose-h2:font-serif prose-h2:font-normal prose-h3:font-serif prose-h3:font-normal prose-h4:font-serif prose-h4:font-normal">
+        <article className="prose max-w-none prose-zinc dark:prose-invert prose-h1:font-serif prose-h1:font-normal prose-h1:tracking-tight prose-h2:font-serif prose-h2:font-normal prose-h3:font-serif prose-h3:font-normal prose-h4:font-serif prose-h4:font-normal">
+          {frontmatter?.series && (
+            <small className="bg-teal-50 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block">
+              Series: <span className="font-medium">{frontmatter.series}</span>
+            </small>
+          )}
           {frontmatter?.title && <h1>{frontmatter.title}</h1>}
           {frontmatter?.date && (
             <div className="flex items-center justify-between mb-8">
               <time className="text-sm text-zinc-600 dark:text-zinc-400">
-                {new Date(frontmatter.date).toLocaleDateString('en-US', {
+                {new Date(frontmatter.date).toLocaleDateString('en-GB', {
                   year: 'numeric',
                   month: 'short',
                   day: 'numeric',

@@ -30,6 +30,7 @@ export default function Home() {
       return {
         slug: file.replace(/\.mdx$/, ''),
         title: frontmatter.title || file.replace(/\.mdx$/, ''),
+        series: frontmatter.series,
         date: frontmatter.date ? new Date(frontmatter.date) : null,
         description: frontmatter.description,
         tags: frontmatter.tags || ['Article'],
@@ -53,7 +54,7 @@ export default function Home() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-6">
+    <>
       <JsonLd data={jsonLd} />
       {/* Hero Section */}
       <section className="py-16 md:py-24">
@@ -102,6 +103,11 @@ export default function Home() {
                       />
                     )}
                   </div>
+                  {post.series && (
+                    <small className="bg-teal-50 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block">
+                      Series: <span className="font-medium">{post.series}</span>
+                    </small>
+                  )}
                   <h2 className="font-serif text-xl font-normal text-zinc-900 transition-colors group-hover:text-teal-500 dark:text-zinc-100 dark:group-hover:text-teal-400">
                     {post.title}
                   </h2>
@@ -162,6 +168,6 @@ export default function Home() {
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }
