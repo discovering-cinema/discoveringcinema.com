@@ -8,26 +8,30 @@ import JsonLd from '@/app/components/JsonLd';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Journal | Discovering Cinema',
-  description:
-    'A collection of articles about cinema, craft, and preservation.',
-  openGraph: {
-    title: 'Journal | Discovering Cinema',
-    description:
-      'A collection of articles about cinema, craft, and preservation.',
-    type: 'website',
-    url: 'https://discoveringcinema.com/journal',
-  },
-  alternates: {
-    canonical: '/journal',
-    types: {
-      'application/rss+xml': '/rss.xml',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}): Promise<Metadata> {
+  const { tag } = await params;
+  const decodedTag = decodeURIComponent(tag);
+  
+  return {
+    title: `Articles tagged with "${decodedTag}" | Discovering Cinema`,
+    description: `A collection of articles about ${decodedTag} in cinema.`,
+    alternates: {
+      canonical: `/journal/tag/${tag}`,
     },
-  },
-};
+  };
+}
 
-export default function JournalIndex() {
+export default async function TagIndex({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}) {
+  const { tag } = await params;
+  const decodedTag = decodeURIComponent(tag);
   const contentDir = path.join(process.cwd(), 'content');
   const files = fs.readdirSync(contentDir);
 
@@ -54,6 +58,9 @@ export default function JournalIndex() {
         image: frontmatter.image,
       };
     })
+    .filter((post) => 
+      post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase())
+    )
     .sort((a, b) => {
       if (!a.date || !b.date) return 0;
       return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -62,10 +69,9 @@ export default function JournalIndex() {
   const jsonLd: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Journal | Discovering Cinema',
-    description:
-      'A collection of articles about cinema, craft, and preservation.',
-    url: 'https://discoveringcinema.com/journal',
+    name: `Articles tagged with "${decodedTag}" | Discovering Cinema`,
+    description: `A collection of articles about ${decodedTag} in cinema.`,
+    url: `https://discoveringcinema.com/journal/tag/${tag}`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: posts.map((post, index) => ({
@@ -82,12 +88,22 @@ export default function JournalIndex() {
       <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16">
+        <div className="flex items-center gap-3 mb-6">
+          <Link 
+            href="/journal"
+            className="text-sm font-medium text-teal-500 hover:text-teal-600 transition-colors flex items-center gap-1"
+          >
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-4 w-4 stroke-current rotate-180">
+              <path d="M6.75 5.75 9.25 8l-2.5 2.25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Back to Journal
+          </Link>
+        </div>
         <h1 className="font-serif text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
-          Journal
+          Tag: {decodedTag}
         </h1>
         <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-400">
-          Thoughts on cinema, technology, and the invisible threads that connect
-          them.
+          {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged with "{decodedTag}".
         </p>
       </header>
 

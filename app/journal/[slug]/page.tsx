@@ -142,18 +142,6 @@ export default async function Page({
                   day: 'numeric',
                 })}
               </time>
-              {frontmatter?.tags && (
-                <div className="flex flex-wrap gap-2">
-                  {frontmatter.tags.map((tag: string) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           )}
           {frontmatter?.image && (
@@ -204,6 +192,24 @@ export default async function Page({
           )}
 
           <Post />
+          {frontmatter?.tags && frontmatter.tags.length > 0 && (
+            <div className="mt-16 not-prose">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mb-4">
+                Explore more on these topics
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {frontmatter.tags.map((tag: string) => (
+                  <Link
+                    key={tag}
+                    href={`/journal/tag/${encodeURIComponent(tag.toLowerCase())}`}
+                    className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 rounded-full hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700"
+                  >
+                    {tag}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
           {nextPost && (
             <div className="mt-12 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 not-prose">
               <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-2">
