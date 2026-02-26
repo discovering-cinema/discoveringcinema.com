@@ -145,15 +145,22 @@ export default async function Page({
             </div>
           )}
           {frontmatter?.image && (
-            <div className="relative mb-12 aspect-video overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 not-prose">
-              <Image
-                src={frontmatter.image}
-                alt={frontmatter.title || ''}
-                fill
-                sizes="(max-width: 672px) calc(100vw - 48px), 672px"
-                className="object-cover"
-                priority
-              />
+            <div className="relative mb-12 not-prose">
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+                <Image
+                  src={frontmatter.image}
+                  alt={frontmatter.imageDescription || frontmatter.title || ''}
+                  fill
+                  sizes="(max-width: 672px) calc(100vw - 48px), 672px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              {frontmatter.imageDescription && (
+                <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed italic">
+                  {frontmatter.imageDescription}
+                </p>
+              )}
             </div>
           )}
 
