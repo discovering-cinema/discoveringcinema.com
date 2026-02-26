@@ -3,12 +3,14 @@ import Link from 'next/link';
 import type { ComponentPropsWithoutRef } from 'react';
 import YouTube from '@/app/components/YouTube';
 import WrappedImage from '@/app/components/WrappedImage';
+import FullWidth from '@/app/components/FullWidth';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
     YouTube,
     WrappedImage,
+    FullWidth,
     a: ({ href, children, ...props }: ComponentPropsWithoutRef<'a'>) => {
       const isExternal = href?.startsWith('http');
       if (isExternal) {

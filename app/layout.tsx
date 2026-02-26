@@ -43,8 +43,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="antialiased">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} overflow-x-hidden`}>
+      <body className="antialiased overflow-x-hidden">
         <main className="mx-auto max-w-2xl px-6">{children}</main>
         <Footer />
         <Analytics />
