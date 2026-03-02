@@ -12,6 +12,13 @@ export interface Post {
   series?: string;
   order?: number;
   faq?: { question: string; answer: string }[];
+  dataset?: {
+    name: string;
+    description: string;
+    creator: string;
+    variableMeasured: { name: string; value: string }[];
+    distribution: { encodingFormat: string; contentUrl: string }[];
+  };
 }
 
 export function getAllPosts(): Post[] {
@@ -36,6 +43,7 @@ export function getAllPosts(): Post[] {
         series: frontmatter.series,
         order: frontmatter.order,
         faq: frontmatter.faq,
+        dataset: frontmatter.dataset,
       };
     })
     .sort((a, b) => {

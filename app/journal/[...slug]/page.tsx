@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { BlogPosting, FAQPage, WithContext } from 'schema-dts';
+import { BlogPosting, FAQPage, Dataset, WithContext } from 'schema-dts';
 import matter from 'gray-matter';
 import AuthorBio from '@/app/components/AuthorBio';
 import Image from 'next/image';
@@ -88,6 +88,47 @@ export default async function Page({
     }
   }
 
+  const faq: FAQPage | null = frontmatter.faq
+    ? {
+        '@type': 'FAQPage',
+        mainEntity: frontmatter.faq.map(
+          (item: { question: string; answer: string }) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: item.answer,
+            },
+          }),
+        ),
+      }
+    : null;
+  const dataset: Dataset | null = frontmatter.dataset
+    ? {
+        '@type': 'Dataset',
+        name: frontmatter.dataset.name,
+        description: frontmatter.dataset.description,
+        creator: {
+          '@type': 'Organization',
+          name: frontmatter.dataset.creator,
+        },
+        variableMeasured: frontmatter.dataset.variableMeasured.map(
+          (v: { name: string; value: string }) => ({
+            '@type': 'PropertyValue',
+            name: v.name,
+            value: v.value,
+          }),
+        ),
+        distribution: frontmatter.dataset.distribution.map(
+          (d: { encodingFormat: string; contentUrl: string }) => ({
+            '@type': 'DataDownload',
+            encodingFormat: d.encodingFormat,
+            contentUrl: d.contentUrl,
+          }),
+        ),
+      }
+    : null;
+
   const jsonLd: WithContext<BlogPosting> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -109,32 +150,18 @@ export default async function Page({
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://discoveringcinema.com/journal/${slug}`,
+      hasPart: [
+        ...(faq ? [faq] : []),
+        ...(dataset ? [dataset] : []),
+      ],
     },
   };
-
-  const faqJsonLd: WithContext<FAQPage> | null = frontmatter.faq
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: frontmatter.faq.map(
-          (item: { question: string; answer: string }) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer,
-            },
-          }),
-        ),
-      }
-    : null;
 
   return (
     <>
       <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
-        {faqJsonLd && <JsonLd data={faqJsonLd} />}
         <article className="prose max-w-none prose-zinc dark:prose-invert prose-h1:font-serif prose-h1:font-normal prose-h1:tracking-tight prose-h2:font-serif prose-h2:font-normal prose-h3:font-serif prose-h3:font-normal prose-h4:font-serif prose-h4:font-normal">
           {frontmatter?.series && (
             <small className="bg-teal-50 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block">
