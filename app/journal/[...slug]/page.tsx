@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { BlogPosting, FAQPage, Dataset, WithContext } from 'schema-dts';
+import { BlogPosting, FAQPage, Dataset, SoftwareApplication, BreadcrumbList, WithContext } from 'schema-dts';
 import matter from 'gray-matter';
 import AuthorBio from '@/app/components/AuthorBio';
 import Image from 'next/image';
@@ -128,6 +128,51 @@ export default async function Page({
         ),
       }
     : null;
+  const softwareApplication: SoftwareApplication | null = frontmatter.softwareApplication
+    ? {
+        '@type': 'SoftwareApplication',
+        name: frontmatter.softwareApplication.name,
+        operatingSystem: frontmatter.softwareApplication.operatingSystem,
+        applicationCategory: frontmatter.softwareApplication.applicationCategory,
+        description: frontmatter.softwareApplication.description,
+        offers: {
+          '@type': 'Offer',
+          price: frontmatter.softwareApplication.offers.price,
+          priceCurrency: frontmatter.softwareApplication.offers.priceCurrency,
+        },
+        featureList: frontmatter.softwareApplication.featureList,
+      }
+    : null;
+
+  const breadcrumbList: BreadcrumbList = {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://discoveringcinema.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Journal',
+        item: 'https://discoveringcinema.com/journal',
+      },
+      ...slugArray.slice(0, -1).map((part, index) => ({
+        '@type': 'ListItem' as const,
+        position: 3 + index,
+        name: part.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        item: `https://discoveringcinema.com/journal/${slugArray.slice(0, index + 1).join('/')}`,
+      })),
+      {
+        '@type': 'ListItem',
+        position: 3 + (slugArray.length - 1),
+        name: frontmatter.title,
+        item: `https://discoveringcinema.com/journal/${slug}`,
+      },
+    ],
+  };
 
   const jsonLd: WithContext<BlogPosting> = {
     '@context': 'https://schema.org',
@@ -150,9 +195,11 @@ export default async function Page({
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://discoveringcinema.com/journal/${slug}`,
+      breadcrumb: breadcrumbList,
       hasPart: [
         ...(faq ? [faq] : []),
         ...(dataset ? [dataset] : []),
+        ...(softwareApplication ? [softwareApplication] : []),
       ],
     },
   };

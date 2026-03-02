@@ -19,6 +19,17 @@ export interface Post {
     variableMeasured: { name: string; value: string }[];
     distribution: { encodingFormat: string; contentUrl: string }[];
   };
+  softwareApplication?: {
+    name: string;
+    operatingSystem: string;
+    applicationCategory: string;
+    description: string;
+    offers: {
+      price: string;
+      priceCurrency: string;
+    };
+    featureList: string[];
+  };
 }
 
 export function getAllPosts(): Post[] {
@@ -44,6 +55,7 @@ export function getAllPosts(): Post[] {
         order: frontmatter.order,
         faq: frontmatter.faq,
         dataset: frontmatter.dataset,
+        softwareApplication: frontmatter.softwareApplication,
       };
     })
     .sort((a, b) => {
