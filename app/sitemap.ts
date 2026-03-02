@@ -1,7 +1,5 @@
-import { MetadataRoute } from 'next';
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import {MetadataRoute} from 'next';
+import {getAllPosts} from '@/app/lib/posts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://discoveringcinema.com';
@@ -15,26 +13,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Dynamic journal routes
-  const contentDir = path.join(process.cwd(), 'content');
-  const files = fs.readdirSync(contentDir);
-
-  const journalRoutes = files
-    .filter((file) => file.endsWith('.mdx'))
-    .map((file) => {
-      const filePath = path.join(contentDir, file);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const { data: frontmatter } = matter(fileContent);
-      const slug = file.replace(/\.mdx$/, '');
-
-      return {
-        url: `${baseUrl}/journal/${slug}`,
-        lastModified: frontmatter.date
-          ? new Date(frontmatter.date)
-          : new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-      };
-    });
+  const journalRoutes = getAllPosts().map((post) => {
+    return {
+      url: `${baseUrl}/journal/${post.slug}`,
+      lastModified: post.date || new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    };
+  });
 
   return [...routes, ...journalRoutes];
 }

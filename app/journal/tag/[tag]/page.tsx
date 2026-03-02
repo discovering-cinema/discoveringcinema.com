@@ -1,12 +1,10 @@
-import fs from 'fs';
-import path from 'path';
 import Link from 'next/link';
 import Image from 'next/image';
-import matter from 'gray-matter';
 import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
-import { CollectionPage, WithContext } from 'schema-dts';
-import { Metadata } from 'next';
+import {CollectionPage, WithContext} from 'schema-dts';
+import {Metadata} from 'next';
+import {getAllPosts} from '@/app/lib/posts';
 
 export async function generateMetadata({
   params,
@@ -32,39 +30,21 @@ export default async function TagIndex({
 }) {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
-  const contentDir = path.join(process.cwd(), 'content');
-  const files = fs.readdirSync(contentDir);
-
-  const posts = files
-    .filter((file) => file.endsWith('.mdx'))
-    .map((file) => {
-      const filePath = path.join(contentDir, file);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const { data: frontmatter } = matter(fileContent);
-
-      return {
-        slug: file.replace(/\.mdx$/, ''),
-        title: frontmatter.title || file.replace(/\.mdx$/, ''),
-        series: frontmatter.series,
-        date: frontmatter.date
-          ? new Date(frontmatter.date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })
-          : null,
-        description: frontmatter.description,
-        tags: frontmatter.tags || [],
-        image: frontmatter.image,
-      };
-    })
+  
+  const posts = getAllPosts()
     .filter((post) => 
       post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase())
     )
-    .sort((a, b) => {
-      if (!a.date || !b.date) return 0;
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
+    .map((post) => ({
+      ...post,
+      date: post.date
+        ? post.date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
+        : null,
+    }));
 
   const jsonLd: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',

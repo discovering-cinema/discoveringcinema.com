@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
 import JsonLd from '@/app/components/JsonLd';
-import { WebSite, WithContext } from 'schema-dts';
-import { Metadata } from 'next';
+import {WebSite, WithContext} from 'schema-dts';
+import {Metadata} from 'next';
+import {getAllPosts} from '@/app/lib/posts';
 
 export const metadata: Metadata = {
   alternates: {
@@ -17,31 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const contentDir = path.join(process.cwd(), 'content');
-  const files = fs.readdirSync(contentDir);
-
-  const posts = files
-    .filter((file) => file.endsWith('.mdx'))
-    .map((file) => {
-      const filePath = path.join(contentDir, file);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const { data: frontmatter } = matter(fileContent);
-
-      return {
-        slug: file.replace(/\.mdx$/, ''),
-        title: frontmatter.title || file.replace(/\.mdx$/, ''),
-        series: frontmatter.series,
-        date: frontmatter.date ? new Date(frontmatter.date) : null,
-        description: frontmatter.description,
-        tags: frontmatter.tags || ['Article'],
-        image: frontmatter.image,
-      };
-    })
-    .sort((a, b) => {
-      if (!a.date || !b.date) return 0;
-      return b.date.getTime() - a.date.getTime();
-    });
-
+  const posts = getAllPosts();
   const displayPosts = posts.slice(0, 4);
   const hasMorePosts = posts.length > 4;
 
