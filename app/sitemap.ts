@@ -1,11 +1,11 @@
 import {MetadataRoute} from 'next';
-import {getAllPosts} from '@/app/lib/posts';
+import {getAllPosts, getAllEducationalContent, getAllTags, getAllSeries} from '@/app/lib/posts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://discoveringcinema.com';
 
   // Static routes
-  const routes = ['', '/manifesto', '/journal'].map((route) => ({
+  const routes = ['', '/manifesto', '/journal', '/concepts', '/journal/series'].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
@@ -22,5 +22,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  return [...routes, ...journalRoutes];
+  const conceptRoutes = getAllEducationalContent().map((item) => ({
+    url: `${baseUrl}${item.urlPath}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }));
+
+  const tagRoutes = getAllTags().map((tag) => ({
+    url: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.5,
+  }));
+
+  const seriesRoutes = getAllSeries().map((s) => ({
+    url: `${baseUrl}/journal/series/${s.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }));
+
+  return [...routes, ...journalRoutes, ...conceptRoutes, ...tagRoutes, ...seriesRoutes];
 }

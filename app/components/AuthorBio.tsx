@@ -12,7 +12,7 @@ export default function AuthorBio({ lastWatched }: AuthorBioProps) {
         alt="Christopher Bray"
         width={64}
         height={64}
-        className="h-16 w-16 flex-shrink-0 rounded bg-zinc-100 object-cover dark:bg-zinc-800"
+        className="h-16 w-16 flex-shrink-0 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
       />
 
       <div className="flex-1">

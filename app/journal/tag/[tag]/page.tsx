@@ -118,15 +118,18 @@ export default async function TagIndex({
                   className="absolute inset-y-0 left-0 flex items-center"
                   aria-hidden="true"
                 >
-                  <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800" />
+                  <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-700" />
                 </span>
                 {post.date}
               </time>
             )}
-            {post.series && (
-              <small className="bg-teal-50 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block">
-                Series: <span className="font-medium">{post.series}</span>
-              </small>
+            {post.series && post.seriesSlug && (
+              <Link
+                href={`/journal/series/${post.seriesSlug}`}
+                className="relative z-10 bg-teal-50 dark:bg-teal-900/30 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
+              >
+                <small>Series: <span className="font-medium">{post.series}</span></small>
+              </Link>
             )}
             <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
               <Link href={`/journal/${post.slug}`}>

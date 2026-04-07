@@ -58,7 +58,7 @@ export default function ManifestoPage() {
   return (
     <>
       <Header />
-      <div className="mx-auto max-w-2xl py-12 px-6 antialiased">
+      <div className="py-12">
         <JsonLd data={jsonLd} />
         <header className="mb-16">
           <h1 className="font-serif text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">

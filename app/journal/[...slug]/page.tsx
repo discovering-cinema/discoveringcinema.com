@@ -1,15 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { BlogPosting, FAQPage, Dataset, SoftwareApplication, BreadcrumbList, WithContext } from 'schema-dts';
+import {Metadata} from 'next';
+import {notFound} from 'next/navigation';
+import {BlogPosting, BreadcrumbList, Dataset, FAQPage, SoftwareApplication, WithContext} from 'schema-dts';
 import matter from 'gray-matter';
 import AuthorBio from '@/app/components/AuthorBio';
 import Image from 'next/image';
 import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
-import { getAllPosts } from '@/app/lib/posts';
+import {getAllPosts} from '@/app/lib/posts';
 
 export async function generateMetadata({
   params,
@@ -19,7 +19,7 @@ export async function generateMetadata({
   const { slug: slugArray } = await params;
   const slug = slugArray.join('/');
   try {
-    const contentDir = path.join(process.cwd(), 'content');
+    const contentDir = path.join(process.cwd(), 'content/articles');
     const filePath = path.join(contentDir, `${slug}.mdx`);
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const { data: frontmatter } = matter(fileContent);
@@ -55,7 +55,7 @@ export default async function Page({
   const { slug: slugArray } = await params;
   const slug = slugArray.join('/');
 
-  const contentDir = path.join(process.cwd(), 'content');
+  const contentDir = path.join(process.cwd(), 'content/articles');
   const filePath = path.join(contentDir, `${slug}.mdx`);
 
   if (!fs.existsSync(filePath)) {
@@ -65,16 +65,18 @@ export default async function Page({
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const { data: frontmatter } = matter(fileContent);
 
-  const { default: Post } = await import(`@/content/${slug}.mdx`);
+  const { default: Post } = await import(`@/content/articles/${slug}.mdx`);
 
-  // Series logic
+  // Series logic — derive from posts.ts (series detected via series.yml in directory)
+  const currentPost = getAllPosts().find((p) => p.slug === slug);
   let seriesPosts: { title: string; slug: string; current: boolean }[] = [];
   let nextPost: { title: string; slug: string } | null = null;
-  if (frontmatter.series) {
-    const seriesName = frontmatter.series;
+  const seriesName = currentPost?.series;
+  const seriesSlug = currentPost?.seriesSlug;
+  if (seriesName && seriesSlug) {
     const allPosts = getAllPosts();
     seriesPosts = allPosts
-      .filter((post) => post.series === seriesName)
+      .filter((post) => post.seriesSlug === seriesSlug)
       .sort((a, b) => (a.order || 0) - (b.order || 0))
       .map((post) => ({
         title: post.title,
@@ -210,10 +212,13 @@ export default async function Page({
       <div className="py-8">
         <JsonLd data={jsonLd} />
         <article className="prose max-w-none prose-zinc dark:prose-invert prose-h1:font-serif prose-h1:font-normal prose-h1:tracking-tight prose-h2:font-serif prose-h2:font-normal prose-h3:font-serif prose-h3:font-normal prose-h4:font-serif prose-h4:font-normal">
-          {frontmatter?.series && (
-            <small className="bg-teal-50 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block">
-              Series: <span className="font-medium">{frontmatter.series}</span>
-            </small>
+          {seriesName && seriesSlug && (
+            <Link
+              href={`/journal/series/${seriesSlug}`}
+              className="relative z-10 bg-teal-50 dark:bg-teal-900/30 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
+            >
+              <small>Series: <span className="font-medium">{seriesName}</span></small>
+            </Link>
           )}
           {frontmatter?.title && <h1>{frontmatter.title}</h1>}
           {frontmatter?.date && (
@@ -248,9 +253,14 @@ export default async function Page({
           )}
 
           {seriesPosts.length > 0 && (
-            <div className="mb-12 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 not-prose">
+            <div className="mb-12 p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 not-prose">
               <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mb-4">
-                In this series: {frontmatter.series}
+                In this series:{' '}
+                {seriesSlug ? (
+                  <Link href={`/journal/series/${seriesSlug}`} className="text-teal-600 dark:text-teal-400 hover:underline">
+                    {seriesName}
+                  </Link>
+                ) : seriesName}
               </h2>
               <nav>
                 <ol className="space-y-3">
@@ -269,7 +279,7 @@ export default async function Page({
                       ) : (
                         <Link
                           href={`/journal/${post.slug}`}
-                          className="text-zinc-600 dark:text-zinc-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                          className="text-zinc-600 dark:text-zinc-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                         >
                           {post.title}
                         </Link>
@@ -291,7 +301,7 @@ export default async function Page({
                 {frontmatter.tags.map((tag: string) => (
                   <Link
                     key={tag}
-                    href={`/journal/tag/${encodeURIComponent(tag.toLowerCase())}`}
+                    href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
                     className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 rounded-full hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700"
                   >
                     {tag}
@@ -301,7 +311,7 @@ export default async function Page({
             </div>
           )}
           {nextPost && (
-            <div className="mt-12 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 not-prose">
+            <div className="mt-12 p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 not-prose">
               <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-2">
                 Next in series
               </h3>
@@ -313,15 +323,17 @@ export default async function Page({
                   {nextPost.title}
                 </span>
                 <svg
-                  viewBox="0 0 24 24"
+                  viewBox="0 0 16 16"
                   fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-6 h-6 text-zinc-400 dark:text-zinc-500 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                  className="ml-1 h-4 w-4 shrink-0 stroke-current text-zinc-400 transition-transform group-hover:translate-x-1 group-hover:text-teal-600 dark:text-zinc-500 dark:group-hover:text-teal-400"
                 >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
+                  <path
+                    d="M6.75 5.75 9.25 8l-2.5 2.25"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </Link>
             </div>
