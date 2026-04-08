@@ -109,7 +109,7 @@ export default async function SeriesPage({
                   alt={post.title}
                   fill
                   sizes="(max-width: 672px) calc(100vw - 48px), 672px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
                   priority={index === 0}
                 />
               ) : (
@@ -123,17 +123,6 @@ export default async function SeriesPage({
                 Part {post.order}
               </small>
             )}
-            {post.date && (
-              <time
-                className="relative z-10 mb-3 flex items-center text-sm text-muted-foreground pl-3.5"
-                dateTime={post.date}
-              >
-                <span className="absolute inset-y-0 left-0 flex items-center" aria-hidden="true">
-                  <span className="h-4 w-0.5 rounded-full bg-border" />
-                </span>
-                {post.date}
-              </time>
-            )}
             <h2 className="font-serif text-2xl font-normal tracking-tight text-foreground">
               <Link href={`/journal/${post.slug}`}>
                 <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
@@ -145,25 +134,17 @@ export default async function SeriesPage({
                 {post.description}
               </p>
             )}
-            <div
-              aria-hidden="true"
-              className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"
-            >
-              Read article
-              <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-                className="ml-1 h-4 w-4 stroke-current transition-transform group-hover:translate-x-1"
-              >
-                <path
-                  d="M6.75 5.75 9.25 8l-2.5 2.25"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+            {post.date && (
+                <time
+                    className="relative z-10 my-3 flex items-center text-sm text-muted-foreground pl-3.5"
+                    dateTime={post.date}
+                >
+                <span className="absolute inset-y-0 left-0 flex items-center" aria-hidden="true">
+                  <span className="h-4 w-0.5 rounded-full bg-border" />
+                </span>
+                  {post.date}
+                </time>
+            )}
           </article>
         ))}
       </div>

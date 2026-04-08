@@ -67,7 +67,7 @@ export default function Home() {
                 alt={featuredPost.title}
                 fill
                 sizes="(max-width: 672px) calc(100vw - 48px), 672px"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
                 priority
               />
             ) : (
@@ -76,24 +76,6 @@ export default function Home() {
               </div>
             )}
           </div>
-          {featuredPost.date && (
-            <time
-              className="relative z-10 mb-3 flex items-center text-sm text-muted-foreground pl-3.5"
-              dateTime={featuredPost.date.toISOString()}
-            >
-              <span
-                className="absolute inset-y-0 left-0 flex items-center"
-                aria-hidden="true"
-              >
-                <span className="h-4 w-0.5 rounded-full bg-border" />
-              </span>
-              {featuredPost.date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })}
-            </time>
-          )}
           {featuredPost.series && featuredPost.seriesSlug && (
             <Link
               href={`/journal/series/${featuredPost.seriesSlug}`}
@@ -113,25 +95,24 @@ export default function Home() {
               {featuredPost.description}
             </p>
           )}
-          <div
-            aria-hidden="true"
-            className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"
-          >
-            Read article
-            <svg
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-              className="ml-1 h-4 w-4 stroke-current transition-transform group-hover:translate-x-1"
-            >
-              <path
-                d="M6.75 5.75 9.25 8l-2.5 2.25"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
+          {featuredPost.date && (
+              <time
+                  className="relative z-10 my-3 flex items-center text-sm text-muted-foreground pl-3.5"
+                  dateTime={featuredPost.date.toISOString()}
+              >
+              <span
+                  className="absolute inset-y-0 left-0 flex items-center"
+                  aria-hidden="true"
+              >
+                <span className="h-4 w-0.5 rounded-full bg-border" />
+              </span>
+                {featuredPost.date.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </time>
+          )}
         </article>
       )}
 
@@ -165,30 +146,12 @@ export default function Home() {
                       alt={post.title}
                       fill
                       sizes="(max-width: 640px) calc(100vw - 48px), (max-width: 672px) calc(50vw - 36px), 312px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0 delay-100"
                     />
                   ) : (
                     <div className="h-full bg-muted" />
                   )}
                 </div>
-                {post.date && (
-                  <time
-                    className="relative z-10 mb-2 flex items-center text-xs text-muted-foreground pl-3.5"
-                    dateTime={post.date.toISOString()}
-                  >
-                    <span
-                      className="absolute inset-y-0 left-0 flex items-center"
-                      aria-hidden="true"
-                    >
-                      <span className="h-3 w-0.5 rounded-full bg-border" />
-                    </span>
-                    {post.date.toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </time>
-                )}
                 <h2 className="font-serif text-lg font-normal tracking-tight text-foreground">
                   <Link href={`/journal/${post.slug}`}>
                     <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
@@ -196,9 +159,27 @@ export default function Home() {
                   </Link>
                 </h2>
                 {post.description && (
-                  <p className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  <p className="relative z-10 my-2 text-sm text-zinc-600 dark:text-zinc-400">
                     {post.description}
                   </p>
+                )}
+                {post.date && (
+                    <time
+                        className="relative z-10 mb-2 flex items-center text-xs text-muted-foreground pl-3.5"
+                        dateTime={post.date.toISOString()}
+                    >
+                    <span
+                        className="absolute inset-y-0 left-0 flex items-center"
+                        aria-hidden="true"
+                    >
+                      <span className="h-3 w-0.5 rounded-full bg-border" />
+                    </span>
+                      {post.date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </time>
                 )}
               </article>
             ))}

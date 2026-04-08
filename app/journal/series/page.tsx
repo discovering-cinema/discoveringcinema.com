@@ -65,7 +65,7 @@ export default function SeriesIndex() {
                     alt={s.name}
                     fill
                     sizes="(max-width: 672px) calc(100vw - 48px), 672px"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-muted-foreground">

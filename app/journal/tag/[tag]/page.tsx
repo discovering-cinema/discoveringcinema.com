@@ -100,7 +100,7 @@ export default async function TagIndex({
                   alt={post.title}
                   fill
                   sizes="(max-width: 672px) calc(100vw - 48px), 672px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
                   priority={posts.indexOf(post) === 0}
                 />
               ) : (
