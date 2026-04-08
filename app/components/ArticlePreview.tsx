@@ -33,10 +33,10 @@ export default function ArticlePreview({
 
   return (
     <article className="group relative flex flex-col items-start">
-      <div
-        className={`relative w-full overflow-hidden rounded-xl bg-muted aspect-video ${isCompact ? 'mb-4' : 'mb-6'}`}
-      >
-        {image ? (
+      {image && (
+        <div
+          className={`relative w-full overflow-hidden rounded-xl bg-muted aspect-video ${isCompact ? 'mb-4' : 'mb-6'}`}
+        >
           <Image
             src={image}
             alt={title}
@@ -49,20 +49,17 @@ export default function ArticlePreview({
             className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
             priority={priority}
           />
-        ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground">
-            <span className="font-serif italic">Discovering Cinema</span>
+          <div className="absolute right-2 bottom-2">
+            {series && seriesSlug && <SeriesLabel series={series} seriesSlug={seriesSlug} />}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {order && (
         <small className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-3 inline-block">
           Part {order}
         </small>
       )}
-
-      {series && seriesSlug && <SeriesLabel series={series} seriesSlug={seriesSlug} />}
 
       <h2
         className={`font-serif font-normal tracking-tight text-foreground ${isCompact ? 'text-lg' : 'text-2xl'}`}

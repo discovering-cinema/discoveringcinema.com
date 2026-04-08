@@ -53,7 +53,7 @@ export default function SeriesIndex() {
         </p>
       </header>
 
-      <div className="flex flex-col gap-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
         {series.map((s) => {
           const coverImage = s.posts[0]?.image || '';
           return (
@@ -64,7 +64,7 @@ export default function SeriesIndex() {
                     src={coverImage}
                     alt={s.name}
                     fill
-                    sizes="(max-width: 672px) calc(100vw - 48px), 672px"
+                    sizes="(max-width: 640px) calc(100vw - 48px), (max-width: 672px) calc(50vw - 36px), 312px"
                     className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
                   />
                 ) : (
