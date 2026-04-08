@@ -9,6 +9,8 @@ import Image from 'next/image';
 import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
+import TagPill from '@/app/components/TagPill';
+import ArticleDate from '@/app/components/ArticleDate';
 import {getAllPosts} from '@/app/lib/posts';
 
 export async function generateMetadata({
@@ -215,13 +217,7 @@ export default async function Page({
           {frontmatter?.title && <h1>{frontmatter.title}</h1>}
           {frontmatter?.date && (
             <div className="not-prose flex items-center justify-between mb-8">
-              <time className="text-sm text-muted-foreground">
-                {new Date(frontmatter.date).toLocaleDateString('en-GB', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </time>
+              <ArticleDate date={frontmatter.date} variant="plain" />
             </div>
           )}
           {frontmatter?.image && (
@@ -291,13 +287,7 @@ export default async function Page({
               </h2>
               <div className="flex flex-wrap gap-2">
                 {frontmatter.tags.map((tag: string) => (
-                  <Link
-                    key={tag}
-                    href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
-                    className="font-mono text-sm uppercase tracking-wider text-muted-foreground px-2 py-0.5 border border-border hover:text-foreground transition-colors hover:border-foreground/30"
-                  >
-                    {tag}
-                  </Link>
+                  <TagPill key={tag} tag={tag} />
                 ))}
               </div>
             </div>

@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/app/components/Header';
+import ArticleSummary from '@/app/components/ArticleSummary';
 import JsonLd from '@/app/components/JsonLd';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
@@ -82,11 +83,7 @@ export default function ConceptsIndex() {
                 <span className="relative z-10">{concept.title}</span>
               </Link>
             </h2>
-            {concept.description && (
-              <p className="relative z-10 mt-2 text-sm text-muted-foreground">
-                {concept.description}
-              </p>
-            )}
+            {concept.description && <ArticleSummary description={concept.description} />}
             <div
               aria-hidden="true"
               className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"

@@ -10,6 +10,9 @@ import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
 import { getAllConcepts, getAllPosts } from '@/app/lib/posts';
+import ArticleSummary from '@/app/components/ArticleSummary';
+import TagPill from '@/app/components/TagPill';
+import QAndA from '@/app/components/QAndA';
 
 export async function generateMetadata({
   params,
@@ -125,7 +128,7 @@ export default async function Page({
       <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
-        <article className="prose max-w-none">
+        <article className="prose mx-auto">
           {frontmatter?.title && <h1>{frontmatter.title}</h1>}
           {frontmatter?.description && (
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground not-prose">
@@ -159,18 +162,7 @@ export default async function Page({
               <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-6">
                 Frequently Asked Questions
               </h2>
-              <div className="space-y-6">
-                {frontmatter.faq.map((item: { question: string; answer: string }, index: number) => (
-                  <div key={index} className="border-t border-border pt-6 bg-concept-card rounded-lg px-4 pb-4">
-                    <h3 className="font-serif text-lg font-normal text-foreground mb-2">
-                      {item.question}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {item.answer}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <QAndA items={frontmatter.faq} />
             </div>
           )}
 
@@ -181,13 +173,7 @@ export default async function Page({
               </h2>
               <div className="flex flex-wrap gap-2">
                 {frontmatter.tags.map((tag: string) => (
-                  <Link
-                    key={tag}
-                    href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
-                    className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground px-2 py-0.5 border border-border rounded-full hover:text-foreground transition-colors hover:border-foreground/30"
-                  >
-                    {tag}
-                  </Link>
+                  <TagPill key={tag} tag={tag} />
                 ))}
               </div>
             </div>
@@ -208,11 +194,7 @@ export default async function Page({
                     <span className="font-serif text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                       {post.title}
                     </span>
-                    {post.description && (
-                      <span className="mt-1 text-sm text-muted-foreground">
-                        {post.description}
-                      </span>
-                    )}
+                    {post.description && <ArticleSummary description={post.description} variant="compact" />}
                   </Link>
                 ))}
               </div>
