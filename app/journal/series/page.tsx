@@ -45,10 +45,10 @@ export default function SeriesIndex() {
       <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16">
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
           Series
         </h1>
-        <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-400">
+        <p className="mt-6 text-lg text-muted-foreground">
           Multi-part investigations into cinema, policy, and the moving image.
         </p>
       </header>
@@ -58,7 +58,7 @@ export default function SeriesIndex() {
           const coverImage = s.posts[0]?.image || '';
           return (
             <article key={s.slug} className="group relative flex flex-col items-start">
-              <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+              <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-muted">
                 {coverImage ? (
                   <Image
                     src={coverImage}
@@ -68,28 +68,28 @@ export default function SeriesIndex() {
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-zinc-400">
+                  <div className="flex h-full items-center justify-center text-muted-foreground">
                     <span className="font-serif italic">Discovering Cinema</span>
                   </div>
                 )}
               </div>
-              <small className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 inline-block">
+              <small className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-3 inline-block">
                 {s.posts.length} {s.posts.length === 1 ? 'article' : 'articles'}
               </small>
-              <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+              <h2 className="font-serif text-2xl font-normal tracking-tight text-foreground">
                 <Link href={`/journal/series/${s.slug}`}>
                   <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
                   <span className="relative z-10">{s.name}</span>
                 </Link>
               </h2>
               {s.description && (
-                <p className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="relative z-10 mt-2 text-sm text-muted-foreground">
                   {s.description}
                 </p>
               )}
               <div
                 aria-hidden="true"
-                className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
+                className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"
               >
                 View series
                 <svg

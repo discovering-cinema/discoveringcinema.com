@@ -13,7 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
-  
+
   return {
     title: `Articles tagged with "${decodedTag}" | Discovering Cinema`,
     description: `A collection of articles about ${decodedTag} in cinema.`,
@@ -30,9 +30,9 @@ export default async function TagIndex({
 }) {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
-  
+
   const posts = getAllPosts()
-    .filter((post) => 
+    .filter((post) =>
       post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase())
     )
     .map((post) => ({
@@ -69,9 +69,9 @@ export default async function TagIndex({
       <JsonLd data={jsonLd} />
       <header className="mb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link 
+          <Link
             href="/journal"
-            className="text-sm font-medium text-teal-500 hover:text-teal-600 transition-colors flex items-center gap-1"
+            className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
           >
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-4 w-4 stroke-current rotate-180">
               <path d="M6.75 5.75 9.25 8l-2.5 2.25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -79,10 +79,10 @@ export default async function TagIndex({
             Back to Journal
           </Link>
         </div>
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
           Tag: {decodedTag}
         </h1>
-        <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-400">
+        <p className="mt-6 text-lg text-muted-foreground">
           {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged with "{decodedTag}".
         </p>
       </header>
@@ -93,7 +93,7 @@ export default async function TagIndex({
             key={post.slug}
             className="group relative flex flex-col items-start"
           >
-            <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+            <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-muted">
               {post.image ? (
                 <Image
                   src={post.image}
@@ -104,21 +104,21 @@ export default async function TagIndex({
                   priority={posts.indexOf(post) === 0}
                 />
               ) : (
-                <div className="flex h-full items-center justify-center text-zinc-400">
+                <div className="flex h-full items-center justify-center text-muted-foreground">
                   <span className="font-serif italic">Discovering Cinema</span>
                 </div>
               )}
             </div>
             {post.date && (
               <time
-                className="relative z-10 mb-3 flex items-center text-sm text-zinc-600 dark:text-zinc-400 pl-3.5"
+                className="relative z-10 mb-3 flex items-center text-sm text-muted-foreground pl-3.5"
                 dateTime={post.date}
               >
                 <span
                   className="absolute inset-y-0 left-0 flex items-center"
                   aria-hidden="true"
                 >
-                  <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-700" />
+                  <span className="h-4 w-0.5 rounded-full bg-border" />
                 </span>
                 {post.date}
               </time>
@@ -126,25 +126,25 @@ export default async function TagIndex({
             {post.series && post.seriesSlug && (
               <Link
                 href={`/journal/series/${post.seriesSlug}`}
-                className="relative z-10 bg-teal-50 dark:bg-teal-900/30 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
+                className="relative z-10 bg-accent/20 text-accent-foreground py-1 px-2 rounded mb-4 inline-block hover:bg-accent/30 transition-colors"
               >
                 <small>Series: <span className="font-medium">{post.series}</span></small>
               </Link>
             )}
-            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="font-serif text-2xl font-normal tracking-tight text-foreground">
               <Link href={`/journal/${post.slug}`}>
                 <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
                 <span className="relative z-10">{post.title}</span>
               </Link>
             </h2>
             {post.description && (
-              <p className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="relative z-10 mt-2 text-sm text-muted-foreground">
                 {post.description}
               </p>
             )}
             <div
               aria-hidden="true"
-              className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
+              className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"
             >
               Read article
               <svg

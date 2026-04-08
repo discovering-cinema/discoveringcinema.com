@@ -12,26 +12,26 @@ export default function AuthorBio({ lastWatched }: AuthorBioProps) {
         alt="Christopher Bray"
         width={64}
         height={64}
-        className="h-16 w-16 flex-shrink-0 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
+        className="h-16 w-16 flex-shrink-0 rounded-full bg-muted object-cover"
       />
 
       <div className="flex-1">
-        <h3 className="mb-1 font-serif text-xl font-normal text-zinc-900 dark:text-zinc-100">
+        <h3 className="mb-1 font-serif text-xl font-normal text-foreground">
           Christopher Bray
         </h3>
-        <div className="mb-3 text-xs font-semibold tracking-wider text-zinc-600 uppercase dark:text-zinc-400">
+        <div className="mb-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Founder & Engineer
         </div>
 
-        <p className="mb-3 max-w-xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        <p className="mb-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
           Engineering open algorithms to map the invisible connections of
           cinema. I build discovery tools that look beyond streaming catalogs to
           ensure film history isn&apos;t lost to the algorithm.
         </p>
 
         {lastWatched && (
-          <div className="mb-3 inline-block rounded bg-zinc-100 px-2 py-1 text-sm text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-            <span className="font-medium text-zinc-700 dark:text-zinc-300">
+          <div className="mb-3 inline-block rounded bg-muted px-2 py-1 text-sm text-foreground">
+            <span className="font-medium text-foreground">
               Last Watched:
             </span>{' '}
             <em className="italic">{lastWatched}</em>
@@ -41,13 +41,13 @@ export default function AuthorBio({ lastWatched }: AuthorBioProps) {
         <div className="flex gap-4 text-sm">
           <a
             href="https://github.com/brayniverse"
-            className="text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            className="text-muted-foreground transition-colors hover:text-foreground"
           >
             GitHub
           </a>
           <a
             href="https://twitter.com/brayniverse"
-            className="text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            className="text-muted-foreground transition-colors hover:text-foreground"
           >
             X / Twitter
           </a>

@@ -212,12 +212,10 @@ export default function BFILoopholeCalculator() {
     const isAmber = qualifies && bypassesGoldenRule;
     const isGreen = qualifies && !bypassesGoldenRule;
 
-    // Contrast-safe status colours
-    // amber-300 on slate-900 = 8.3:1 ✓  emerald-300 on slate-900 = 8.1:1 ✓  rose-400 on slate-900 = 5.9:1 ✓
-    const statusColor   = isAmber ? 'text-amber-300'   : isGreen ? 'text-emerald-300'   : 'text-rose-400';
-    const statusBorder  = isAmber ? 'border-amber-400/30' : isGreen ? 'border-emerald-400/30' : 'border-rose-400/30';
-    const statusBg      = isAmber ? 'bg-amber-400/10'  : isGreen ? 'bg-emerald-400/10'  : 'bg-rose-500/10';
-    const subtextColor  = isAmber ? 'text-amber-200'   : 'text-emerald-200';
+    const statusColor   = isAmber ? 'text-warning-foreground' : isGreen ? 'text-success'    : 'text-destructive';
+    const statusBorder  = isAmber ? 'border-warning/30'      : isGreen ? 'border-success/30' : 'border-destructive/30';
+    const statusBg      = isAmber ? 'bg-warning/10'          : isGreen ? 'bg-success/10'     : 'bg-destructive/10';
+    const subtextColor  = isAmber ? 'text-muted-foreground'  : 'text-success';
 
     const statusText = isAmber
         ? '✓ Certified British — via Section B discretion'
@@ -234,7 +232,7 @@ export default function BFILoopholeCalculator() {
             : null;
 
     return (
-        <div className="max-w-3xl mx-auto rounded-2xl shadow-xl font-sans my-10 border border-slate-700 bg-slate-900 text-white overflow-visible">
+        <div className="max-w-3xl mx-auto rounded-2xl shadow-xl font-sans my-10 border border-border bg-card text-foreground overflow-visible">
 
             {/* ── ZONE 1: Film panel (preset only) ── */}
             {isPreset && presetData && (
@@ -248,7 +246,7 @@ export default function BFILoopholeCalculator() {
                             backgroundPosition: 'center top',
                         }}
                     >
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-slate-900" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/90" />
                     </div>
 
                     <div className="relative z-10 p-6 md:p-8 flex gap-5 items-end min-h-[200px] pb-0">
@@ -266,7 +264,7 @@ export default function BFILoopholeCalculator() {
                                 href={presetData.letterboxd}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-200 hover:text-indigo-300 underline underline-offset-2 transition-colors w-fit"
+                                className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-white/70 underline underline-offset-2 transition-colors w-fit"
                             >
                                 <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M8.5 3C5.46 3 3 5.46 3 8.5S5.46 14 8.5 14c1.28 0 2.46-.44 3.38-1.17L18.83 19.8a1 1 0 001.42-1.41L13.3 11.9A5.47 5.47 0 0014 8.5C14 5.46 11.54 3 8.5 3zm0 2C10.43 5 12 6.57 12 8.5S10.43 12 8.5 12 5 10.43 5 8.5 6.57 5 8.5 5z"/>
@@ -286,7 +284,7 @@ export default function BFILoopholeCalculator() {
                             <img
                                 src={presetData.poster.replace('/original/', '/w342/')}
                                 alt={`${activePreset} film poster`}
-                                className="h-64 w-[10.5rem] object-cover rounded-md shadow-xl ring-1 ring-white/10 hover:ring-indigo-400 transition-all"
+                                className="h-64 w-[10.5rem] object-cover rounded-md shadow-xl ring-1 ring-white/10 hover:ring-primary transition-all"
                                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                             />
                         </a>
@@ -313,14 +311,13 @@ export default function BFILoopholeCalculator() {
             )}
 
             {/* ── ZONE 2: Calculator ── */}
-            <div className={`p-6 md:p-8 bg-slate-900 ${isPreset ? 'pt-14' : 'rounded-t-xl'}`}>
+            <div className={`p-6 md:p-8 bg-card ${isPreset ? 'pt-14' : 'rounded-t-xl'}`}>
 
                 {/* Status badge */}
                 <div className={`inline-flex flex-col gap-1.5 px-4 py-3 rounded-xl border mb-6 w-full ${statusBg} ${statusBorder}`}>
                     <div className="flex items-center gap-3 flex-wrap">
-                        <span className="text-4xl font-black tabular-nums text-white">{total}</span>
-                        {/* slate-300 on slate-900 = 7.6:1 ✓ */}
-                        <span className="text-slate-300 font-semibold text-base">/35 pts</span>
+                        <span className="text-4xl font-black tabular-nums text-foreground">{total}</span>
+                        <span className="text-muted-foreground font-semibold text-base">/35 pts</span>
                         <span className={`text-sm font-bold ${statusColor}`}>
                             {statusText}
                         </span>
@@ -335,29 +332,26 @@ export default function BFILoopholeCalculator() {
 
                 {/* Stats row */}
                 <div className="grid grid-cols-3 gap-3 mb-6">
-                    <div className="bg-slate-800 rounded-lg p-3">
-                        {/* slate-300 on slate-800 = 6.8:1 ✓ */}
-                        <div className="text-xs font-bold uppercase tracking-wide text-slate-300 mb-1">Budget</div>
-                        <div className="text-base font-black text-white tabular-nums">{formatM(budget)}</div>
+                    <div className="bg-muted rounded-lg p-3">
+                        <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-1">Budget</div>
+                        <div className="text-base font-black text-foreground tabular-nums">{formatM(budget)}</div>
                         {isPreset && presetData?.boxOffice && (
-                            // slate-400 on slate-800 = 4.6:1 ✓ (just passes AA at this size)
-                            <div className="text-xs text-slate-400 mt-0.5">Box office: {formatM(presetData.boxOffice)}</div>
+                            <div className="text-xs text-muted-foreground mt-0.5">Box office: {formatM(presetData.boxOffice)}</div>
                         )}
                     </div>
-                    <div className="bg-slate-800 rounded-lg p-3">
-                        <div className="text-xs font-bold uppercase tracking-wide text-slate-300 mb-1">UK Spend</div>
-                        <div className="text-base font-black text-white tabular-nums">{ukSpendPercent}%</div>
-                        <div className="text-xs text-slate-400 mt-0.5">{formatM(budget * ukSpendPercent / 100)} qualifying</div>
+                    <div className="bg-muted rounded-lg p-3">
+                        <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-1">UK Spend</div>
+                        <div className="text-base font-black text-foreground tabular-nums">{ukSpendPercent}%</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">{formatM(budget * ukSpendPercent / 100)} qualifying</div>
                     </div>
-                    <div className="bg-slate-800 rounded-lg p-3">
-                        <div className="text-xs font-bold uppercase tracking-wide text-slate-300 mb-1">AVEC Rebate</div>
+                    <div className="bg-muted rounded-lg p-3">
+                        <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-1">AVEC Rebate</div>
                         {rebate ? (
-                            // emerald-400 on slate-800 = 5.8:1 ✓
-                            <div className="text-base font-black text-emerald-400 tabular-nums">~${rebate}M</div>
+                            <div className="text-base font-black text-success tabular-nums">~${rebate}M</div>
                         ) : (
-                            <div className="text-base font-black text-slate-500">—</div>
+                            <div className="text-base font-black text-muted-foreground/50">—</div>
                         )}
-                        <div className="text-xs text-slate-400 mt-0.5">25.5% net, capped 80%</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">25.5% net, capped 80%</div>
                     </div>
                 </div>
 
@@ -365,23 +359,21 @@ export default function BFILoopholeCalculator() {
                 <div className="grid grid-cols-2 gap-6 mb-6">
                     <div className="space-y-2">
                         <div className="flex justify-between text-xs font-bold uppercase tracking-wide">
-                            {/* indigo-300 on slate-900 = 7.9:1 ✓ */}
-                            <span className="text-indigo-300">Story & Culture (A+B)</span>
-                            <span className="text-slate-300">{creativeScore} / {CREATIVE_MAX}</span>
+                            <span className="text-primary">Story & Culture (A+B)</span>
+                            <span className="text-muted-foreground">{creativeScore} / {CREATIVE_MAX}</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-indigo-500 transition-all duration-700 rounded-full"
+                        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                            <div className="h-full bg-primary transition-all duration-700 rounded-full"
                                  style={{ width: `${Math.min(creativeScore / CREATIVE_MAX * 100, 100)}%` }} />
                         </div>
                     </div>
                     <div className="space-y-2">
                         <div className="flex justify-between text-xs font-bold uppercase tracking-wide">
-                            {/* purple-300 on slate-900 = 7.4:1 ✓ */}
-                            <span className="text-purple-300">Craft & People (C+D)</span>
-                            <span className="text-slate-300">{technicalScore} / {TECHNICAL_MAX}</span>
+                            <span className="text-muted-foreground">Craft & People (C+D)</span>
+                            <span className="text-muted-foreground">{technicalScore} / {TECHNICAL_MAX}</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-purple-500 transition-all duration-700 rounded-full"
+                        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                            <div className="h-full bg-muted-foreground transition-all duration-700 rounded-full"
                                  style={{ width: `${Math.min(technicalScore / TECHNICAL_MAX * 100, 100)}%` }} />
                         </div>
                     </div>
@@ -391,7 +383,7 @@ export default function BFILoopholeCalculator() {
                 {!isPreset && (
                     <div className="grid grid-cols-2 gap-3 mb-6">
                         <div>
-                            <label htmlFor="bfi-budget" className="text-xs font-bold uppercase tracking-wide text-slate-300 block mb-1.5">
+                            <label htmlFor="bfi-budget" className="text-xs font-bold uppercase tracking-wide text-muted-foreground block mb-1.5">
                                 Budget ($M)
                             </label>
                             <input
@@ -405,11 +397,11 @@ export default function BFILoopholeCalculator() {
                                     qualifies,
                                     rebate:          rebate ?? 0,
                                 })}
-                                className="w-full bg-slate-800 border border-slate-600 p-2 rounded-lg text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500 text-white tabular-nums"
+                                className="w-full bg-muted border border-border p-2 rounded-lg text-sm font-bold outline-none focus:ring-2 focus:ring-ring text-foreground tabular-nums"
                             />
                         </div>
                         <div>
-                            <label htmlFor="bfi-ukspend" className="text-xs font-bold uppercase tracking-wide text-slate-300 block mb-1.5">
+                            <label htmlFor="bfi-ukspend" className="text-xs font-bold uppercase tracking-wide text-muted-foreground block mb-1.5">
                                 UK Spend (%)
                             </label>
                             <input
@@ -423,7 +415,7 @@ export default function BFILoopholeCalculator() {
                                     qualifies,
                                     rebate:          rebate ?? 0,
                                 })}
-                                className="w-full bg-slate-800 border border-slate-600 p-2 rounded-lg text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500 text-white tabular-nums"
+                                className="w-full bg-muted border border-border p-2 rounded-lg text-sm font-bold outline-none focus:ring-2 focus:ring-ring text-foreground tabular-nums"
                             />
                         </div>
                     </div>
@@ -433,9 +425,9 @@ export default function BFILoopholeCalculator() {
                 {isPreset && (
                     <button
                         onClick={enterCustomMode}
-                        className="w-full py-3 px-4 rounded-xl border border-slate-600 bg-slate-800 hover:bg-slate-700 hover:border-indigo-400 text-sm font-semibold text-slate-200 hover:text-white transition-all flex items-center justify-center gap-2 group"
+                        className="w-full py-3 px-4 rounded-xl border border-border bg-muted hover:bg-border hover:border-primary/50 text-sm font-semibold text-foreground transition-all flex items-center justify-center gap-2 group"
                     >
-                        <svg className="w-4 h-4 text-indigo-400 group-hover:text-indigo-300 flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                        <svg className="w-4 h-4 text-primary group-hover:text-primary/70 flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
                         Try your own combination
@@ -445,7 +437,7 @@ export default function BFILoopholeCalculator() {
                 {/* Back to examples — custom mode */}
                 {!isPreset && (
                     <div className="flex items-center gap-3 mb-2">
-                        <span className="text-xs font-bold uppercase tracking-wide text-slate-400">Custom configuration</span>
+                        <span className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Custom configuration</span>
                         <button
                             onClick={() => {
                                 sendGAEvent('event', 'bfi_preset_restored', {
@@ -454,7 +446,7 @@ export default function BFILoopholeCalculator() {
                                 loadPreset(DEFAULT_PRESET);
                                 toggleBreakdown();
                             }}
-                            className="text-sm font-semibold text-indigo-300 hover:text-indigo-200 underline underline-offset-2 transition-colors"
+                            className="text-sm font-semibold text-primary hover:text-primary/70 underline underline-offset-2 transition-colors"
                         >
                             ← Back to examples
                         </button>
@@ -466,18 +458,17 @@ export default function BFILoopholeCalculator() {
             <button
                 onClick={toggleBreakdown}
                 aria-expanded={showEditor}
-                className={`${showEditor ? '' : 'rounded-b-xl'} w-full p-4 bg-slate-800 hover:bg-slate-700 text-sm font-semibold text-slate-300 hover:text-white border-t border-slate-700 transition-colors`}
+                className={`${showEditor ? '' : 'rounded-b-xl'} w-full p-4 bg-muted hover:bg-border text-sm font-semibold text-muted-foreground hover:text-foreground border-t border-border transition-colors`}
             >
                 {showEditor ? '↑ Close breakdown' : '↓ View points breakdown'}
             </button>
 
             {showEditor && (
-                <div className="p-6 md:p-8 bg-white text-slate-900 rounded-b-2xl">
+                <div className="p-6 md:p-8 bg-card text-foreground rounded-b-2xl border-t border-border">
                     <div className="grid md:grid-cols-2 gap-10">
                         {CATEGORIES.map(cat => (
                             <div key={cat.id}>
-                                {/* slate-700 on white = 5.9:1 ✓ */}
-                                <h4 className="text-xs font-black text-slate-700 uppercase tracking-wide mb-4 border-b border-slate-200 pb-2">
+                                <h4 className="text-xs font-black text-muted-foreground uppercase tracking-wide mb-4 border-b border-border pb-2">
                                     {cat.name}
                                 </h4>
                                 <div className="space-y-2">
@@ -485,7 +476,7 @@ export default function BFILoopholeCalculator() {
                                         <label key={t.label} className="flex items-center gap-3 cursor-pointer group">
                                             <input
                                                 type="checkbox"
-                                                className="w-4 h-4 rounded flex-shrink-0 accent-indigo-600"
+                                                className="w-4 h-4 rounded flex-shrink-0 accent-primary"
                                                 checked={selected.includes(t.label)}
                                                 onChange={() => {
                                                     const adding = !selected.includes(t.label);
@@ -505,12 +496,10 @@ export default function BFILoopholeCalculator() {
                                                     setSelected(nextSelected);
                                                 }}
                                             />
-                                            {/* slate-800 on white = 12.6:1 ✓ */}
-                                            <span className="text-sm text-slate-800 group-hover:text-slate-900">
+                                            <span className="text-sm text-foreground group-hover:text-foreground">
                                                 {t.label}
                                             </span>
-                                            {/* slate-500 on white = 4.6:1 ✓ */}
-                                            <span className="ml-auto text-xs font-bold text-slate-500">+{t.pts}</span>
+                                            <span className="ml-auto text-xs font-bold text-muted-foreground">+{t.pts}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -518,22 +507,21 @@ export default function BFILoopholeCalculator() {
                         ))}
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-slate-200 space-y-4">
-                        {/* slate-700 on white = 5.9:1 ✓ */}
-                        <p className="text-sm text-slate-700 leading-relaxed">
-                            <span className="font-bold text-slate-900">Golden Points Rule: </span>
+                    <div className="mt-8 pt-6 border-t border-border space-y-4">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                            <span className="font-bold text-foreground">Golden Points Rule: </span>
                             A film cannot qualify on language, infrastructure, and crew alone. It must also score at least
                             2 points from A1 (setting), or at least 2 from A2 (lead characters), or all 4 from A3 (story).
                             The three gaming-the-system presets qualified via BFI Section B discretion — a route that is
                             real but not codified. When you configure the checkboxes manually, the rule applies in full.
                         </p>
-                        <p className="text-sm text-slate-700 leading-relaxed">
-                            <span className="font-bold text-slate-900">Rebate: </span>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                            <span className="font-bold text-foreground">Rebate: </span>
                             The AVEC net rate is 25.5% on qualifying UK spend, capped at 80% of total budget.
                             EEA-language films score up to 4pts for A4, not the full 6 awarded for English.
                             A1 and A2 award points proportionally — partial UK/EEA content earns partial points.
                         </p>
-                        <p className="text-sm text-slate-600 leading-relaxed">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                             Film data sourced from TMDb. This product uses the TMDB API but is not endorsed or certified by TMDB.
                         </p>
                     </div>

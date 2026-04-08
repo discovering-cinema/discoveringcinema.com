@@ -125,11 +125,16 @@ export default async function Page({
       <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
-        <article className="prose max-w-none prose-zinc dark:prose-invert prose-h1:font-serif prose-h1:font-normal prose-h1:tracking-tight prose-h2:font-serif prose-h2:font-normal prose-h3:font-serif prose-h3:font-normal prose-h4:font-serif prose-h4:font-normal">
+        <article className="prose max-w-none">
           {frontmatter?.title && <h1>{frontmatter.title}</h1>}
+          {frontmatter?.description && (
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground not-prose">
+              {frontmatter.description}
+            </p>
+          )}
           {frontmatter?.image && (
             <div className="relative mb-12 not-prose">
-              <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
                 <Image
                   src={frontmatter.image}
                   alt={frontmatter.imageDescription || frontmatter.title || ''}
@@ -140,7 +145,7 @@ export default async function Page({
                 />
               </div>
               {frontmatter.imageDescription && (
-                <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed italic">
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed italic">
                   {frontmatter.imageDescription}
                 </p>
               )}
@@ -151,16 +156,16 @@ export default async function Page({
 
           {frontmatter?.faq && frontmatter.faq.length > 0 && (
             <div className="mt-16 not-prose">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mb-6">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-6">
                 Frequently Asked Questions
               </h2>
               <div className="space-y-6">
                 {frontmatter.faq.map((item: { question: string; answer: string }, index: number) => (
-                  <div key={index} className="border-t border-zinc-200 dark:border-zinc-800 pt-6">
-                    <h3 className="font-serif text-lg font-normal text-zinc-900 dark:text-zinc-100 mb-2">
+                  <div key={index} className="border-t border-border pt-6 bg-concept-card rounded-lg px-4 pb-4">
+                    <h3 className="font-serif text-lg font-normal text-foreground mb-2">
                       {item.question}
                     </h3>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {item.answer}
                     </p>
                   </div>
@@ -171,7 +176,7 @@ export default async function Page({
 
           {frontmatter?.tags && frontmatter.tags.length > 0 && (
             <div className="mt-16 not-prose">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mb-4">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
                 Explore more on these topics
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -179,7 +184,7 @@ export default async function Page({
                   <Link
                     key={tag}
                     href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
-                    className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 rounded-full hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700"
+                    className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground px-2 py-0.5 border border-border rounded-full hover:text-foreground transition-colors hover:border-foreground/30"
                   >
                     {tag}
                   </Link>
@@ -190,7 +195,7 @@ export default async function Page({
 
           {relatedPosts.length > 0 && (
             <div className="mt-16 not-prose">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mb-6">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-6">
                 Related Articles
               </h2>
               <div className="space-y-4">
@@ -198,13 +203,13 @@ export default async function Page({
                   <Link
                     key={post.slug}
                     href={`/journal/${post.slug}`}
-                    className="group flex flex-col p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+                    className="group flex flex-col p-4 rounded-xl border border-border hover:border-foreground/30 transition-colors"
                   >
-                    <span className="font-serif text-lg font-normal text-zinc-900 dark:text-zinc-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                    <span className="font-serif text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                       {post.title}
                     </span>
                     {post.description && (
-                      <span className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                      <span className="mt-1 text-sm text-muted-foreground">
                         {post.description}
                       </span>
                     )}

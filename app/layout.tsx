@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Playfair_Display, Lora, Inter, Montserrat } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -8,13 +8,28 @@ import './globals.css';
 import 'katex/dist/katex.min.css';
 import Footer from '@/app/components/Footer';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const montserrat = Montserrat({
+  variable: '--font-montserrat',
   subsets: ['latin'],
+  weight: ['400', '700'],
+})
+
+const playfair = Playfair_Display({
+  variable: '--font-playfair',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['400', '700'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const lora = Lora({
+  variable: '--font-lora',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['400', '700'],
+});
+
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
 });
 
@@ -43,7 +58,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} overflow-x-hidden`}>
+    <html lang="en" className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} overflow-x-hidden`}>
       <body className="antialiased overflow-x-hidden">
         <main className="mx-auto max-w-2xl px-6">{children}</main>
         <Footer />

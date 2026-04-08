@@ -63,8 +63,8 @@ export default function Quiz({ questions, title }: QuizProps) {
         const correct = idx === q.correct;
         sendGAEvent('event', 'quiz_question_answered', {
             quiz_title:       quizTitle,
-            question_index:   current,           // 0-based, useful for funnel analysis
-            question_number:  current + 1,        // 1-based, human-readable
+            question_index:   current,
+            question_number:  current + 1,
             question_text:    q.question,
             answer_chosen:    q.options[idx],
             correct_answer:   q.options[q.correct],
@@ -82,7 +82,6 @@ export default function Quiz({ questions, title }: QuizProps) {
             setCurrent(current + 1);
             setChosen(answers[current + 1]);
         } else {
-            // Calculate final score including the last answer
             const finalScore = answers.filter((a, i) => a === questions[i].correct).length;
             sendGAEvent('event', 'quiz_completed', {
                 quiz_title:     quizTitle,
@@ -115,37 +114,37 @@ export default function Quiz({ questions, title }: QuizProps) {
     // ── Results screen ────────────────────────────────────────────────────────
     if (finished) {
         const pct = score / questions.length;
-        const barColor = pct === 1 ? 'bg-emerald-400' : pct >= 0.6 ? 'bg-indigo-400' : 'bg-amber-400';
+        const barColor = pct === 1 ? 'bg-success' : pct >= 0.6 ? 'bg-primary' : 'bg-warning';
 
         return (
-            <div className="my-8 rounded-2xl border border-slate-700 bg-slate-900 text-white overflow-hidden font-sans">
+            <div className="my-8 rounded-2xl border border-border bg-card text-foreground overflow-hidden font-sans">
                 {title && (
                     <div className="px-6 pt-5 pb-0">
-                        <p className="text-xs font-bold uppercase tracking-widest text-slate-500">{title}</p>
+                        <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{title}</p>
                     </div>
                 )}
 
                 {/* Progress bar — full */}
-                <div className="h-1 w-full bg-slate-800 mt-4">
-                    <div className="h-full bg-emerald-400 transition-all duration-700" style={{ width: '100%' }} />
+                <div className="h-1 w-full bg-muted mt-4">
+                    <div className="h-full bg-success transition-all duration-700" style={{ width: '100%' }} />
                 </div>
 
                 <div className="p-6 md:p-8">
                     {/* Score */}
                     <div className="flex items-end gap-3 mb-2">
-                        <span className="text-5xl font-black tabular-nums text-white leading-none">{score}</span>
-                        <span className="text-slate-400 font-semibold text-lg leading-none mb-1">/ {questions.length}</span>
+                        <span className="text-5xl font-black tabular-nums text-foreground leading-none">{score}</span>
+                        <span className="text-muted-foreground font-semibold text-lg leading-none mb-1">/ {questions.length}</span>
                     </div>
 
                     {/* Score bar */}
-                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden mb-3">
+                    <div className="h-2 w-full bg-muted rounded-full overflow-hidden mb-3">
                         <div
                             className={`h-full rounded-full transition-all duration-1000 ${barColor}`}
                             style={{ width: `${(score / questions.length) * 100}%` }}
                         />
                     </div>
 
-                    <p className="text-base text-slate-300 mb-8" aria-live="polite">
+                    <p className="text-base text-muted-foreground mb-8" aria-live="polite">
                         <ScoreMessage score={score} total={questions.length} />
                     </p>
 
@@ -159,22 +158,22 @@ export default function Quiz({ questions, title }: QuizProps) {
                                     key={i}
                                     className={`rounded-xl px-4 py-3 border text-sm ${
                                         correct
-                                            ? 'bg-emerald-400/10 border-emerald-400/30'
-                                            : 'bg-rose-400/10 border-rose-400/30'
+                                            ? 'bg-success/10 border-success/30'
+                                            : 'bg-destructive/10 border-destructive/30'
                                     }`}
                                 >
                                     <div className="flex items-start gap-3">
-                                        <span className={`text-base font-black leading-none mt-0.5 flex-shrink-0 ${correct ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                        <span className={`text-base font-black leading-none mt-0.5 flex-shrink-0 ${correct ? 'text-success' : 'text-destructive'}`}>
                                             {correct ? '✓' : '✕'}
                                         </span>
                                         <div>
-                                            <p className="font-semibold text-white leading-snug mb-1">{q.question}</p>
+                                            <p className="font-semibold text-foreground leading-snug mb-1">{q.question}</p>
                                             {!correct && userAnswer !== null && (
-                                                <p className="text-rose-300 text-xs mb-0.5">
+                                                <p className="text-destructive text-xs mb-0.5">
                                                     You answered: {q.options[userAnswer]}
                                                 </p>
                                             )}
-                                            <p className={`text-xs font-semibold ${correct ? 'text-emerald-300' : 'text-slate-300'}`}>
+                                            <p className={`text-xs font-semibold ${correct ? 'text-success' : 'text-muted-foreground'}`}>
                                                 {correct ? '' : 'Correct: '}{q.options[q.correct]}
                                             </p>
                                         </div>
@@ -186,7 +185,7 @@ export default function Quiz({ questions, title }: QuizProps) {
 
                     <button
                         onClick={handleRestart}
-                        className="w-full py-3 px-4 rounded-xl border border-slate-600 bg-slate-800 hover:bg-slate-700 hover:border-indigo-400 text-sm font-semibold text-slate-200 hover:text-white transition-all"
+                        className="w-full py-3 px-4 rounded-xl border border-border bg-muted hover:bg-border hover:border-primary/50 text-sm font-semibold text-foreground transition-all"
                     >
                         Try again
                     </button>
@@ -197,29 +196,29 @@ export default function Quiz({ questions, title }: QuizProps) {
 
     // ── Question screen ───────────────────────────────────────────────────────
     return (
-        <div className="my-8 rounded-2xl border border-slate-700 bg-slate-900 text-white overflow-hidden font-sans">
+        <div className="my-8 rounded-2xl border border-border bg-card text-foreground overflow-hidden font-sans">
             {title && (
                 <div className="px-6 pt-5 pb-0">
-                    <p className="text-xs font-bold uppercase tracking-widest text-slate-500">{title}</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{title}</p>
                 </div>
             )}
 
             {/* Progress bar */}
-            <div className="h-1 w-full bg-slate-800 mt-4">
+            <div className="h-1 w-full bg-muted mt-4">
                 <div
-                    className="h-full bg-indigo-500 transition-all duration-500"
+                    className="h-full bg-primary transition-all duration-500"
                     style={{ width: `${progress}%` }}
                 />
             </div>
 
             <div className="p-6 md:p-8">
                 {/* Counter */}
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
                     Question {current + 1} of {questions.length}
                 </p>
 
                 {/* Question */}
-                <p className="text-lg font-bold text-white leading-snug mb-6">
+                <p className="text-lg font-bold text-foreground leading-snug mb-6">
                     {q.question}
                 </p>
 
@@ -233,15 +232,15 @@ export default function Quiz({ questions, title }: QuizProps) {
                         const isChosen  = chosen === idx;
                         const isRight   = idx === q.correct;
 
-                        let optionStyle = 'border-slate-700 bg-slate-800 text-slate-200 hover:border-slate-500 hover:bg-slate-700 cursor-pointer';
+                        let optionStyle = 'border-border bg-muted text-foreground hover:border-foreground/30 hover:bg-border cursor-pointer';
 
                         if (isAnswered) {
                             if (isRight) {
-                                optionStyle = 'border-emerald-400/60 bg-emerald-400/10 text-emerald-200 cursor-default';
+                                optionStyle = 'border-success/60 bg-success/10 text-success cursor-default';
                             } else if (isChosen) {
-                                optionStyle = 'border-rose-400/60 bg-rose-400/10 text-rose-200 cursor-default';
+                                optionStyle = 'border-destructive/60 bg-destructive/10 text-destructive cursor-default';
                             } else {
-                                optionStyle = 'border-slate-800 bg-slate-800/50 text-slate-500 cursor-default';
+                                optionStyle = 'border-border bg-muted/50 text-muted-foreground/50 cursor-default';
                             }
                         }
 
@@ -256,12 +255,12 @@ export default function Quiz({ questions, title }: QuizProps) {
                             >
                                 <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-black flex-shrink-0 transition-all ${
                                     isAnswered && isRight
-                                        ? 'border-emerald-400 text-emerald-400'
+                                        ? 'border-success text-success'
                                         : isAnswered && isChosen && !isRight
-                                        ? 'border-rose-400 text-rose-400'
+                                        ? 'border-destructive text-destructive'
                                         : isAnswered
-                                        ? 'border-slate-700 text-slate-600'
-                                        : 'border-slate-600 text-slate-400'
+                                        ? 'border-border text-muted-foreground/50'
+                                        : 'border-border text-muted-foreground'
                                 }`}>
                                     {isAnswered && isRight ? '✓' : isAnswered && isChosen ? '✕' : LETTER[idx]}
                                 </span>
@@ -276,13 +275,13 @@ export default function Quiz({ questions, title }: QuizProps) {
                     <div
                         className={`rounded-xl px-4 py-3 border mb-6 text-sm leading-relaxed ${
                             isCorrect
-                                ? 'bg-emerald-400/10 border-emerald-400/30 text-emerald-200'
-                                : 'bg-slate-800 border-slate-700 text-slate-300'
+                                ? 'bg-success/10 border-success/30 text-success'
+                                : 'bg-muted border-border text-muted-foreground'
                         }`}
                         aria-live="polite"
                     >
                         {!isCorrect && (
-                            <span className="font-bold text-white block mb-1">
+                            <span className="font-bold text-foreground block mb-1">
                                 The correct answer was: {q.options[q.correct]}
                             </span>
                         )}
@@ -293,7 +292,7 @@ export default function Quiz({ questions, title }: QuizProps) {
                 {/* Feedback line when no explanation */}
                 {isAnswered && !q.explanation && (
                     <p
-                        className={`text-sm font-semibold mb-6 ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}`}
+                        className={`text-sm font-semibold mb-6 ${isCorrect ? 'text-success' : 'text-destructive'}`}
                         aria-live="polite"
                     >
                         {isCorrect ? 'Correct.' : `Incorrect. The answer was: ${q.options[q.correct]}`}
@@ -304,7 +303,7 @@ export default function Quiz({ questions, title }: QuizProps) {
                 {isAnswered && (
                     <button
                         onClick={handleNext}
-                        className="w-full py-3 px-4 rounded-xl border border-slate-600 bg-slate-800 hover:bg-slate-700 hover:border-indigo-400 text-sm font-semibold text-slate-200 hover:text-white transition-all"
+                        className="w-full py-3 px-4 rounded-xl border border-border bg-muted hover:bg-border hover:border-primary/50 text-sm font-semibold text-foreground transition-all"
                     >
                         {current < questions.length - 1 ? 'Next question' : 'See results'}
                     </button>

@@ -61,34 +61,34 @@ export default function ManifestoPage() {
       <div className="py-12">
         <JsonLd data={jsonLd} />
         <header className="mb-16">
-          <h1 className="font-serif text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+          <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
             The Manifesto
           </h1>
-          <p className="mt-8 text-lg italic leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <p className="mt-8 text-lg italic leading-relaxed text-muted-foreground">
             We are building Discovering Cinema to be the counter-balance to the
             streaming era. These are the promises that guide our code, our
             design, and our data.
           </p>
-          <div className="mt-12 h-px w-full bg-zinc-200 dark:bg-zinc-800" />
+          <div className="mt-12 h-px w-full bg-border" />
         </header>
 
         <main className="space-y-16">
           {tenets.map((tenet) => (
             <section key={tenet.number} className="group">
-              <span className="block font-mono text-xs tracking-widest text-zinc-500 uppercase dark:text-zinc-500">
+              <span className="block font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 {tenet.number}
               </span>
-              <h2 className="mt-2 font-serif text-2xl text-zinc-900 dark:text-zinc-100">
+              <h2 className="mt-2 font-serif text-2xl text-foreground">
                 {tenet.title}
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
                 {tenet.content}
               </p>
             </section>
           ))}
 
-          <section className="rounded-lg border border-zinc-200 bg-zinc-50/50 p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
-            <h2 className="font-serif text-xl text-zinc-900 dark:text-zinc-100">
+          <section className="rounded-lg border border-border bg-muted/50 p-8">
+            <h2 className="font-serif text-xl text-foreground">
               What We Are Not
             </h2>
             <ul className="mt-6 space-y-3">
@@ -100,9 +100,9 @@ export default function ManifestoPage() {
               ].map((item) => (
                 <li
                   key={item}
-                  className="flex items-center gap-4 text-zinc-500 dark:text-zinc-400"
+                  className="flex items-center gap-4 text-muted-foreground"
                 >
-                  <span className="text-xl font-bold text-zinc-300 dark:text-zinc-700">
+                  <span className="text-xl font-bold text-muted-foreground/40">
                     ×
                   </span>
                   {item}

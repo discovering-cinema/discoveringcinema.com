@@ -211,19 +211,11 @@ export default async function Page({
       <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
-        <article className="prose max-w-none prose-zinc dark:prose-invert prose-h1:font-serif prose-h1:font-normal prose-h1:tracking-tight prose-h2:font-serif prose-h2:font-normal prose-h3:font-serif prose-h3:font-normal prose-h4:font-serif prose-h4:font-normal">
-          {seriesName && seriesSlug && (
-            <Link
-              href={`/journal/series/${seriesSlug}`}
-              className="relative z-10 bg-teal-50 dark:bg-teal-900/30 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
-            >
-              <small>Series: <span className="font-medium">{seriesName}</span></small>
-            </Link>
-          )}
+        <article className="prose max-w-none">
           {frontmatter?.title && <h1>{frontmatter.title}</h1>}
           {frontmatter?.date && (
-            <div className="flex items-center justify-between mb-8">
-              <time className="text-sm text-zinc-600 dark:text-zinc-400">
+            <div className="not-prose flex items-center justify-between mb-8">
+              <time className="text-sm text-muted-foreground">
                 {new Date(frontmatter.date).toLocaleDateString('en-GB', {
                   year: 'numeric',
                   month: 'short',
@@ -234,7 +226,7 @@ export default async function Page({
           )}
           {frontmatter?.image && (
             <div className="relative mb-12 not-prose">
-              <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
                 <Image
                   src={frontmatter.image}
                   alt={frontmatter.imageDescription || frontmatter.title || ''}
@@ -245,7 +237,7 @@ export default async function Page({
                 />
               </div>
               {frontmatter.imageDescription && (
-                <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed italic">
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed italic">
                   {frontmatter.imageDescription}
                 </p>
               )}
@@ -253,11 +245,11 @@ export default async function Page({
           )}
 
           {seriesPosts.length > 0 && (
-            <div className="mb-12 p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 not-prose">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mb-4">
+            <div className="mb-12 pl-6 not-prose border-l-2 border-primary">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
                 In this series:{' '}
                 {seriesSlug ? (
-                  <Link href={`/journal/series/${seriesSlug}`} className="text-teal-600 dark:text-teal-400 hover:underline">
+                  <Link href={`/journal/series/${seriesSlug}`} className="text-primary hover:underline">
                     {seriesName}
                   </Link>
                 ) : seriesName}
@@ -269,17 +261,17 @@ export default async function Page({
                       key={post.slug}
                       className="flex items-start gap-3 text-sm"
                     >
-                      <span className="text-zinc-400 dark:text-zinc-500 font-mono mt-0.5">
+                      <span className="text-muted-foreground font-mono mt-0.5">
                         {String(index + 1).padStart(2, '0')}
                       </span>
                       {post.current ? (
-                        <span className="font-medium text-teal-600 dark:text-teal-400">
+                        <span className="font-medium text-primary">
                           {post.title} (current)
                         </span>
                       ) : (
                         <Link
                           href={`/journal/${post.slug}`}
-                          className="text-zinc-600 dark:text-zinc-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                          className="text-muted-foreground hover:text-primary transition-colors"
                         >
                           {post.title}
                         </Link>
@@ -294,7 +286,7 @@ export default async function Page({
           <Post />
           {frontmatter?.tags && frontmatter.tags.length > 0 && (
             <div className="mt-16 not-prose">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mb-4">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
                 Explore more on these topics
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -302,7 +294,7 @@ export default async function Page({
                   <Link
                     key={tag}
                     href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
-                    className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 rounded-full hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700"
+                    className="font-mono text-sm uppercase tracking-wider text-muted-foreground px-2 py-0.5 border border-border hover:text-foreground transition-colors hover:border-foreground/30"
                   >
                     {tag}
                   </Link>
@@ -311,22 +303,22 @@ export default async function Page({
             </div>
           )}
           {nextPost && (
-            <div className="mt-12 p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 not-prose">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-2">
+            <div className="mt-12 pl-6 border-l-2 border-primary not-prose">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
                 Next in series
               </h3>
               <Link
                 href={`/journal/${nextPost.slug}`}
                 className="group flex items-center justify-between gap-4"
               >
-                <span className="text-xl font-serif text-zinc-900 dark:text-zinc-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                <span className="text-xl font-serif text-foreground group-hover:text-primary transition-colors">
                   {nextPost.title}
                 </span>
                 <svg
                   viewBox="0 0 16 16"
                   fill="none"
                   aria-hidden="true"
-                  className="ml-1 h-4 w-4 shrink-0 stroke-current text-zinc-400 transition-transform group-hover:translate-x-1 group-hover:text-teal-600 dark:text-zinc-500 dark:group-hover:text-teal-400"
+                  className="ml-1 h-4 w-4 shrink-0 stroke-current text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
                 >
                   <path
                     d="M6.75 5.75 9.25 8l-2.5 2.25"
@@ -338,7 +330,7 @@ export default async function Page({
               </Link>
             </div>
           )}
-          <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+          <div className="mt-16 pt-8 border-t border-border not-prose">
             <AuthorBio lastWatched={frontmatter?.lastWatched} />
           </div>
         </article>

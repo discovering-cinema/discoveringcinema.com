@@ -78,7 +78,7 @@ export default async function SeriesPage({
         <div className="flex items-center gap-3 mb-6">
           <Link
             href="/journal/series"
-            className="text-sm font-medium text-teal-500 hover:text-teal-600 transition-colors flex items-center gap-1"
+            className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
           >
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-4 w-4 stroke-current rotate-180">
               <path d="M6.75 5.75 9.25 8l-2.5 2.25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -86,15 +86,15 @@ export default async function SeriesPage({
             All series
           </Link>
         </div>
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
           {s.name}
         </h1>
         {s.description && (
-          <p className="mt-6 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
             {s.description}
           </p>
         )}
-        <p className={`${s.description ? 'mt-4' : 'mt-6'} text-lg text-zinc-600 dark:text-zinc-400`}>
+        <p className={`${s.description ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}>
           {posts.length} {posts.length === 1 ? 'article' : 'articles'}
         </p>
       </header>
@@ -102,7 +102,7 @@ export default async function SeriesPage({
       <div className="flex flex-col gap-16">
         {posts.map((post, index) => (
           <article key={post.slug} className="group relative flex flex-col items-start">
-            <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+            <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-muted">
               {post.image ? (
                 <Image
                   src={post.image}
@@ -113,41 +113,41 @@ export default async function SeriesPage({
                   priority={index === 0}
                 />
               ) : (
-                <div className="flex h-full items-center justify-center text-zinc-400">
+                <div className="flex h-full items-center justify-center text-muted-foreground">
                   <span className="font-serif italic">Discovering Cinema</span>
                 </div>
               )}
             </div>
             {post.order && (
-              <small className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 inline-block">
+              <small className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-3 inline-block">
                 Part {post.order}
               </small>
             )}
             {post.date && (
               <time
-                className="relative z-10 mb-3 flex items-center text-sm text-zinc-600 dark:text-zinc-400 pl-3.5"
+                className="relative z-10 mb-3 flex items-center text-sm text-muted-foreground pl-3.5"
                 dateTime={post.date}
               >
                 <span className="absolute inset-y-0 left-0 flex items-center" aria-hidden="true">
-                  <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-700" />
+                  <span className="h-4 w-0.5 rounded-full bg-border" />
                 </span>
                 {post.date}
               </time>
             )}
-            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="font-serif text-2xl font-normal tracking-tight text-foreground">
               <Link href={`/journal/${post.slug}`}>
                 <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
                 <span className="relative z-10">{post.title}</span>
               </Link>
             </h2>
             {post.description && (
-              <p className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="relative z-10 mt-2 text-sm text-muted-foreground">
                 {post.description}
               </p>
             )}
             <div
               aria-hidden="true"
-              className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
+              className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"
             >
               Read article
               <svg

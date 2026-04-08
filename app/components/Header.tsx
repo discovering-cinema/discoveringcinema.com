@@ -6,22 +6,23 @@ export default function Header() {
       <nav className="flex items-center justify-between">
         <Link
           href="/"
-          className="font-serif text-xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100"
+          className="text-foreground flex items-baseline space-x-2 uppercase"
         >
-          Discovering Cinema
+            <span className="font-montserrat font-medium tracking-[0.2em] text-sm">Discovering</span>
+            <span className="font-playfair font-bold text-2xl">Cinema</span>
         </Link>
         <div className="flex gap-6">
           <Link
             href="/journal"
-            className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Journal
           </Link>
           <Link
-            href="/manifesto"
-            className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            href="/concepts"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            Manifesto
+            Concepts
           </Link>
         </div>
       </nav>

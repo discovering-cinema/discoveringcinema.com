@@ -84,15 +84,15 @@ export default async function TagPage({
       <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16">
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
           {decodedTag}
         </h1>
         {summary && (
-          <p className="mt-6 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
             {summary}
           </p>
         )}
-        <p className={`${summary ? 'mt-4' : 'mt-6'} text-lg text-zinc-600 dark:text-zinc-400`}>
+        <p className={`${summary ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}>
           {totalCount} {totalCount === 1 ? 'result' : 'results'}
         </p>
       </header>
@@ -100,7 +100,7 @@ export default async function TagPage({
       {posts.length > 0 && (
         <section className="mb-20">
           {educationalItems.length > 0 && (
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-600 dark:text-zinc-400 mb-8">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-8">
               Journal
             </h2>
           )}
@@ -110,7 +110,7 @@ export default async function TagPage({
                 key={post.slug}
                 className="group relative flex flex-col items-start"
               >
-                <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+                <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-muted">
                   {post.image ? (
                     <Image
                       src={post.image}
@@ -121,21 +121,21 @@ export default async function TagPage({
                       priority={posts.indexOf(post) === 0}
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center text-zinc-400">
+                    <div className="flex h-full items-center justify-center text-muted-foreground">
                       <span className="font-serif italic">Discovering Cinema</span>
                     </div>
                   )}
                 </div>
                 {post.date && (
                   <time
-                    className="relative z-10 mb-3 flex items-center text-sm text-zinc-600 dark:text-zinc-400 pl-3.5"
+                    className="relative z-10 mb-3 flex items-center text-sm text-muted-foreground pl-3.5"
                     dateTime={post.date}
                   >
                     <span
                       className="absolute inset-y-0 left-0 flex items-center"
                       aria-hidden="true"
                     >
-                      <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-700" />
+                      <span className="h-4 w-0.5 rounded-full bg-border" />
                     </span>
                     {post.date}
                   </time>
@@ -143,25 +143,25 @@ export default async function TagPage({
                 {post.series && post.seriesSlug && (
                   <Link
                     href={`/journal/series/${post.seriesSlug}`}
-                    className="relative z-10 bg-teal-50 dark:bg-teal-900/30 py-1 px-2 rounded text-teal-600 dark:text-teal-400 mb-4 inline-block hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
+                    className="relative z-10 bg-accent/20 text-accent-foreground py-1 px-2 rounded mb-4 inline-block hover:bg-accent/30 transition-colors"
                   >
                     <small>Series: <span className="font-medium">{post.series}</span></small>
                   </Link>
                 )}
-                <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+                <h2 className="font-serif text-2xl font-normal tracking-tight text-foreground">
                   <Link href={`/journal/${post.slug}`}>
                     <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
                     <span className="relative z-10">{post.title}</span>
                   </Link>
                 </h2>
                 {post.description && (
-                  <p className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  <p className="relative z-10 mt-2 text-sm text-muted-foreground">
                     {post.description}
                   </p>
                 )}
                 <div
                   aria-hidden="true"
-                  className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
+                  className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"
                 >
                   Read article
                   <svg
@@ -187,7 +187,7 @@ export default async function TagPage({
       {educationalItems.length > 0 && (
         <section>
           {posts.length > 0 && (
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-600 dark:text-zinc-400 mb-8">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-8">
               Educational Material
             </h2>
           )}
@@ -196,16 +196,16 @@ export default async function TagPage({
               <article key={item.urlPath} className="group relative flex flex-col items-start">
                 <Link
                   href={item.urlPath}
-                  className="block w-full p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+                  className="block w-full p-6 rounded-xl border border-border hover:border-foreground/30 bg-concept-card transition-colors"
                 >
-                  <small className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 inline-block">
+                  <small className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-3 inline-block">
                     {item.contentType}
                   </small>
-                  <h2 className="font-serif text-xl font-normal text-zinc-900 dark:text-zinc-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                  <h2 className="font-serif text-xl font-normal text-foreground group-hover:text-primary transition-colors">
                     {item.title}
                   </h2>
                   {item.description && (
-                    <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="mt-2 text-sm text-muted-foreground">
                       {item.description}
                     </p>
                   )}
