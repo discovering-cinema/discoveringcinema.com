@@ -211,7 +211,7 @@ export default async function Page({
       <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
-        <article className="prose max-w-none">
+        <article className="prose mx-auto">
           {frontmatter?.title && <h1>{frontmatter.title}</h1>}
           {frontmatter?.date && (
             <div className="not-prose flex items-center justify-between mb-8">
@@ -246,7 +246,7 @@ export default async function Page({
 
           {seriesPosts.length > 0 && (
             <div className="mb-12 pl-6 not-prose border-l-2 border-primary">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 flex flex-col sm:flex-row gap-2">
                 In this series:{' '}
                 {seriesSlug ? (
                   <Link href={`/journal/series/${seriesSlug}`} className="text-primary hover:underline">
