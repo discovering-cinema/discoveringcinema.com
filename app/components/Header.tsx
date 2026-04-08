@@ -6,7 +6,7 @@ export default function Header() {
       <nav className="flex items-center justify-between">
         <Link
           href="/"
-          className="text-foreground flex items-baseline space-x-2 uppercase"
+          className="text-foreground flex flex-col sm:flex-row items-baseline space-x-2 uppercase"
         >
             <span className="font-montserrat font-medium tracking-[0.2em] text-sm">Discovering</span>
             <span className="font-playfair font-bold text-2xl">Cinema</span>

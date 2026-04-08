@@ -60,8 +60,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} overflow-x-hidden`}>
       <body className="antialiased overflow-x-hidden">
-        <main className="mx-auto max-w-2xl px-6">{children}</main>
-        <Footer />
+        <main className="mx-auto max-w-5xl px-6">
+          {children}
+          <Footer />
+        </main>
         <Analytics />
         <SpeedInsights />
         {process.env.NODE_ENV === 'production' &&

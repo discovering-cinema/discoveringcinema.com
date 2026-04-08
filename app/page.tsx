@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const posts = getAllPosts();
-  const [featuredPost, ...remainingPosts] = posts.slice(0, 5);
-  const hasMorePosts = posts.length > 5;
+  const [featuredPost, ...remainingPosts] = posts.slice(0, 4);
+  const hasMorePosts = posts.length > 4;
   const educationalContent = getAllEducationalContent();
   const displayEducationalContent = educationalContent.slice(0, 3);
 
@@ -36,7 +36,7 @@ export default function Home() {
       {/* Masthead */}
       <section className="pt-8 pb-6 border-b border-border mb-12">
         <nav className="flex items-center justify-between">
-          <h1 className="text-foreground flex items-baseline space-x-2 uppercase">
+          <h1 className="text-foreground flex flex-col sm:flex-row items-baseline space-x-2 uppercase">
             <span className="font-montserrat font-medium tracking-[0.2em] text-sm">Discovering</span>
             <span className="font-playfair font-bold text-2xl">Cinema</span>
           </h1>
@@ -152,7 +152,7 @@ export default function Home() {
               </Link>
             )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {remainingPosts.map((post) => (
               <article
                 key={post.slug}
@@ -209,11 +209,21 @@ export default function Home() {
       {/* Concepts */}
       {displayEducationalContent.length > 0 && (
         <section className="border-t border-border py-8 mb-16">
-          <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-            <span className="inline-block h-2 w-2 rounded-sm bg-accent" aria-hidden="true" />
-            Concepts
-          </span>
-          <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between mb-6">
+            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+              <span className="inline-block h-2 w-2 rounded-sm bg-accent" aria-hidden="true" />
+              Concepts
+            </span>
+            {educationalContent.length > 3 && (
+                <Link
+                    href="/journal"
+                    className="text-sm font-medium text-primary hover:text-primary/80"
+                >
+                  See all →
+                </Link>
+            )}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {displayEducationalContent.map((item) => (
               <Link
                 key={item.urlPath}
@@ -234,14 +244,6 @@ export default function Home() {
               </Link>
             ))}
           </div>
-          {educationalContent.length > 3 && (
-            <Link
-              href="/concepts"
-              className="mt-4 inline-block text-sm font-medium text-primary hover:text-primary/80"
-            >
-              All concepts →
-            </Link>
-          )}
         </section>
       )}
     </>
