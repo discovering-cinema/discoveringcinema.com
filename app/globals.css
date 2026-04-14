@@ -5,14 +5,14 @@
   :root {
     /* Backgrounds */
     --background: 45 29% 97%; /* Parchment */
-    --card: 220 14% 96%; /* Subtle Gray */
-    --muted: 85 15% 92%; /* Same as card */
+    --card: 40 15% 95%; /* Warm Parchment Step */
+    --muted: 40 12% 92%; /* Warm Neutral */
     --popover: 45 29% 97%;
 
     /* Paired foregrounds */
     --foreground: 223 14% 20%; /* Deep Ink */
     --card-foreground: 223 14% 20%;
-    --muted-foreground: 90 20% 25%; /* Charcoal */
+    --muted-foreground: 35 12% 40%; /* Warm Slate */
     --popover-foreground: 223 14% 20%;
 
     /* Primary action — Director's Red */
@@ -32,71 +32,12 @@
     --warning-foreground: 223 14% 20%;
 
     /* Structural */
-    --border: 220 14% 88%;
-    --input: 220 14% 88%;
+    --border: 40 10% 88%;
+    --input: 40 10% 88%;
     --ring: 8 76% 48%; /* Focus rings in Director's Red */
 
     /* Custom brand token */
     --concept-card: 46 100% 95%;
-  }
-
-  .dark {
-    --background: 223 14% 10%;
-    --card: 223 14% 14%;
-    --muted: 85 15% 92%;
-    --popover: 223 14% 10%;
-
-    --foreground: 45 29% 92%;
-    --card-foreground: 45 29% 92%;
-    --muted-foreground: 90 20% 25%;
-    --popover-foreground: 45 29% 92%;
-
-    --primary: 8 80% 58%;
-    --primary-foreground: 45 29% 97%;
-
-    --accent: 46 100% 65%;
-    --accent-foreground: 223 14% 10%;
-
-    --success: 142 60% 48%;
-    --success-foreground: 45 29% 97%;
-    --destructive: 0 72% 55%;
-    --destructive-foreground: 45 29% 97%;
-    --warning: 46 100% 65%;
-    --warning-foreground: 223 14% 10%;
-
-    --border: 223 14% 18%;
-    --input: 223 14% 18%;
-    --ring: 8 80% 58%;
-
-    --concept-card: 46 40% 16%;
-  }
-
-  /* System preference fallback — works without a JS theme toggle */
-  @media (prefers-color-scheme: dark) {
-    :root:not(.light) {
-      --background: 223 14% 10%;
-      --card: 223 14% 14%;
-      --muted: 85 15% 92%;
-      --popover: 223 14% 10%;
-      --foreground: 45 29% 92%;
-      --card-foreground: 45 29% 92%;
-      --muted-foreground: 90 20% 25%;
-      --popover-foreground: 45 29% 92%;
-      --primary: 8 80% 58%;
-      --primary-foreground: 45 29% 97%;
-      --accent: 46 100% 65%;
-      --accent-foreground: 223 14% 10%;
-      --success: 142 60% 48%;
-      --success-foreground: 45 29% 97%;
-      --destructive: 0 72% 55%;
-      --destructive-foreground: 45 29% 97%;
-      --warning: 46 100% 65%;
-      --warning-foreground: 223 14% 10%;
-      --border: 223 14% 18%;
-      --input: 223 14% 18%;
-      --ring: 8 80% 58%;
-      --concept-card: 46 40% 16%;
-    }
   }
 }
 
@@ -190,6 +131,7 @@ h6 {
     --tw-prose-hr: hsl(var(--border));
     --tw-prose-th-borders: hsl(var(--border));
     --tw-prose-td-borders: hsl(var(--border));
+    color: hsl(var(--foreground));
     font-family: var(--font-lora);
   }
 

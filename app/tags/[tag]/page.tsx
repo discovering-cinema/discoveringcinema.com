@@ -81,7 +81,7 @@ export default async function TagPage({
       <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16">
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
+        <h1 className="text-center text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight mb-16">
           {decodedTag}
         </h1>
         {summary && (
@@ -89,11 +89,6 @@ export default async function TagPage({
             {summary}
           </p>
         )}
-        <p
-          className={`${summary ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}
-        >
-          {totalCount} {totalCount === 1 ? 'result' : 'results'}
-        </p>
       </header>
 
       {posts.length > 0 && (

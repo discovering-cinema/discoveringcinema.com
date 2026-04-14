@@ -49,8 +49,8 @@ export default function JournalIndex() {
     <>
       <Header />
       <JsonLd data={jsonLd} />
-      <header className="mb-16">
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
+      <header className="mb-16 text-center">
+        <h1 className="text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight">
           Journal
         </h1>
         <p className="mt-6 text-lg text-muted-foreground">

@@ -127,7 +127,7 @@ export default function Home() {
             </span>
             {educationalContent.length > 3 && (
               <Link
-                href="/journal"
+                href="/concepts"
                 className="text-sm font-medium text-primary hover:text-primary/80"
               >
                 See all →

@@ -20,7 +20,7 @@ export default function YouTube({
   const src = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
   return (
-    <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 not-prose my-8">
+    <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-100 not-prose my-8">
       <iframe
         className="absolute top-0 left-0 h-full w-full"
         src={src}

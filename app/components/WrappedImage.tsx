@@ -32,7 +32,7 @@ export default function WrappedImage({
         className="rounded-lg object-cover"
       />
       {description && (
-        <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400 leading-tight italic">
+        <p className="mt-2 text-xs text-zinc-500 leading-tight italic">
           {description}
         </p>
       )}

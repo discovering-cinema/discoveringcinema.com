@@ -11,7 +11,9 @@ import {
   WithContext,
 } from 'schema-dts';
 import matter from 'gray-matter';
+import GithubSlugger from 'github-slugger';
 import AuthorBio from '@/app/components/AuthorBio';
+import TableOfContents from '@/app/components/TableOfContents';
 import Image from 'next/image';
 import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
@@ -74,6 +76,12 @@ export default async function Page({
 
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const { data: frontmatter } = matter(fileContent);
+
+  const slugger = new GithubSlugger();
+  const headings = [...fileContent.matchAll(/^## (.+)$/gm)].map((m) => ({
+    text: m[1].trim(),
+    id: slugger.slug(m[1].trim()),
+  }));
 
   const { default: Post } = await import(`@/content/articles/${slug}.mdx`);
 
@@ -229,7 +237,7 @@ export default async function Page({
 
         {/* ── Full-width title and hero ── */}
         {frontmatter?.title && (
-          <h1 className="font-playfair text-4xl font-bold mb-4">
+          <h1 className="text-center text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight mb-16">
             {frontmatter.title}
           </h1>
         )}
@@ -262,7 +270,7 @@ export default async function Page({
           {/* ── Main column (2/3) ── */}
           <article className="prose max-w-none lg:col-span-2">
             {seriesPosts.length > 0 && (
-              <div className="mb-12 pl-6 not-prose border-l-2 border-primary">
+              <div className="mb-8 border-b border-border pb-8 not-prose">
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 flex flex-col sm:flex-row gap-2">
                   In this series:{' '}
                   {seriesSlug ? (
@@ -350,8 +358,8 @@ export default async function Page({
               </div>
             )}
 
-            {/* Author bio — mobile/tablet only */}
-            <div className="mt-16 pt-8 border-t border-border not-prose lg:hidden">
+            {/* Author bio */}
+            <div className="mt-16 pt-8 border-t border-border not-prose">
               <AuthorBio lastWatched={frontmatter?.lastWatched} />
             </div>
 
@@ -366,13 +374,15 @@ export default async function Page({
 
           {/* ── Sidebar (1/3) — desktop only ── */}
           <aside
-            className="hidden lg:flex lg:flex-col lg:top-8"
+            className="hidden lg:flex lg:flex-col w-full"
             aria-label="Sidebar"
           >
-            {/* Author bio — top */}
-            <div>
-              <AuthorBio lastWatched={frontmatter?.lastWatched} />
+            {/* TOC — sticky at top */}
+            <div className="sticky top-8">
+              <TableOfContents headings={headings} />
             </div>
+
+            <div className="flex-grow" />
 
             {/* Related articles — bottom */}
             <div className="mt-auto flex flex-col gap-8 pt-8">

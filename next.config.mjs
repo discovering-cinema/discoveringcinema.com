@@ -79,7 +79,7 @@ const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: ['remark-frontmatter', 'remark-math'],
-    rehypePlugins: ['rehype-katex'],
+    rehypePlugins: ['rehype-slug', 'rehype-katex'],
   },
 });
 

@@ -87,7 +87,7 @@ export default async function SeriesPage({
             All series
           </Link>
         </div>
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
+        <h1 className="text-center text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight mb-16">
           {s.name}
         </h1>
         {s.description && (
@@ -95,11 +95,6 @@ export default async function SeriesPage({
             {s.description}
           </p>
         )}
-        <p
-          className={`${s.description ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}
-        >
-          {posts.length} {posts.length === 1 ? 'article' : 'articles'}
-        </p>
       </header>
 
       <div className="flex flex-col gap-16">

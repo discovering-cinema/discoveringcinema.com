@@ -60,9 +60,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} overflow-x-hidden`}
+      className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} overflow-x-clip`}
     >
-      <body className="antialiased overflow-x-hidden">
+      <body className="antialiased overflow-x-clip">
         <main className="mx-auto max-w-5xl px-6">
           {children}
           <Footer />
