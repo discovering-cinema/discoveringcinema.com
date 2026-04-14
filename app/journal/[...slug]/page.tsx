@@ -12,6 +12,7 @@ import Link from 'next/link';
 import TagPill from '@/app/components/TagPill';
 import ArticleDate from '@/app/components/ArticleDate';
 import {getAllPosts} from '@/app/lib/posts';
+import RelatedArticles from '@/app/components/RelatedArticles';
 
 export async function generateMetadata({
   params,
@@ -213,117 +214,152 @@ export default async function Page({
       <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
-        <article className="prose mx-auto">
-          {frontmatter?.title && <h1>{frontmatter.title}</h1>}
-          {frontmatter?.date && (
-            <div className="not-prose flex items-center justify-between mb-8">
-              <ArticleDate date={frontmatter.date} variant="plain" />
-            </div>
-          )}
-          {frontmatter?.image && (
-            <div className="relative mb-12 not-prose">
-              <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
-                <Image
-                  src={frontmatter.image}
-                  alt={frontmatter.imageDescription || frontmatter.title || ''}
-                  fill
-                  sizes="(max-width: 672px) calc(100vw - 48px), 672px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              {frontmatter.imageDescription && (
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed italic">
-                  {frontmatter.imageDescription}
-                </p>
-              )}
-            </div>
-          )}
 
-          {seriesPosts.length > 0 && (
-            <div className="mb-12 pl-6 not-prose border-l-2 border-primary">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 flex flex-col sm:flex-row gap-2">
-                In this series:{' '}
-                {seriesSlug ? (
-                  <Link href={`/journal/series/${seriesSlug}`} className="text-primary hover:underline">
-                    {seriesName}
-                  </Link>
-                ) : seriesName}
-              </h2>
-              <nav>
-                <ol className="space-y-3">
-                  {seriesPosts.map((post, index) => (
-                    <li
-                      key={post.slug}
-                      className="flex items-start gap-3 text-sm"
-                    >
-                      <span className="text-muted-foreground font-mono mt-0.5">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      {post.current ? (
-                        <span className="font-medium text-primary">
-                          {post.title} (current)
-                        </span>
-                      ) : (
-                        <Link
-                          href={`/journal/${post.slug}`}
-                          className="text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {post.title}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ol>
-              </nav>
-            </div>
-          )}
-
-          <Post />
-          {frontmatter?.tags && frontmatter.tags.length > 0 && (
-            <div className="mt-16 not-prose">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
-                Explore more on these topics
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {frontmatter.tags.map((tag: string) => (
-                  <TagPill key={tag} tag={tag} />
-                ))}
-              </div>
-            </div>
-          )}
-          {nextPost && (
-            <div className="mt-12 pl-6 border-l-2 border-primary not-prose">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
-                Next in series
-              </h3>
-              <Link
-                href={`/journal/${nextPost.slug}`}
-                className="group flex items-center justify-between gap-4"
-              >
-                <span className="text-xl font-serif text-foreground group-hover:text-primary transition-colors">
-                  {nextPost.title}
-                </span>
-                <svg
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  aria-hidden="true"
-                  className="ml-1 h-4 w-4 shrink-0 stroke-current text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
-                >
-                  <path
-                    d="M6.75 5.75 9.25 8l-2.5 2.25"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
-            </div>
-          )}
-          <div className="mt-16 pt-8 border-t border-border not-prose">
-            <AuthorBio lastWatched={frontmatter?.lastWatched} />
+        {/* ── Full-width title and hero ── */}
+        {frontmatter?.title && (
+          <h1 className="font-playfair text-4xl font-bold mb-4">{frontmatter.title}</h1>
+        )}
+        {frontmatter?.date && (
+          <div className="flex items-center justify-between mb-8">
+            <ArticleDate date={frontmatter.date} variant="plain" />
           </div>
-        </article>
+        )}
+        {frontmatter?.image && (
+          <div className="relative mb-12">
+            <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
+              <Image
+                src={frontmatter.image}
+                alt={frontmatter.imageDescription || frontmatter.title || ''}
+                fill
+                sizes="(max-width: 1023px) calc(100vw - 48px), calc(min(100vw, 1024px) - 48px)"
+                className="object-cover"
+                priority
+              />
+            </div>
+            {frontmatter.imageDescription && (
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed italic">
+                {frontmatter.imageDescription}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="lg:grid lg:grid-cols-3 lg:gap-12 lg:items-stretch">
+
+          {/* ── Main column (2/3) ── */}
+          <article className="prose max-w-none lg:col-span-2">
+
+            {seriesPosts.length > 0 && (
+              <div className="mb-12 pl-6 not-prose border-l-2 border-primary">
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 flex flex-col sm:flex-row gap-2">
+                  In this series:{' '}
+                  {seriesSlug ? (
+                    <Link href={`/journal/series/${seriesSlug}`} className="text-primary hover:underline">
+                      {seriesName}
+                    </Link>
+                  ) : seriesName}
+                </h2>
+                <nav>
+                  <ol className="space-y-3">
+                    {seriesPosts.map((post, index) => (
+                      <li
+                        key={post.slug}
+                        className="flex items-start gap-3 text-sm"
+                      >
+                        <span className="text-muted-foreground font-mono mt-0.5">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        {post.current ? (
+                          <span className="font-medium text-primary">
+                            {post.title} (current)
+                          </span>
+                        ) : (
+                          <Link
+                            href={`/journal/${post.slug}`}
+                            className="text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            {post.title}
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              </div>
+            )}
+
+            <Post />
+
+            {nextPost && (
+              <div className="mt-12 pl-6 border-l-2 border-primary not-prose">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
+                  Next in series
+                </h3>
+                <Link
+                  href={`/journal/${nextPost.slug}`}
+                  className="group flex items-center justify-between gap-4"
+                  >
+                  <span className="text-xl font-serif text-foreground group-hover:text-primary transition-colors">
+                    {nextPost.title}
+                  </span>
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                    className="ml-1 h-4 w-4 shrink-0 stroke-current text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                    >
+                    <path
+                      d="M6.75 5.75 9.25 8l-2.5 2.25"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              </div>
+            )}
+
+            {/* Tags — mobile/tablet only */}
+            {frontmatter?.tags && frontmatter.tags.length > 0 && (
+              <div className="mt-16 not-prose border-t border-border pt-16">
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
+                  Explore more on these topics
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {frontmatter.tags.map((tag: string) => (
+                    <TagPill key={tag} tag={tag} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Author bio — mobile/tablet only */}
+            <div className="mt-16 pt-8 border-t border-border not-prose lg:hidden">
+              <AuthorBio lastWatched={frontmatter?.lastWatched} />
+            </div>
+
+            {/* Related articles — mobile/tablet only, below author bio */}
+            <div className="mt-12 not-prose lg:hidden">
+              <RelatedArticles currentSlug={slug} currentTags={frontmatter.tags || []} />
+            </div>
+          </article>
+
+          {/* ── Sidebar (1/3) — desktop only ── */}
+          <aside className="hidden lg:flex lg:flex-col lg:top-8" aria-label="Sidebar">
+
+            {/* Author bio — top */}
+            <div>
+              <AuthorBio lastWatched={frontmatter?.lastWatched} />
+            </div>
+
+            {/* Related articles — bottom */}
+            <div className="mt-auto flex flex-col gap-8 pt-8">
+              <RelatedArticles currentSlug={slug} currentTags={frontmatter.tags || []} />
+            </div>
+
+          </aside>
+
+        </div>
       </div>
     </>
   );

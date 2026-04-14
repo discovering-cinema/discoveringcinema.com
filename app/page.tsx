@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import JsonLd from '@/app/components/JsonLd';
+import MobileMenuButton from '@/app/components/MobileMenuButton';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import ConceptCard from '@/app/components/ConceptCard';
 import {WebSite, WithContext} from 'schema-dts';
@@ -35,13 +36,13 @@ export default function Home() {
       <JsonLd data={jsonLd} />
 
       {/* Masthead */}
-      <section className="pt-8 pb-6 border-b border-border mb-12">
+      <section className="relative pt-8 pb-6 border-b border-border mb-12">
         <nav className="flex items-center justify-between">
           <h1 className="text-foreground flex flex-col sm:flex-row items-baseline space-x-2 uppercase">
             <span className="font-montserrat font-medium tracking-[0.2em] text-sm">Discovering</span>
             <span className="font-playfair font-bold text-2xl">Cinema</span>
           </h1>
-          <div className="flex gap-6">
+          <div className="hidden sm:flex gap-6">
             <Link
               href="/journal"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -55,6 +56,7 @@ export default function Home() {
               Concepts
             </Link>
           </div>
+          <MobileMenuButton />
         </nav>
       </section>
 

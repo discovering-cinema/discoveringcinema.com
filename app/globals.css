@@ -6,13 +6,13 @@
     /* Backgrounds */
     --background: 45 29% 97%;         /* Parchment */
     --card: 220 14% 96%;              /* Subtle Gray */
-    --muted: 220 14% 96%;             /* Same as card */
+    --muted: 85 15% 92%;             /* Same as card */
     --popover: 45 29% 97%;
 
     /* Paired foregrounds */
     --foreground: 223 14% 20%;        /* Deep Ink */
     --card-foreground: 223 14% 20%;
-    --muted-foreground: 215 14% 34%;  /* Charcoal */
+    --muted-foreground: 90 20% 25%;  /* Charcoal */
     --popover-foreground: 223 14% 20%;
 
     /* Primary action — Director's Red */
@@ -43,12 +43,12 @@
   .dark {
     --background: 223 14% 10%;
     --card: 223 14% 14%;
-    --muted: 223 14% 14%;
+    --muted: 85 15% 92%;
     --popover: 223 14% 10%;
 
     --foreground: 45 29% 92%;
     --card-foreground: 45 29% 92%;
-    --muted-foreground: 215 14% 65%;
+    --muted-foreground: 90 20% 25%;
     --popover-foreground: 45 29% 92%;
 
     --primary: 8 80% 58%;
@@ -76,11 +76,11 @@
     :root:not(.light) {
       --background: 223 14% 10%;
       --card: 223 14% 14%;
-      --muted: 223 14% 14%;
+      --muted: 85 15% 92%;
       --popover: 223 14% 10%;
       --foreground: 45 29% 92%;
       --card-foreground: 45 29% 92%;
-      --muted-foreground: 215 14% 65%;
+      --muted-foreground: 90 20% 25%;
       --popover-foreground: 45 29% 92%;
       --primary: 8 80% 58%;
       --primary-foreground: 45 29% 97%;
@@ -156,6 +156,15 @@ h1, h2, h3, h4, h5, h6 {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-in-out;
 }
 
 @layer components {

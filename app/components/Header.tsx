@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import MobileMenuButton from '@/app/components/MobileMenuButton';
 
 export default function Header() {
   return (
-    <header className="py-8 border-b border-border mb-12">
+    <header className="relative py-8 border-b border-border mb-12">
       <nav className="flex items-center justify-between">
         <Link
           href="/"
@@ -11,7 +12,7 @@ export default function Header() {
             <span className="font-montserrat font-medium tracking-[0.2em] text-sm">Discovering</span>
             <span className="font-playfair font-bold text-2xl">Cinema</span>
         </Link>
-        <div className="flex gap-6">
+        <div className="hidden sm:flex gap-6">
           <Link
             href="/journal"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -25,6 +26,7 @@ export default function Header() {
             Concepts
           </Link>
         </div>
+        <MobileMenuButton />
       </nav>
     </header>
   );
