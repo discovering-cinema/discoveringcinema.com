@@ -1,4 +1,3 @@
-// @ts-nocheck
 import fs from 'fs';
 import path from 'path';
 import { Metadata } from 'next';
@@ -21,7 +20,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const filePath = path.join(process.cwd(), 'content/concepts', `${slug}.mdx`);
+    const filePath = path.join(
+      process.cwd(),
+      'content/concepts',
+      `${slug}.mdx`,
+    );
     const { data: frontmatter } = matter(fs.readFileSync(filePath, 'utf8'));
 
     return {
@@ -61,9 +64,10 @@ export default async function Page({
 
   // Resolve related articles
   const relatedArticleSlugs: string[] = frontmatter.relatedArticles || [];
-  const relatedPosts = relatedArticleSlugs.length > 0
-    ? getAllPosts().filter((post) => relatedArticleSlugs.includes(post.slug))
-    : [];
+  const relatedPosts =
+    relatedArticleSlugs.length > 0
+      ? getAllPosts().filter((post) => relatedArticleSlugs.includes(post.slug))
+      : [];
 
   const faq: FAQPage | null = frontmatter.faq
     ? {
@@ -194,7 +198,12 @@ export default async function Page({
                     <span className="font-serif text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                       {post.title}
                     </span>
-                    {post.description && <ArticleSummary description={post.description} variant="compact" />}
+                    {post.description && (
+                      <ArticleSummary
+                        description={post.description}
+                        variant="compact"
+                      />
+                    )}
                   </Link>
                 ))}
               </div>

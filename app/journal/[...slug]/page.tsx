@@ -1,8 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import {Metadata} from 'next';
-import {notFound} from 'next/navigation';
-import {BlogPosting, BreadcrumbList, Dataset, FAQPage, SoftwareApplication, WithContext} from 'schema-dts';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import {
+  BlogPosting,
+  BreadcrumbList,
+  Dataset,
+  FAQPage,
+  SoftwareApplication,
+  WithContext,
+} from 'schema-dts';
 import matter from 'gray-matter';
 import AuthorBio from '@/app/components/AuthorBio';
 import Image from 'next/image';
@@ -11,7 +18,7 @@ import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
 import TagPill from '@/app/components/TagPill';
 import ArticleDate from '@/app/components/ArticleDate';
-import {getAllPosts} from '@/app/lib/posts';
+import { getAllPosts } from '@/app/lib/posts';
 import RelatedArticles from '@/app/components/RelatedArticles';
 
 export async function generateMetadata({
@@ -133,21 +140,23 @@ export default async function Page({
         ),
       }
     : null;
-  const softwareApplication: SoftwareApplication | null = frontmatter.softwareApplication
-    ? {
-        '@type': 'SoftwareApplication',
-        name: frontmatter.softwareApplication.name,
-        operatingSystem: frontmatter.softwareApplication.operatingSystem,
-        applicationCategory: frontmatter.softwareApplication.applicationCategory,
-        description: frontmatter.softwareApplication.description,
-        offers: {
-          '@type': 'Offer',
-          price: frontmatter.softwareApplication.offers.price,
-          priceCurrency: frontmatter.softwareApplication.offers.priceCurrency,
-        },
-        featureList: frontmatter.softwareApplication.featureList,
-      }
-    : null;
+  const softwareApplication: SoftwareApplication | null =
+    frontmatter.softwareApplication
+      ? {
+          '@type': 'SoftwareApplication',
+          name: frontmatter.softwareApplication.name,
+          operatingSystem: frontmatter.softwareApplication.operatingSystem,
+          applicationCategory:
+            frontmatter.softwareApplication.applicationCategory,
+          description: frontmatter.softwareApplication.description,
+          offers: {
+            '@type': 'Offer',
+            price: frontmatter.softwareApplication.offers.price,
+            priceCurrency: frontmatter.softwareApplication.offers.priceCurrency,
+          },
+          featureList: frontmatter.softwareApplication.featureList,
+        }
+      : null;
 
   const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
@@ -167,7 +176,10 @@ export default async function Page({
       ...slugArray.slice(0, -1).map((part, index) => ({
         '@type': 'ListItem' as const,
         position: 3 + index,
-        name: part.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        name: part
+          .split('-')
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' '),
         item: `https://discoveringcinema.com/journal/${slugArray.slice(0, index + 1).join('/')}`,
       })),
       {
@@ -217,7 +229,9 @@ export default async function Page({
 
         {/* ── Full-width title and hero ── */}
         {frontmatter?.title && (
-          <h1 className="font-playfair text-4xl font-bold mb-4">{frontmatter.title}</h1>
+          <h1 className="font-playfair text-4xl font-bold mb-4">
+            {frontmatter.title}
+          </h1>
         )}
         {frontmatter?.date && (
           <div className="flex items-center justify-between mb-8">
@@ -245,19 +259,22 @@ export default async function Page({
         )}
 
         <div className="lg:grid lg:grid-cols-3 lg:gap-12 lg:items-stretch">
-
           {/* ── Main column (2/3) ── */}
           <article className="prose max-w-none lg:col-span-2">
-
             {seriesPosts.length > 0 && (
               <div className="mb-12 pl-6 not-prose border-l-2 border-primary">
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 flex flex-col sm:flex-row gap-2">
                   In this series:{' '}
                   {seriesSlug ? (
-                    <Link href={`/journal/series/${seriesSlug}`} className="text-primary hover:underline">
+                    <Link
+                      href={`/journal/series/${seriesSlug}`}
+                      className="text-primary hover:underline"
+                    >
                       {seriesName}
                     </Link>
-                  ) : seriesName}
+                  ) : (
+                    seriesName
+                  )}
                 </h2>
                 <nav>
                   <ol className="space-y-3">
@@ -298,7 +315,7 @@ export default async function Page({
                 <Link
                   href={`/journal/${nextPost.slug}`}
                   className="group flex items-center justify-between gap-4"
-                  >
+                >
                   <span className="text-xl font-serif text-foreground group-hover:text-primary transition-colors">
                     {nextPost.title}
                   </span>
@@ -307,7 +324,7 @@ export default async function Page({
                     fill="none"
                     aria-hidden="true"
                     className="ml-1 h-4 w-4 shrink-0 stroke-current text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
-                    >
+                  >
                     <path
                       d="M6.75 5.75 9.25 8l-2.5 2.25"
                       strokeWidth="1.5"
@@ -340,13 +357,18 @@ export default async function Page({
 
             {/* Related articles — mobile/tablet only, below author bio */}
             <div className="mt-12 not-prose lg:hidden">
-              <RelatedArticles currentSlug={slug} currentTags={frontmatter.tags || []} />
+              <RelatedArticles
+                currentSlug={slug}
+                currentTags={frontmatter.tags || []}
+              />
             </div>
           </article>
 
           {/* ── Sidebar (1/3) — desktop only ── */}
-          <aside className="hidden lg:flex lg:flex-col lg:top-8" aria-label="Sidebar">
-
+          <aside
+            className="hidden lg:flex lg:flex-col lg:top-8"
+            aria-label="Sidebar"
+          >
             {/* Author bio — top */}
             <div>
               <AuthorBio lastWatched={frontmatter?.lastWatched} />
@@ -354,11 +376,12 @@ export default async function Page({
 
             {/* Related articles — bottom */}
             <div className="mt-auto flex flex-col gap-8 pt-8">
-              <RelatedArticles currentSlug={slug} currentTags={frontmatter.tags || []} />
+              <RelatedArticles
+                currentSlug={slug}
+                currentTags={frontmatter.tags || []}
+              />
             </div>
-
           </aside>
-
         </div>
       </div>
     </>

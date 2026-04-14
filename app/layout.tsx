@@ -12,7 +12,7 @@ const montserrat = Montserrat({
   variable: '--font-montserrat',
   subsets: ['latin'],
   weight: ['400', '700'],
-})
+});
 
 const playfair = Playfair_Display({
   variable: '--font-playfair',
@@ -58,7 +58,10 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} overflow-x-hidden`}>
+    <html
+      lang="en"
+      className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} overflow-x-hidden`}
+    >
       <body className="antialiased overflow-x-hidden">
         <main className="mx-auto max-w-5xl px-6">
           {children}

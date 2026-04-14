@@ -1,4 +1,4 @@
-import {getAllPosts} from '@/app/lib/posts';
+import { getAllPosts } from '@/app/lib/posts';
 
 const SITE_URL = 'https://discoveringcinema.com';
 const SITE_TITLE = 'Discovering Cinema';

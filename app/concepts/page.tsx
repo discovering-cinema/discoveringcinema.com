@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/app/components/Header';
@@ -10,10 +9,12 @@ import { getAllConcepts } from '@/app/lib/posts';
 
 export const metadata: Metadata = {
   title: 'Concepts | Discovering Cinema',
-  description: 'Educational explainers on key ideas in film history, theory, and criticism.',
+  description:
+    'Educational explainers on key ideas in film history, theory, and criticism.',
   openGraph: {
     title: 'Concepts | Discovering Cinema',
-    description: 'Educational explainers on key ideas in film history, theory, and criticism.',
+    description:
+      'Educational explainers on key ideas in film history, theory, and criticism.',
     type: 'website',
     url: 'https://discoveringcinema.com/concepts',
   },
@@ -29,7 +30,8 @@ export default function ConceptsIndex() {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Concepts | Discovering Cinema',
-    description: 'Educational explainers on key ideas in film history, theory, and criticism.',
+    description:
+      'Educational explainers on key ideas in film history, theory, and criticism.',
     url: 'https://discoveringcinema.com/concepts',
     mainEntity: {
       '@type': 'ItemList',
@@ -51,12 +53,15 @@ export default function ConceptsIndex() {
           Concepts
         </h1>
         <p className="mt-6 text-lg text-muted-foreground">
-          Film criticism has a vocabulary that rarely gets explained. Terms like the punctum, embodied spectatorship,
-          and the indexical image circulate in academic writing and serious criticism without much effort to make them
-          accessible to readers who haven't studied film theory formally. These pages try to close that gap. Each one
-          introduces a foundational concept, traces it to its source, and shows what it actually looks like when applied
-          to a film you might have seen. The goal isn't to make you sound knowledgeable about film theory. It's to give
-          you tools that make watching films more rewarding.
+          Film criticism has a vocabulary that rarely gets explained. Terms like
+          the punctum, embodied spectatorship, and the indexical image circulate
+          in academic writing and serious criticism without much effort to make
+          them accessible to readers who haven&apos;t studied film theory
+          formally. These pages try to close that gap. Each one introduces a
+          foundational concept, traces it to its source, and shows what it
+          actually looks like when applied to a film you might have seen. The
+          goal isn&apos;t to make you sound knowledgeable about film theory.
+          It&apos;s to give you tools that make watching films more rewarding.
         </p>
       </header>
 
@@ -83,7 +88,9 @@ export default function ConceptsIndex() {
                 <span className="relative z-10">{concept.title}</span>
               </Link>
             </h2>
-            {concept.description && <ArticleSummary description={concept.description} />}
+            {concept.description && (
+              <ArticleSummary description={concept.description} />
+            )}
             <div
               aria-hidden="true"
               className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary"

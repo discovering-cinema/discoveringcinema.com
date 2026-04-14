@@ -5,7 +5,12 @@ import ConceptCard from '@/app/components/ConceptCard';
 import JsonLd from '@/app/components/JsonLd';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
-import { getAllPosts, getAllEducationalContent, getAllTags, getTagSummary } from '@/app/lib/posts';
+import {
+  getAllPosts,
+  getAllEducationalContent,
+  getAllTags,
+  getTagSummary,
+} from '@/app/lib/posts';
 
 export async function generateMetadata({
   params,
@@ -18,7 +23,9 @@ export async function generateMetadata({
 
   return {
     title: `"${decodedTag}" | Discovering Cinema`,
-    description: summary ?? `Everything tagged with "${decodedTag}" on Discovering Cinema.`,
+    description:
+      summary ??
+      `Everything tagged with "${decodedTag}" on Discovering Cinema.`,
     alternates: {
       canonical: `/tags/${tag}`,
     },
@@ -34,11 +41,11 @@ export default async function TagPage({
   const decodedTag = decodeURIComponent(tag);
 
   const posts = getAllPosts().filter((post) =>
-    post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase())
+    post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase()),
   );
 
   const educationalItems = getAllEducationalContent().filter((item) =>
-    item.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase())
+    item.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase()),
   );
 
   const totalCount = posts.length + educationalItems.length;
@@ -82,7 +89,9 @@ export default async function TagPage({
             {summary}
           </p>
         )}
-        <p className={`${summary ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}>
+        <p
+          className={`${summary ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}
+        >
           {totalCount} {totalCount === 1 ? 'result' : 'results'}
         </p>
       </header>

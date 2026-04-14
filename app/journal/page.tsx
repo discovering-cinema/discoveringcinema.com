@@ -1,9 +1,9 @@
 import Header from '@/app/components/Header';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import JsonLd from '@/app/components/JsonLd';
-import {CollectionPage, WithContext} from 'schema-dts';
-import {Metadata} from 'next';
-import {getAllPosts} from '@/app/lib/posts';
+import { CollectionPage, WithContext } from 'schema-dts';
+import { Metadata } from 'next';
+import { getAllPosts } from '@/app/lib/posts';
 
 export const metadata: Metadata = {
   title: 'Journal | Discovering Cinema',

@@ -4,15 +4,15 @@
 @layer base {
   :root {
     /* Backgrounds */
-    --background: 45 29% 97%;         /* Parchment */
-    --card: 220 14% 96%;              /* Subtle Gray */
-    --muted: 85 15% 92%;             /* Same as card */
+    --background: 45 29% 97%; /* Parchment */
+    --card: 220 14% 96%; /* Subtle Gray */
+    --muted: 85 15% 92%; /* Same as card */
     --popover: 45 29% 97%;
 
     /* Paired foregrounds */
-    --foreground: 223 14% 20%;        /* Deep Ink */
+    --foreground: 223 14% 20%; /* Deep Ink */
     --card-foreground: 223 14% 20%;
-    --muted-foreground: 90 20% 25%;  /* Charcoal */
+    --muted-foreground: 90 20% 25%; /* Charcoal */
     --popover-foreground: 223 14% 20%;
 
     /* Primary action — Director's Red */
@@ -24,17 +24,17 @@
     --accent-foreground: 223 14% 20%;
 
     /* Status tokens */
-    --success: 142 60% 38%;           /* Accessible green on parchment */
+    --success: 142 60% 38%; /* Accessible green on parchment */
     --success-foreground: 45 29% 97%;
-    --destructive: 0 72% 48%;         /* Error red — distinct from Director's Red */
+    --destructive: 0 72% 48%; /* Error red — distinct from Director's Red */
     --destructive-foreground: 45 29% 97%;
-    --warning: 46 100% 65%;           /* Reuses Concept Yellow */
+    --warning: 46 100% 65%; /* Reuses Concept Yellow */
     --warning-foreground: 223 14% 20%;
 
     /* Structural */
     --border: 220 14% 88%;
     --input: 220 14% 88%;
-    --ring: 8 76% 48%;                /* Focus rings in Director's Red */
+    --ring: 8 76% 48%; /* Focus rings in Director's Red */
 
     /* Custom brand token */
     --concept-card: 46 100% 95%;
@@ -108,7 +108,9 @@
   /* Remap --font-serif to Playfair so all existing font-serif JSX classes upgrade automatically */
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
 
   /* Semantic color utilities */
   --color-background: hsl(var(--background));
@@ -133,11 +135,11 @@
   --color-concept-card: hsl(var(--concept-card));
 
   /* Border radius — sharper scale for editorial aesthetic */
-  --radius-sm:  1px;
-  --radius:     2px;
-  --radius-md:  2px;
-  --radius-lg:  2px;
-  --radius-xl:  3px;
+  --radius-sm: 1px;
+  --radius: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 3px;
   --radius-2xl: 4px;
   --radius-3xl: 6px;
 }
@@ -148,7 +150,12 @@ body {
   font-family: var(--font-lora);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-playfair);
 }
 
@@ -159,8 +166,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-fade-in {
@@ -182,7 +193,10 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-lora);
   }
 
-  .prose h1, .prose h2, .prose h3, .prose h4 {
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4 {
     font-family: var(--font-playfair);
     letter-spacing: -0.02em;
   }

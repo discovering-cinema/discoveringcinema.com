@@ -71,8 +71,18 @@ export default async function SeriesPage({
             href="/journal/series"
             className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
           >
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-4 w-4 stroke-current rotate-180">
-              <path d="M6.75 5.75 9.25 8l-2.5 2.25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+              className="h-4 w-4 stroke-current rotate-180"
+            >
+              <path
+                d="M6.75 5.75 9.25 8l-2.5 2.25"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
             All series
           </Link>
@@ -85,7 +95,9 @@ export default async function SeriesPage({
             {s.description}
           </p>
         )}
-        <p className={`${s.description ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}>
+        <p
+          className={`${s.description ? 'mt-4' : 'mt-6'} text-lg text-muted-foreground`}
+        >
           {posts.length} {posts.length === 1 ? 'article' : 'articles'}
         </p>
       </header>

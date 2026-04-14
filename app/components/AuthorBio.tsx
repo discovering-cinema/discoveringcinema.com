@@ -9,11 +9,11 @@ export default function AuthorBio({ lastWatched }: AuthorBioProps) {
     <div className="@container flex flex-col items-start gap-4 font-sans @sm:flex-row">
       <div className="flex gap-4 items-center">
         <Image
-            src="/images/authors/christopher-bray.png"
-            alt="Christopher Bray"
-            width={48}
-            height={48}
-            className="h-12 w-12 flex-shrink-0 rounded bg-muted object-cover"
+          src="/images/authors/christopher-bray.png"
+          alt="Christopher Bray"
+          width={48}
+          height={48}
+          className="h-12 w-12 flex-shrink-0 rounded bg-muted object-cover"
         />
 
         <div>
@@ -36,9 +36,7 @@ export default function AuthorBio({ lastWatched }: AuthorBioProps) {
 
         {lastWatched && (
           <div className="mb-3 inline-block text-xs border-l border-primary px-2.5">
-            <span className="font-medium">
-              Last Watched:
-            </span>{' '}
+            <span className="font-medium">Last Watched:</span>{' '}
             <em className="italic">{lastWatched}</em>
           </div>
         )}

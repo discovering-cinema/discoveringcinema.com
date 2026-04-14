@@ -9,8 +9,10 @@ export default function Header() {
           href="/"
           className="text-foreground flex flex-col sm:flex-row items-baseline space-x-2 uppercase"
         >
-            <span className="font-montserrat font-medium tracking-[0.2em] text-sm">Discovering</span>
-            <span className="font-playfair font-bold text-2xl">Cinema</span>
+          <span className="font-montserrat font-medium tracking-[0.2em] text-sm">
+            Discovering
+          </span>
+          <span className="font-playfair font-bold text-2xl">Cinema</span>
         </Link>
         <div className="hidden sm:flex gap-6">
           <Link

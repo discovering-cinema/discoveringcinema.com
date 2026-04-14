@@ -8,10 +8,12 @@ import { getAllSeries } from '@/app/lib/posts';
 
 export const metadata: Metadata = {
   title: 'Series | Discovering Cinema',
-  description: 'Multi-part investigations into cinema, policy, and the moving image.',
+  description:
+    'Multi-part investigations into cinema, policy, and the moving image.',
   openGraph: {
     title: 'Series | Discovering Cinema',
-    description: 'Multi-part investigations into cinema, policy, and the moving image.',
+    description:
+      'Multi-part investigations into cinema, policy, and the moving image.',
     type: 'website',
     url: 'https://discoveringcinema.com/journal/series',
   },
@@ -27,7 +29,8 @@ export default function SeriesIndex() {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Series | Discovering Cinema',
-    description: 'Multi-part investigations into cinema, policy, and the moving image.',
+    description:
+      'Multi-part investigations into cinema, policy, and the moving image.',
     url: 'https://discoveringcinema.com/journal/series',
     mainEntity: {
       '@type': 'ItemList',
@@ -57,7 +60,10 @@ export default function SeriesIndex() {
         {series.map((s) => {
           const coverImage = s.posts[0]?.image || '';
           return (
-            <article key={s.slug} className="group relative flex flex-col items-start">
+            <article
+              key={s.slug}
+              className="group relative flex flex-col items-start"
+            >
               <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl bg-muted">
                 {coverImage ? (
                   <Image
@@ -69,7 +75,9 @@ export default function SeriesIndex() {
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-muted-foreground">
-                    <span className="font-serif italic">Discovering Cinema</span>
+                    <span className="font-serif italic">
+                      Discovering Cinema
+                    </span>
                   </div>
                 )}
               </div>

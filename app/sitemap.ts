@@ -1,11 +1,22 @@
-import {MetadataRoute} from 'next';
-import {getAllPosts, getAllEducationalContent, getAllTags, getAllSeries} from '@/app/lib/posts';
+import { MetadataRoute } from 'next';
+import {
+  getAllPosts,
+  getAllEducationalContent,
+  getAllTags,
+  getAllSeries,
+} from '@/app/lib/posts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://discoveringcinema.com';
 
   // Static routes
-  const routes = ['', '/manifesto', '/journal', '/concepts', '/journal/series'].map((route) => ({
+  const routes = [
+    '',
+    '/manifesto',
+    '/journal',
+    '/concepts',
+    '/journal/series',
+  ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
@@ -43,5 +54,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...routes, ...journalRoutes, ...conceptRoutes, ...tagRoutes, ...seriesRoutes];
+  return [
+    ...routes,
+    ...journalRoutes,
+    ...conceptRoutes,
+    ...tagRoutes,
+    ...seriesRoutes,
+  ];
 }

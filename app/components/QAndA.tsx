@@ -12,7 +12,7 @@ export default function QAndA({ items }: { items: QAndAItem[] }) {
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   function toggle(index: number, question: string) {
-    setExpanded(prev => {
+    setExpanded((prev) => {
       const next = new Set(prev);
       if (next.has(index)) {
         next.delete(index);

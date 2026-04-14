@@ -2,9 +2,9 @@ import Link from 'next/link';
 import Header from '@/app/components/Header';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import JsonLd from '@/app/components/JsonLd';
-import {CollectionPage, WithContext} from 'schema-dts';
-import {Metadata} from 'next';
-import {getAllPosts} from '@/app/lib/posts';
+import { CollectionPage, WithContext } from 'schema-dts';
+import { Metadata } from 'next';
+import { getAllPosts } from '@/app/lib/posts';
 
 export async function generateMetadata({
   params,
@@ -32,7 +32,7 @@ export default async function TagIndex({
   const decodedTag = decodeURIComponent(tag);
 
   const posts = getAllPosts().filter((post) =>
-    post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase())
+    post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase()),
   );
 
   const jsonLd: WithContext<CollectionPage> = {
@@ -62,8 +62,18 @@ export default async function TagIndex({
             href="/journal"
             className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
           >
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-4 w-4 stroke-current rotate-180">
-              <path d="M6.75 5.75 9.25 8l-2.5 2.25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+              className="h-4 w-4 stroke-current rotate-180"
+            >
+              <path
+                d="M6.75 5.75 9.25 8l-2.5 2.25"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
             Back to Journal
           </Link>
@@ -72,7 +82,8 @@ export default async function TagIndex({
           Tag: {decodedTag}
         </h1>
         <p className="mt-6 text-lg text-muted-foreground">
-          {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged with "{decodedTag}".
+          {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged
+          with &quot;{decodedTag}&quot;.
         </p>
       </header>
 

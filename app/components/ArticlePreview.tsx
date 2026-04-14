@@ -50,7 +50,9 @@ export default function ArticlePreview({
             priority={priority}
           />
           <div className="absolute right-2 bottom-2">
-            {series && seriesSlug && <SeriesLabel series={series} seriesSlug={seriesSlug} />}
+            {series && seriesSlug && (
+              <SeriesLabel series={series} seriesSlug={seriesSlug} />
+            )}
           </div>
         </div>
       )}
@@ -72,7 +74,9 @@ export default function ArticlePreview({
 
       {description && <ArticleSummary description={description} />}
 
-      {date && <ArticleDate date={date} variant={isCompact ? 'compact' : 'default'} />}
+      {date && (
+        <ArticleDate date={date} variant={isCompact ? 'compact' : 'default'} />
+      )}
     </article>
   );
 }

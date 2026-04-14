@@ -33,7 +33,9 @@ export interface Post {
   };
 }
 
-function readSeriesYml(dir: string): { name: string; description: string } | null {
+function readSeriesYml(
+  dir: string,
+): { name: string; description: string } | null {
   const filePath = path.join(dir, 'series.yml');
   if (!fs.existsSync(filePath)) return null;
   const raw = fs.readFileSync(filePath, 'utf8');
@@ -59,7 +61,8 @@ export function getAllPosts(): Post[] {
       const { data: frontmatter } = matter(fileContent);
 
       const parentDir = path.dirname(file);
-      const seriesData = parentDir !== contentDir ? readSeriesYml(parentDir) : null;
+      const seriesData =
+        parentDir !== contentDir ? readSeriesYml(parentDir) : null;
       const seriesSlug = seriesData ? path.basename(parentDir) : undefined;
 
       return {
@@ -83,10 +86,17 @@ export function getAllPosts(): Post[] {
     });
 }
 
-export function getAllSeries(): { name: string; description: string; slug: string; posts: Post[] }[] {
+export function getAllSeries(): {
+  name: string;
+  description: string;
+  slug: string;
+  posts: Post[];
+}[] {
   const articlesDir = path.join(process.cwd(), 'content/articles');
   if (!fs.existsSync(articlesDir)) return [];
-  const dirs = fs.readdirSync(articlesDir, { withFileTypes: true }).filter((d) => d.isDirectory());
+  const dirs = fs
+    .readdirSync(articlesDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory());
   const allPosts = getAllPosts();
   return dirs
     .map((d) => {
@@ -97,7 +107,16 @@ export function getAllSeries(): { name: string; description: string; slug: strin
         .sort((a, b) => (a.order || 0) - (b.order || 0));
       return { ...yml, slug: d.name, posts };
     })
-    .filter((s): s is { name: string; description: string; slug: string; posts: Post[] } => s !== null);
+    .filter(
+      (
+        s,
+      ): s is {
+        name: string;
+        description: string;
+        slug: string;
+        posts: Post[];
+      } => s !== null,
+    );
 }
 
 export interface EducationalContent {
@@ -142,14 +161,18 @@ export function getTagSummary(tag: string): string | null {
   if (!fs.existsSync(filePath)) return null;
   const raw = fs.readFileSync(filePath, 'utf8');
   const { data } = matter(`---\n${raw}\n---`);
-  const key = Object.keys(data).find((k) => k.toLowerCase() === tag.toLowerCase());
+  const key = Object.keys(data).find(
+    (k) => k.toLowerCase() === tag.toLowerCase(),
+  );
   return key ? (data[key] as string).trim() : null;
 }
 
 export function getAllTags(): string[] {
   const postTags = getAllPosts().flatMap((p) => p.tags);
   const educationalTags = getAllEducationalContent().flatMap((e) => e.tags);
-  return [...new Set([...postTags, ...educationalTags].map((t) => t.toLowerCase()))];
+  return [
+    ...new Set([...postTags, ...educationalTags].map((t) => t.toLowerCase())),
+  ];
 }
 
 export function getAllEducationalContent(): EducationalContent[] {

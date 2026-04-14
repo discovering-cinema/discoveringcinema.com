@@ -3,7 +3,10 @@ interface ArticleSummaryProps {
   variant?: 'default' | 'compact';
 }
 
-export default function ArticleSummary({ description, variant = 'default' }: ArticleSummaryProps) {
+export default function ArticleSummary({
+  description,
+  variant = 'default',
+}: ArticleSummaryProps) {
   const className =
     variant === 'compact'
       ? 'mt-1 text-sm text-muted-foreground'
