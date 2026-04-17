@@ -1,6 +1,6 @@
 interface ArticleDateProps {
   date: Date | string;
-  variant?: 'default' | 'compact' | 'plain';
+  variant?: 'default' | 'plain';
 }
 
 export default function ArticleDate({
@@ -25,19 +25,16 @@ export default function ArticleDate({
     );
   }
 
-  const isCompact = variant === 'compact';
   return (
     <time
-      className={`relative z-10 flex items-center text-muted-foreground pl-3.5 ${isCompact ? 'text-xs mb-2' : 'text-sm my-3'}`}
+      className="relative z-10 flex items-center text-sm text-muted-foreground pl-3 mt-8"
       dateTime={d.toISOString()}
     >
       <span
         className="absolute inset-y-0 left-0 flex items-center"
         aria-hidden="true"
       >
-        <span
-          className={`rounded-full bg-border w-0.5 ${isCompact ? 'h-3' : 'h-4'}`}
-        />
+        <span className="rounded-full bg-border w-0.5 h-4" />
       </span>
       {formatted}
     </time>

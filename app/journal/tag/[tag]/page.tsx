@@ -1,10 +1,16 @@
 import Link from 'next/link';
-import Header from '@/app/components/Header';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import JsonLd from '@/app/components/JsonLd';
+import { TitleLockup } from '@/app/components/TitleLockup';
+import { Title } from '@/app/components/Title';
+import { Subtitle } from '@/app/components/Subtitle';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
-import { getAllPosts } from '@/app/lib/posts';
+import { getAllPosts, getAllTags, getTagDisplayName, tagToSlug } from '@/app/lib/posts';
+
+export function generateStaticParams() {
+  return getAllTags().map((tag) => ({ tag }));
+}
 
 export async function generateMetadata({
   params,
@@ -12,11 +18,11 @@ export async function generateMetadata({
   params: Promise<{ tag: string }>;
 }): Promise<Metadata> {
   const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
+  const displayName = getTagDisplayName(tag);
 
   return {
-    title: `Articles tagged with "${decodedTag}" | Discovering Cinema`,
-    description: `A collection of articles about ${decodedTag} in cinema.`,
+    title: `Articles tagged with "${displayName}" | Discovering Cinema`,
+    description: `A collection of articles about ${displayName} in cinema.`,
     alternates: {
       canonical: `/journal/tag/${tag}`,
     },
@@ -29,17 +35,17 @@ export default async function TagIndex({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
+  const displayName = getTagDisplayName(tag);
 
   const posts = getAllPosts().filter((post) =>
-    post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase()),
+    post.tags.some((t: string) => tagToSlug(t) === tag),
   );
 
   const jsonLd: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `Articles tagged with "${decodedTag}" | Discovering Cinema`,
-    description: `A collection of articles about ${decodedTag} in cinema.`,
+    name: `Articles tagged with "${displayName}" | Discovering Cinema`,
+    description: `A collection of articles about ${displayName} in cinema.`,
     url: `https://discoveringcinema.com/journal/tag/${tag}`,
     mainEntity: {
       '@type': 'ItemList',
@@ -54,7 +60,6 @@ export default async function TagIndex({
 
   return (
     <>
-      <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16">
         <div className="flex items-center gap-3 mb-6">
@@ -78,13 +83,13 @@ export default async function TagIndex({
             Back to Journal
           </Link>
         </div>
-        <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
-          Tag: {decodedTag}
-        </h1>
-        <p className="mt-6 text-lg text-muted-foreground">
-          {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged
-          with &quot;{decodedTag}&quot;.
-        </p>
+        <TitleLockup>
+          <Title>Tag: {displayName}</Title>
+          <Subtitle>
+            {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged
+            with &quot;{displayName}&quot;.
+          </Subtitle>
+        </TitleLockup>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
@@ -92,6 +97,7 @@ export default async function TagIndex({
           <ArticlePreview
             key={post.slug}
             title={post.title}
+            subtitle={post.subtitle}
             slug={post.slug}
             date={post.date}
             description={post.description}

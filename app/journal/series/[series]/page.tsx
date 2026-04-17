@@ -1,7 +1,9 @@
 import Link from 'next/link';
-import Header from '@/app/components/Header';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import JsonLd from '@/app/components/JsonLd';
+import { TitleLockup } from '@/app/components/TitleLockup';
+import { Title } from '@/app/components/Title';
+import { Subtitle } from '@/app/components/Subtitle';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
 import { getAllSeries } from '@/app/lib/posts';
@@ -63,7 +65,6 @@ export default async function SeriesPage({
 
   return (
     <>
-      <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16">
         <div className="flex items-center gap-3 mb-6">
@@ -87,14 +88,10 @@ export default async function SeriesPage({
             All series
           </Link>
         </div>
-        <h1 className="text-center text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight mb-16">
-          {s.name}
-        </h1>
-        {s.description && (
-          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            {s.description}
-          </p>
-        )}
+        <TitleLockup>
+          <Title className="mb-4">{s.name}</Title>
+          {s.description && <Subtitle>{s.description}</Subtitle>}
+        </TitleLockup>
       </header>
 
       <div className="flex flex-col gap-16">
@@ -102,6 +99,7 @@ export default async function SeriesPage({
           <ArticlePreview
             key={post.slug}
             title={post.title}
+            subtitle={post.subtitle}
             slug={post.slug}
             date={post.date}
             description={post.description}

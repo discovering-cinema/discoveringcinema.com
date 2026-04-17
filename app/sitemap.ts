@@ -41,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const tagRoutes = getAllTags().map((tag) => ({
-    url: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
+    url: `${baseUrl}/tags/${tag}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.5,

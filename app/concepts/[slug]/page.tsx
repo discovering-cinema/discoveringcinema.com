@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 import { DefinedTerm, FAQPage, BreadcrumbList, WithContext } from 'schema-dts';
 import matter from 'gray-matter';
 import Image from 'next/image';
-import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
 import GithubSlugger from 'github-slugger';
@@ -14,6 +13,10 @@ import ArticleSummary from '@/app/components/ArticleSummary';
 import TagPill from '@/app/components/TagPill';
 import QAndA from '@/app/components/QAndA';
 import TableOfContents from '@/app/components/TableOfContents';
+import { TitleLockup } from '@/app/components/TitleLockup';
+import { Title } from '@/app/components/Title';
+import ConceptCard from '@/app/components/ConceptCard';
+import { SectionLabel } from '@/app/components/SectionLabel';
 
 export async function generateMetadata({
   params,
@@ -79,7 +82,7 @@ export default async function Page({
 
   type Resource = { title: string; url: string; type?: string };
   const resources: Resource[] = frontmatter.resources || [];
-  const otherConcepts = getAllConcepts().filter((c) => c.slug !== slug);
+  const otherConcepts = getAllConcepts().filter((c) => c.slug !== slug).slice(0, 3);
 
   const faq: FAQPage | null = frontmatter.faq
     ? {
@@ -141,15 +144,14 @@ export default async function Page({
 
   return (
     <>
-      <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
 
         {/* ── Full-width title and hero ── */}
         {frontmatter?.title && (
-          <h1 className="text-center text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight mb-16">
-            {frontmatter.title}
-          </h1>
+          <TitleLockup>
+            <Title className="mb-16">{frontmatter.title}</Title>
+          </TitleLockup>
         )}
         {frontmatter?.image && (
           <div className="relative mb-12">
@@ -172,53 +174,26 @@ export default async function Page({
         )}
 
         {/* ── 2/3 + 1/3 grid ── */}
-        <div className="lg:grid lg:grid-cols-3 lg:gap-12">
+        <div className="lg:grid lg:grid-cols-3 lg:gap-12 lg:items-stretch">
           {/* Main column (2/3) */}
           <article className="prose max-w-none lg:col-span-2">
             <Concept />
 
-            {frontmatter?.faq && frontmatter.faq.length > 0 && (
-              <div className="mt-16 not-prose">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-6">
-                  Frequently Asked Questions
-                </h2>
-                <QAndA items={frontmatter.faq} />
-              </div>
-            )}
-
-            {frontmatter?.tags && frontmatter.tags.length > 0 && (
-              <div className="mt-16 not-prose">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
-                  Explore more on these topics
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {frontmatter.tags.map((tag: string) => (
-                    <TagPill key={tag} tag={tag} />
-                  ))}
-                </div>
-              </div>
-            )}
-
             {relatedPosts.length > 0 && (
               <div className="mt-16 not-prose">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-6">
-                  Related Articles
-                </h2>
+                <SectionLabel className="mb-6">Related Articles</SectionLabel>
                 <div className="space-y-4">
                   {relatedPosts.map((post) => (
                     <Link
                       key={post.slug}
                       href={`/journal/${post.slug}`}
-                      className="group flex flex-col p-4 rounded-xl border border-border hover:border-foreground/30 transition-colors"
+                      className="group flex flex-col p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors"
                     >
                       <span className="font-serif text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                         {post.title}
                       </span>
                       {post.description && (
-                        <ArticleSummary
-                          description={post.description}
-                          variant="compact"
-                        />
+                        <ArticleSummary description={post.description} />
                       )}
                     </Link>
                   ))}
@@ -229,74 +204,82 @@ export default async function Page({
 
           {/* Sidebar (1/3) — desktop only */}
           <aside
-            className="hidden lg:flex lg:flex-col gap-8"
+            className="hidden lg:block"
             aria-label="Sidebar"
           >
-            <div className="sticky top-8">
+            <div className="sticky top-8 space-y-12">
               <TableOfContents headings={headings} />
-            </div>
-
-            <div className="mt-auto flex flex-col gap-8">
-              {otherConcepts.length > 0 && (
-                <div>
-                  <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-                    Other concepts
-                  </h2>
-                  <nav>
-                    <ul className="space-y-2">
-                      {otherConcepts.map((concept) => (
-                        <li key={concept.slug}>
-                          <Link
-                            href={`/concepts/${concept.slug}`}
-                            className="group flex flex-col gap-0.5 py-2 border-b border-border last:border-0"
-                          >
-                            <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                              {concept.title}
-                            </span>
-                            {concept.description && (
-                              <span className="text-xs text-muted-foreground line-clamp-2">
-                                {concept.description}
-                              </span>
-                            )}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </nav>
-                </div>
-              )}
-
-              {resources.length > 0 && (
-                <div>
-                  <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-                    External resources
-                  </h2>
-                  <ul className="space-y-3">
-                    {resources.map((resource) => (
-                      <li key={resource.url}>
-                        <a
-                          href={resource.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group flex items-start gap-2"
-                        >
-                          <span className="text-sm text-foreground group-hover:text-primary transition-colors leading-snug">
-                            {resource.title}
-                          </span>
-                          {resource.type && (
-                            <span className="shrink-0 mt-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground border border-border rounded px-1 py-0.5">
-                              {resource.type}
-                            </span>
-                          )}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
           </aside>
         </div>
+
+        {(frontmatter?.faq?.length > 0 || frontmatter?.tags?.length > 0) && (
+          <div className="mt-16 lg:grid lg:grid-cols-3 lg:gap-12 space-y-12 lg:space-y-0">
+            <div className="space-y-12 lg:col-span-2">
+              {frontmatter?.faq && frontmatter.faq.length > 0 && (
+                <div>
+                  <SectionLabel className="mb-6">Frequently Asked Questions</SectionLabel>
+                  <QAndA items={frontmatter.faq} />
+                </div>
+              )}
+            </div>
+
+            {frontmatter?.tags && frontmatter.tags.length > 0 && (
+              <aside className="flex flex-col gap-8">
+                {resources.length > 0 && (
+                  <div>
+                    <SectionLabel className="mb-4">External resources</SectionLabel>
+                    <ul className="space-y-3">
+                      {resources.map((resource) => (
+                        <li key={resource.url}>
+                          <a
+                              href={resource.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="group flex items-start gap-2 justify-between leading-snug"
+                          >
+                            <span className="text-sm text-foreground group-hover:text-primary transition-colors leading-snug">
+                              {resource.title}
+                            </span>
+                            {resource.type && (
+                                <span className="shrink-0 text-[10px] font-medium uppercase tracking-wide text-muted-foreground bg-muted rounded px-1 py-0.5">
+                                  {resource.type}
+                                </span>
+                            )}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <div>
+                  <SectionLabel className="mb-4">Explore more on these topics</SectionLabel>
+                  <div className="flex flex-wrap gap-2">
+                    {frontmatter.tags.map((tag: string) => (
+                      <TagPill key={tag} tag={tag} />
+                    ))}
+                  </div>
+                </div>
+              </aside>
+            )}
+          </div>
+        )}
+
+        {otherConcepts.length > 0 && (
+          <div className="mt-16">
+            <SectionLabel className="mb-6">Other concepts</SectionLabel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {otherConcepts.map((concept) => (
+                <ConceptCard
+                  key={concept.slug}
+                  href={`/concepts/${concept.slug}`}
+                  title={concept.title}
+                  description={concept.description}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

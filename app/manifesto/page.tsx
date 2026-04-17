@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
-import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
+import { TitleLockup } from '@/app/components/TitleLockup';
+import { Title } from '@/app/components/Title';
+import { Subtitle } from '@/app/components/Subtitle';
 import { WebPage, WithContext } from 'schema-dts';
 
 export const metadata: Metadata = {
@@ -57,18 +59,17 @@ export default function ManifestoPage() {
 
   return (
     <>
-      <Header />
       <div className="py-12">
         <JsonLd data={jsonLd} />
         <header className="mb-16">
-          <h1 className="font-serif text-5xl font-normal tracking-tight text-foreground">
-            The Manifesto
-          </h1>
-          <p className="mt-8 text-lg italic leading-relaxed text-muted-foreground">
-            We are building Discovering Cinema to be the counter-balance to the
-            streaming era. These are the promises that guide our code, our
-            design, and our data.
-          </p>
+          <TitleLockup>
+            <Title>The Manifesto</Title>
+            <Subtitle className="mt-8">
+              We are building Discovering Cinema to be the counter-balance to
+              the streaming era. These are the promises that guide our code, our
+              design, and our data.
+            </Subtitle>
+          </TitleLockup>
           <div className="mt-12 h-px w-full bg-border" />
         </header>
 

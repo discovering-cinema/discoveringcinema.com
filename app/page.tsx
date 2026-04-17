@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import JsonLd from '@/app/components/JsonLd';
-import MobileMenuButton from '@/app/components/MobileMenuButton';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import ConceptCard from '@/app/components/ConceptCard';
 import { WebSite, WithContext } from 'schema-dts';
@@ -35,38 +34,12 @@ export default function Home() {
     <>
       <JsonLd data={jsonLd} />
 
-      {/* Masthead */}
-      <section className="relative pt-8 pb-6 border-b border-border mb-12">
-        <nav className="flex items-center justify-between">
-          <h1 className="text-foreground flex flex-col sm:flex-row items-baseline space-x-2 uppercase">
-            <span className="font-montserrat font-medium tracking-[0.2em] text-sm">
-              Discovering
-            </span>
-            <span className="font-playfair font-bold text-2xl">Cinema</span>
-          </h1>
-          <div className="hidden sm:flex gap-6">
-            <Link
-              href="/journal"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Journal
-            </Link>
-            <Link
-              href="/concepts"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Concepts
-            </Link>
-          </div>
-          <MobileMenuButton />
-        </nav>
-      </section>
-
       {/* Featured Article */}
       {featuredPost && (
         <div className="mb-12">
           <ArticlePreview
             title={featuredPost.title}
+            subtitle={featuredPost.subtitle}
             slug={featuredPost.slug}
             date={featuredPost.date}
             description={featuredPost.description}
@@ -82,7 +55,7 @@ export default function Home() {
       {remainingPosts.length > 0 && (
         <section className="border-t border-border pt-8 mb-12">
           <div className="flex items-center justify-between mb-6">
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground pl-3 relative">
+            <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground pl-3 relative">
               <span
                 className="absolute inset-y-0 left-0 w-0.5 rounded-full bg-primary"
                 aria-hidden="true"
@@ -103,11 +76,11 @@ export default function Home() {
               <ArticlePreview
                 key={post.slug}
                 title={post.title}
+                subtitle={post.subtitle}
                 slug={post.slug}
                 date={post.date}
                 description={post.description}
                 image={post.image}
-                variant="compact"
               />
             ))}
           </div>
@@ -116,11 +89,11 @@ export default function Home() {
 
       {/* Concepts */}
       {displayEducationalContent.length > 0 && (
-        <section className="border-t border-border py-8 mb-16">
+        <section className="border-t border-border pt-8 mb-16">
           <div className="flex items-center justify-between mb-6">
-            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+            <span className="relative pl-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
               <span
-                className="inline-block h-2 w-2 rounded-sm bg-accent"
+                className="absolute inset-y-0 left-0 w-0.5 rounded-full bg-accent"
                 aria-hidden="true"
               />
               Concepts

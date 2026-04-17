@@ -25,9 +25,12 @@ export async function GET() {
           : '';
         const postDate = post.date || new Date();
 
+        const rssTitle = post.subtitle
+          ? `${post.title}: ${post.subtitle}`
+          : post.title;
         return `
     <item>
-      <title><![CDATA[${post.title}]]></title>
+      <title><![CDATA[${rssTitle}]]></title>
       <link>${SITE_URL}/journal/${post.slug}</link>
       <guid isPermaLink="true">${SITE_URL}/journal/${post.slug}</guid>
       <pubDate>${postDate.toUTCString()}</pubDate>

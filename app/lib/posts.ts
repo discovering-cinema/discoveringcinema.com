@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 export interface Post {
   slug: string;
   title: string;
+  subtitle?: string;
   date: Date | null;
   description: string;
   tags: string[];
@@ -68,6 +69,7 @@ export function getAllPosts(): Post[] {
       return {
         slug,
         title: frontmatter.title || slug.split('/').pop() || '',
+        subtitle: frontmatter.subtitle,
         date: frontmatter.date ? new Date(frontmatter.date) : null,
         description: frontmatter.description || '',
         tags: frontmatter.tags || [],
@@ -156,23 +158,34 @@ export function getAllConcepts(): Concept[] {
     });
 }
 
-export function getTagSummary(tag: string): string | null {
+export function tagToSlug(tag: string): string {
+  return tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+export function getTagDisplayName(slug: string): string {
+  const filePath = path.join(process.cwd(), 'content/tags.yaml');
+  if (fs.existsSync(filePath)) {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const { data } = matter(`---\n${raw}\n---`);
+    const key = Object.keys(data).find((k) => tagToSlug(k) === slug);
+    if (key) return key;
+  }
+  return slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+export function getTagSummary(slug: string): string | null {
   const filePath = path.join(process.cwd(), 'content/tags.yaml');
   if (!fs.existsSync(filePath)) return null;
   const raw = fs.readFileSync(filePath, 'utf8');
   const { data } = matter(`---\n${raw}\n---`);
-  const key = Object.keys(data).find(
-    (k) => k.toLowerCase() === tag.toLowerCase(),
-  );
+  const key = Object.keys(data).find((k) => tagToSlug(k) === slug);
   return key ? (data[key] as string).trim() : null;
 }
 
 export function getAllTags(): string[] {
   const postTags = getAllPosts().flatMap((p) => p.tags);
   const educationalTags = getAllEducationalContent().flatMap((e) => e.tags);
-  return [
-    ...new Set([...postTags, ...educationalTags].map((t) => t.toLowerCase())),
-  ];
+  return [...new Set([...postTags, ...educationalTags].map(tagToSlug))];
 }
 
 export function getAllEducationalContent(): EducationalContent[] {

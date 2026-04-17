@@ -36,8 +36,10 @@
     --input: 40 10% 88%;
     --ring: 8 76% 48%; /* Focus rings in Director's Red */
 
-    /* Custom brand token */
-    --concept-card: 46 100% 95%;
+    --concept-card: 46 85% 89%;
+    --concept-card-label: 46 55% 32%;
+    --concept-card-foreground: 46 48% 16%;
+    --concept-card-muted: 46 28% 30%;       /* muted amber — body text */
   }
 }
 
@@ -46,6 +48,9 @@
   --font-playfair: var(--font-playfair);
   --font-lora: var(--font-lora);
   --font-inter: var(--font-inter);
+  --font-barlow-condensed: var(--font-barlow-condensed);
+  --font-dm-sans: var(--font-dm-sans);
+  --font-merriweather: var(--font-merriweather);
   /* Remap --font-serif to Playfair so all existing font-serif JSX classes upgrade automatically */
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
@@ -74,6 +79,9 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
   --color-concept-card: hsl(var(--concept-card));
+  --color-concept-card-label: hsl(var(--concept-card-label));
+  --color-concept-card-foreground: hsl(var(--concept-card-foreground));
+  --color-concept-card-muted: hsl(var(--concept-card-muted));
 
   /* Border radius — sharper scale for editorial aesthetic */
   --radius-sm: 1px;
@@ -118,6 +126,29 @@ h6 {
 .animate-fade-in {
   animation: fade-in 0.2s ease-in-out;
 }
+
+/* ── Timeline font utilities ─────────────────────────────────────────────── */
+.font-cond    { font-family: var(--font-barlow-condensed), 'Arial Narrow', sans-serif; }
+.font-body    { font-family: var(--font-merriweather), Georgia, serif; }
+.font-display { font-family: var(--font-dm-sans), system-ui, sans-serif; }
+
+/* ── Accessibility ───────────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
 
 @layer components {
   .prose {

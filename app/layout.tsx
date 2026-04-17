@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Playfair_Display, Lora, Inter, Montserrat } from 'next/font/google';
+import { Playfair_Display, Lora, Inter, Montserrat, Barlow_Condensed, DM_Sans, Merriweather } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import 'katex/dist/katex.min.css';
 import Footer from '@/app/components/Footer';
+import Header from '@/app/components/Header';
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -31,6 +32,25 @@ const lora = Lora({
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
+});
+
+const barlowCondensed = Barlow_Condensed({
+  variable: '--font-barlow-condensed',
+  subsets: ['latin'],
+  weight: ['700', '900'],
+});
+
+const dmSans = DM_Sans({
+  variable: '--font-dm-sans',
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+});
+
+const merriweather = Merriweather({
+  variable: '--font-merriweather',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
@@ -60,13 +80,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} overflow-x-clip`}
+      className={`${playfair.variable} ${lora.variable} ${inter.variable} ${montserrat.variable} ${barlowCondensed.variable} ${dmSans.variable} ${merriweather.variable}`}
     >
       <body className="antialiased overflow-x-clip">
+        <Header />
         <main className="mx-auto max-w-5xl px-6">
           {children}
-          <Footer />
         </main>
+        <Footer />
         <Analytics />
         <SpeedInsights />
         {process.env.NODE_ENV === 'production' &&

@@ -141,7 +141,7 @@ export default function Quiz({ questions, title }: QuizProps) {
     return (
       <div className="my-8 rounded-2xl border border-border bg-card text-foreground overflow-hidden font-sans">
         {title && (
-          <div className="px-6 pt-5 pb-0">
+          <div className="px-6 pt-6 pb-0">
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
               {title}
             </p>
@@ -239,7 +239,7 @@ export default function Quiz({ questions, title }: QuizProps) {
   return (
     <div className="my-8 rounded-2xl border border-border bg-card text-foreground overflow-hidden font-sans">
       {title && (
-        <div className="px-6 pt-5 pb-0">
+        <div className="px-6 pt-6 pb-0">
           <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
             {title}
           </p>

@@ -1,6 +1,8 @@
-import Header from '@/app/components/Header';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import JsonLd from '@/app/components/JsonLd';
+import { TitleLockup } from '@/app/components/TitleLockup';
+import { Title } from '@/app/components/Title';
+import { Subtitle } from '@/app/components/Subtitle';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
 import { getAllPosts } from '@/app/lib/posts';
@@ -47,16 +49,15 @@ export default function JournalIndex() {
 
   return (
     <>
-      <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16 text-center">
-        <h1 className="text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight">
-          Journal
-        </h1>
-        <p className="mt-6 text-lg text-muted-foreground">
-          Thoughts on cinema, technology, and the invisible threads that connect
-          them.
-        </p>
+        <TitleLockup>
+          <Title>Journal</Title>
+          <Subtitle>
+            Thoughts on cinema, technology, and the invisible threads that
+            connect them.
+          </Subtitle>
+        </TitleLockup>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
@@ -64,6 +65,7 @@ export default function JournalIndex() {
           <ArticlePreview
             key={post.slug}
             title={post.title}
+            subtitle={post.subtitle}
             slug={post.slug}
             date={post.date}
             description={post.description}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { SectionLabel } from '@/app/components/SectionLabel';
 
 interface Heading {
   text: string;
@@ -12,7 +13,7 @@ interface TableOfContentsProps {
 }
 
 export default function TableOfContents({ headings }: TableOfContentsProps) {
-  const [activeId, setActiveId] = useState<string>('');
+  const [activeId, setActiveId] = useState<string>(headings[0]?.id ?? '');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,10 +38,8 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav aria-label="Table of contents">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground border-b border-border pb-3 mb-4">
-        On this page
-      </h2>
-      <ul className="space-y-2">
+      <SectionLabel border className="mb-6">On this page</SectionLabel>
+      <ul className="space-y-4">
         {headings.map(({ id, text }) => (
           <li key={id}>
             <a

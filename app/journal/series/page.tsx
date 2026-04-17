@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
+import { TitleLockup } from '@/app/components/TitleLockup';
+import { Title } from '@/app/components/Title';
+import { Subtitle } from '@/app/components/Subtitle';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
 import { getAllSeries } from '@/app/lib/posts';
@@ -45,15 +47,14 @@ export default function SeriesIndex() {
 
   return (
     <>
-      <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16 text-center">
-        <h1 className="text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight">
-          Series
-        </h1>
-        <p className="mt-6 text-lg text-muted-foreground">
-          Multi-part investigations into cinema, policy, and the moving image.
-        </p>
+        <TitleLockup>
+          <Title>Series</Title>
+          <Subtitle>
+            Multi-part investigations into cinema, policy, and the moving image.
+          </Subtitle>
+        </TitleLockup>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">

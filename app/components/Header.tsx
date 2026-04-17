@@ -4,7 +4,7 @@ import MobileMenuButton from '@/app/components/MobileMenuButton';
 export default function Header() {
   return (
     <header className="relative py-8 border-b border-border mb-12">
-      <nav className="flex items-center justify-between">
+      <nav className="mx-auto max-w-5xl px-6 flex items-center justify-between">
         <Link
           href="/"
           className="text-foreground flex flex-col sm:flex-row items-baseline space-x-2 uppercase"

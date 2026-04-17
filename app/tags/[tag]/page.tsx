@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import Header from '@/app/components/Header';
 import ArticlePreview from '@/app/components/ArticlePreview';
 import ConceptCard from '@/app/components/ConceptCard';
 import JsonLd from '@/app/components/JsonLd';
+import { TitleLockup } from '@/app/components/TitleLockup';
+import { Title } from '@/app/components/Title';
+import { Subtitle } from '@/app/components/Subtitle';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
 import {
@@ -10,7 +12,10 @@ import {
   getAllEducationalContent,
   getAllTags,
   getTagSummary,
+  getTagDisplayName,
+  tagToSlug,
 } from '@/app/lib/posts';
+import { SectionLabel } from '@/app/components/SectionLabel';
 
 export async function generateMetadata({
   params,
@@ -18,14 +23,14 @@ export async function generateMetadata({
   params: Promise<{ tag: string }>;
 }): Promise<Metadata> {
   const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
-  const summary = getTagSummary(decodedTag);
+  const displayName = getTagDisplayName(tag);
+  const summary = getTagSummary(tag);
 
   return {
-    title: `"${decodedTag}" | Discovering Cinema`,
+    title: `"${displayName}" | Discovering Cinema`,
     description:
       summary ??
-      `Everything tagged with "${decodedTag}" on Discovering Cinema.`,
+      `Everything tagged with "${displayName}" on Discovering Cinema.`,
     alternates: {
       canonical: `/tags/${tag}`,
     },
@@ -38,24 +43,24 @@ export default async function TagPage({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
+  const displayName = getTagDisplayName(tag);
 
   const posts = getAllPosts().filter((post) =>
-    post.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase()),
+    post.tags.some((t: string) => tagToSlug(t) === tag),
   );
 
   const educationalItems = getAllEducationalContent().filter((item) =>
-    item.tags.some((t: string) => t.toLowerCase() === decodedTag.toLowerCase()),
+    item.tags.some((t: string) => tagToSlug(t) === tag),
   );
 
   const totalCount = posts.length + educationalItems.length;
-  const summary = getTagSummary(decodedTag);
+  const summary = getTagSummary(tag);
 
   const jsonLd: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `"${decodedTag}" | Discovering Cinema`,
-    description: `Everything tagged with "${decodedTag}" on Discovering Cinema.`,
+    name: `"${displayName}" | Discovering Cinema`,
+    description: `Everything tagged with "${displayName}" on Discovering Cinema.`,
     url: `https://discoveringcinema.com/tags/${tag}`,
     mainEntity: {
       '@type': 'ItemList',
@@ -78,31 +83,25 @@ export default async function TagPage({
 
   return (
     <>
-      <Header />
       <JsonLd data={jsonLd} />
       <header className="mb-16">
-        <h1 className="text-center text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight mb-16">
-          {decodedTag}
-        </h1>
-        {summary && (
-          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            {summary}
-          </p>
-        )}
+        <TitleLockup>
+          <Title className="mb-16">{displayName}</Title>
+          {summary && <Subtitle>{summary}</Subtitle>}
+        </TitleLockup>
       </header>
 
       {posts.length > 0 && (
         <section className="mb-20">
           {educationalItems.length > 0 && (
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-8">
-              Journal
-            </h2>
+            <SectionLabel className="mb-6">Journal</SectionLabel>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
             {posts.map((post, index) => (
               <ArticlePreview
                 key={post.slug}
                 title={post.title}
+                subtitle={post.subtitle}
                 slug={post.slug}
                 date={post.date}
                 description={post.description}
@@ -119,11 +118,9 @@ export default async function TagPage({
       {educationalItems.length > 0 && (
         <section>
           {posts.length > 0 && (
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-8">
-              Educational Material
-            </h2>
+            <SectionLabel className="mb-6">Concepts</SectionLabel>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {educationalItems.map((item) => (
               <ConceptCard
                 key={item.urlPath}
@@ -141,5 +138,5 @@ export default async function TagPage({
 }
 
 export function generateStaticParams() {
-  return getAllTags().map((tag) => ({ tag: encodeURIComponent(tag) }));
+  return getAllTags().map((tag) => ({ tag }));
 }

@@ -15,13 +15,14 @@ import GithubSlugger from 'github-slugger';
 import AuthorBio from '@/app/components/AuthorBio';
 import TableOfContents from '@/app/components/TableOfContents';
 import Image from 'next/image';
-import Header from '@/app/components/Header';
 import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
 import TagPill from '@/app/components/TagPill';
-import ArticleDate from '@/app/components/ArticleDate';
+import ArticleHeader from '@/app/components/ArticleHeader';
 import { getAllPosts } from '@/app/lib/posts';
+import { readingTime } from '@/app/lib/utils';
 import RelatedArticles from '@/app/components/RelatedArticles';
+import { SectionLabel } from '@/app/components/SectionLabel';
 
 export async function generateMetadata({
   params,
@@ -36,11 +37,14 @@ export async function generateMetadata({
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const { data: frontmatter } = matter(fileContent);
 
+    const fullTitle = frontmatter?.subtitle
+      ? `${frontmatter.title}: ${frontmatter.subtitle}`
+      : frontmatter?.title;
     return {
-      title: frontmatter?.title,
+      title: fullTitle,
       description: frontmatter?.description,
       openGraph: {
-        title: frontmatter?.title,
+        title: fullTitle,
         description: frontmatter?.description,
         type: 'article',
         publishedTime: frontmatter?.date
@@ -97,7 +101,7 @@ export default async function Page({
       .filter((post) => post.seriesSlug === seriesSlug)
       .sort((a, b) => (a.order || 0) - (b.order || 0))
       .map((post) => ({
-        title: post.title,
+        title: post.subtitle ? `${post.title}: ${post.subtitle}` : post.title,
         slug: post.slug,
         current: post.slug === slug,
       }));
@@ -202,7 +206,9 @@ export default async function Page({
   const jsonLd: WithContext<BlogPosting> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: frontmatter.title,
+    headline: frontmatter.subtitle
+      ? `${frontmatter.title}: ${frontmatter.subtitle}`
+      : frontmatter.title,
     description: frontmatter.description,
     image: frontmatter.image,
     datePublished: frontmatter.date
@@ -231,20 +237,18 @@ export default async function Page({
 
   return (
     <>
-      <Header />
       <div className="py-8">
         <JsonLd data={jsonLd} />
 
         {/* ── Full-width title and hero ── */}
         {frontmatter?.title && (
-          <h1 className="text-center text-balance font-playfair text-[clamp(2.5rem,6vw,5rem)] font-bold leading-tight tracking-tight mb-16">
-            {frontmatter.title}
-          </h1>
-        )}
-        {frontmatter?.date && (
-          <div className="flex items-center justify-between mb-8">
-            <ArticleDate date={frontmatter.date} variant="plain" />
-          </div>
+          <ArticleHeader
+            title={frontmatter.title}
+            subtitle={frontmatter.subtitle}
+            author="Christopher Bray"
+            date={frontmatter.date}
+            readingTime={readingTime(fileContent)}
+          />
         )}
         {frontmatter?.image && (
           <div className="relative mb-12">
@@ -270,8 +274,8 @@ export default async function Page({
           {/* ── Main column (2/3) ── */}
           <article className="prose max-w-none lg:col-span-2">
             {seriesPosts.length > 0 && (
-              <div className="mb-8 border-b border-border pb-8 not-prose">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 flex flex-col sm:flex-row gap-2">
+              <div className="mb-10 bg-muted/60 rounded-lg p-5 not-prose">
+                <SectionLabel className="mb-4 flex flex-col sm:flex-row gap-2">
                   In this series:{' '}
                   {seriesSlug ? (
                     <Link
@@ -283,7 +287,7 @@ export default async function Page({
                   ) : (
                     seriesName
                   )}
-                </h2>
+                </SectionLabel>
                 <nav>
                   <ol className="space-y-3">
                     {seriesPosts.map((post, index) => (
@@ -296,7 +300,7 @@ export default async function Page({
                         </span>
                         {post.current ? (
                           <span className="font-medium text-primary">
-                            {post.title} (current)
+                            {post.title}
                           </span>
                         ) : (
                           <Link
@@ -317,9 +321,7 @@ export default async function Page({
 
             {nextPost && (
               <div className="mt-12 pl-6 border-l-2 border-primary not-prose">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
-                  Next in series
-                </h3>
+                <SectionLabel as="h3" className="mb-2">Next in series</SectionLabel>
                 <Link
                   href={`/journal/${nextPost.slug}`}
                   className="group flex items-center justify-between gap-4"
@@ -344,55 +346,43 @@ export default async function Page({
               </div>
             )}
 
-            {/* Tags — mobile/tablet only */}
-            {frontmatter?.tags && frontmatter.tags.length > 0 && (
-              <div className="mt-16 not-prose border-t border-border pt-16">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4">
-                  Explore more on these topics
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {frontmatter.tags.map((tag: string) => (
-                    <TagPill key={tag} tag={tag} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Author bio */}
-            <div className="mt-16 pt-8 border-t border-border not-prose">
-              <AuthorBio lastWatched={frontmatter?.lastWatched} />
-            </div>
-
-            {/* Related articles — mobile/tablet only, below author bio */}
-            <div className="mt-12 not-prose lg:hidden">
-              <RelatedArticles
-                currentSlug={slug}
-                currentTags={frontmatter.tags || []}
-              />
-            </div>
           </article>
 
           {/* ── Sidebar (1/3) — desktop only ── */}
           <aside
-            className="hidden lg:flex lg:flex-col w-full"
+            className="hidden lg:block"
             aria-label="Sidebar"
           >
-            {/* TOC — sticky at top */}
             <div className="sticky top-8">
               <TableOfContents headings={headings} />
             </div>
-
-            <div className="flex-grow" />
-
-            {/* Related articles — bottom */}
-            <div className="mt-auto flex flex-col gap-8 pt-8">
-              <RelatedArticles
-                currentSlug={slug}
-                currentTags={frontmatter.tags || []}
-              />
-            </div>
           </aside>
         </div>
+
+        <div className="mt-16 lg:grid lg:grid-cols-3 lg:gap-12">
+          <div className="lg:col-span-2">
+            <AuthorBio lastWatched={frontmatter?.lastWatched} />
+          </div>
+          {frontmatter?.tags && frontmatter.tags.length > 0 && (
+            <aside className="mt-8 lg:mt-0">
+              <SectionLabel className="mb-4">Explore more on these topics</SectionLabel>
+              <div className="flex flex-wrap gap-2">
+                {frontmatter.tags.map((tag: string) => (
+                  <TagPill key={tag} tag={tag} />
+                ))}
+              </div>
+            </aside>
+          )}
+        </div>
+
+        {frontmatter?.tags && frontmatter.tags.length > 0 && (
+          <div className="mt-16">
+            <RelatedArticles
+              currentSlug={slug}
+              currentTags={frontmatter.tags || []}
+            />
+          </div>
+        )}
       </div>
     </>
   );
