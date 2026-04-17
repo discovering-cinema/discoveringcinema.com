@@ -60,7 +60,7 @@ export default function AuthorBio({ lastWatched }: AuthorBioProps) {
         </p>
 
         {lastWatched && (
-          <div className="inline-block text-xs border-l border-primary px-3">
+          <div className="inline-block text-xs border-l-2 border-primary px-3">
             <span className="font-medium">Last Watched:</span>{' '}
             <em className="italic">{lastWatched}</em>
           </div>

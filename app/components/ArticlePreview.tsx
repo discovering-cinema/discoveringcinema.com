@@ -15,6 +15,7 @@ interface ArticlePreviewProps {
   seriesSlug?: string;
   order?: number;
   priority?: boolean;
+  featured?: boolean;
 }
 
 export default function ArticlePreview({
@@ -28,6 +29,7 @@ export default function ArticlePreview({
   seriesSlug,
   order,
   priority = false,
+  featured = false,
 }: ArticlePreviewProps) {
   const displayTitle = subtitle ? `${title}: ${subtitle}` : title;
 
@@ -52,19 +54,19 @@ export default function ArticlePreview({
       )}
 
       {order && (
-        <small className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-3 inline-block">
+        <small className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-3 inline-block">
           Part {order}
         </small>
       )}
 
-      <h2 className="font-serif font-normal tracking-tight text-foreground text-2xl">
+      <h2 className={`font-serif font-normal tracking-tight text-foreground ${featured ? 'text-3xl sm:text-4xl' : 'text-2xl'}`}>
         <Link href={`/journal/${slug}`}>
           <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
           <span className="relative z-10">{displayTitle}</span>
         </Link>
       </h2>
 
-      {description && <ArticleSummary description={description} />}
+      {description && <ArticleSummary description={description} className={featured ? 'text-base' : undefined} />}
 
       {date && <ArticleDate date={date} />}
     </article>

@@ -94,7 +94,7 @@ export default async function SeriesPage({
         </TitleLockup>
       </header>
 
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-12">
         {posts.map((post, index) => (
           <ArticlePreview
             key={post.slug}

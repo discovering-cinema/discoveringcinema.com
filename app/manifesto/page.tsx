@@ -103,7 +103,7 @@ export default function ManifestoPage() {
                   key={item}
                   className="flex items-center gap-4 text-muted-foreground"
                 >
-                  <span className="text-xl font-bold text-muted-foreground/40">
+                  <span className="text-xl font-bold text-muted-foreground/70">
                     ×
                   </span>
                   {item}

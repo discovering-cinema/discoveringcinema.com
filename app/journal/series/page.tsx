@@ -82,7 +82,7 @@ export default function SeriesIndex() {
                   </div>
                 )}
               </div>
-              <small className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-3 inline-block">
+              <small className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-3 inline-block">
                 {s.posts.length} {s.posts.length === 1 ? 'article' : 'articles'}
               </small>
               <h2 className="font-serif text-2xl font-normal tracking-tight text-foreground">

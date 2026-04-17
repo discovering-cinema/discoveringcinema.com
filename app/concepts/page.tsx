@@ -47,12 +47,12 @@ export default function ConceptsIndex() {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <header className="mb-16">
+      <header className="mb-16 text-center">
         <TitleLockup>
           <Title>Concepts</Title>
           <Subtitle>Key ideas in film theory, made accessible.</Subtitle>
         </TitleLockup>
-        <p className="mt-8 max-w-2xl mx-auto">
+        <p className="mt-8 max-w-2xl mx-auto text-center text-muted-foreground leading-relaxed">
           Film criticism has a vocabulary that rarely gets explained. Terms like
           the punctum, embodied spectatorship, and the indexical image circulate
           in academic writing and serious criticism without much effort to make

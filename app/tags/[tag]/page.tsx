@@ -86,7 +86,7 @@ export default async function TagPage({
       <JsonLd data={jsonLd} />
       <header className="mb-16">
         <TitleLockup>
-          <Title className="mb-16">{displayName}</Title>
+          <Title>{displayName}</Title>
           {summary && <Subtitle>{summary}</Subtitle>}
         </TitleLockup>
       </header>

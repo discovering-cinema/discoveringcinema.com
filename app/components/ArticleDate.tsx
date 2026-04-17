@@ -27,7 +27,7 @@ export default function ArticleDate({
 
   return (
     <time
-      className="relative z-10 flex items-center text-sm text-muted-foreground pl-3 mt-8"
+      className="relative z-10 flex items-center text-sm text-muted-foreground pl-3 mt-3"
       dateTime={d.toISOString()}
     >
       <span

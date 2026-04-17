@@ -150,7 +150,7 @@ export default async function Page({
         {/* ── Full-width title and hero ── */}
         {frontmatter?.title && (
           <TitleLockup>
-            <Title className="mb-16">{frontmatter.title}</Title>
+            <Title>{frontmatter.title}</Title>
           </TitleLockup>
         )}
         {frontmatter?.image && (

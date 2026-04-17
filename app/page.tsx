@@ -47,6 +47,7 @@ export default function Home() {
             series={featuredPost.series}
             seriesSlug={featuredPost.seriesSlug}
             priority
+            featured
           />
         </div>
       )}
