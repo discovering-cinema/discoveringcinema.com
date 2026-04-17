@@ -40,6 +40,15 @@ export async function generateMetadata({
         description: frontmatter?.description,
         type: 'article',
         url: `https://discoveringcinema.com/concepts/${slug}`,
+        ...(frontmatter?.image && {
+          images: [{ url: frontmatter.image, alt: frontmatter.imageDescription || frontmatter.title }],
+        }),
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: frontmatter?.title,
+        description: frontmatter?.description,
+        ...(frontmatter?.image && { images: [frontmatter.image] }),
       },
       alternates: {
         canonical: `/concepts/${slug}`,

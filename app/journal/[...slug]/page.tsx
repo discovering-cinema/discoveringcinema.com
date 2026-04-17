@@ -51,6 +51,15 @@ export async function generateMetadata({
           ? new Date(frontmatter.date).toISOString()
           : undefined,
         url: `https://discoveringcinema.com/journal/${slug}`,
+        ...(frontmatter?.image && {
+          images: [{ url: frontmatter.image, alt: frontmatter.imageDescription || fullTitle }],
+        }),
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: fullTitle,
+        description: frontmatter?.description,
+        ...(frontmatter?.image && { images: [frontmatter.image] }),
       },
       alternates: {
         canonical: `/journal/${slug}`,

@@ -64,6 +64,9 @@ export const metadata: Metadata = {
     url: 'https://discoveringcinema.com',
     siteName: 'Discovering Cinema',
   },
+  twitter: {
+    card: 'summary_large_image',
+  },
   alternates: {
     canonical: '/',
     types: {
