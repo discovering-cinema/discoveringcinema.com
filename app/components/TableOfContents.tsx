@@ -45,7 +45,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
             <a
               href={`#${id}`}
               className={[
-                'text-sm block pl-3 leading-snug transition-colors duration-200 border-l',
+                'text-sm block pl-3 leading-snug transition-colors duration-200 border-l text-balance',
                 activeId === id
                   ? 'text-primary font-medium border-primary/100'
                   : 'text-muted-foreground hover:text-foreground border-primary/0',

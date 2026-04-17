@@ -13,8 +13,7 @@ import ArticleSummary from '@/app/components/ArticleSummary';
 import TagPill from '@/app/components/TagPill';
 import QAndA from '@/app/components/QAndA';
 import TableOfContents from '@/app/components/TableOfContents';
-import { TitleLockup } from '@/app/components/TitleLockup';
-import { Title } from '@/app/components/Title';
+import ArticleHeader from '@/app/components/ArticleHeader';
 import ConceptCard from '@/app/components/ConceptCard';
 import { SectionLabel } from '@/app/components/SectionLabel';
 
@@ -158,12 +157,14 @@ export default async function Page({
       <div className="py-8">
         <JsonLd data={jsonLd} />
 
-        {/* ── Full-width title and hero ── */}
-        {frontmatter?.title && (
-          <TitleLockup>
-            <Title>{frontmatter.title}</Title>
-          </TitleLockup>
-        )}
+        <div className="mb-24">
+          <ArticleHeader
+              title={frontmatter.title}
+              subtitle={frontmatter.subtitle}
+              author="Christopher Bray"
+          />
+        </div>
+
         {frontmatter?.image && (
           <div className="relative mb-12">
             <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">

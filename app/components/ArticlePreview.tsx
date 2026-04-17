@@ -59,7 +59,7 @@ export default function ArticlePreview({
         </small>
       )}
 
-      <h2 className={`font-serif font-normal tracking-tight text-foreground ${featured ? 'text-3xl sm:text-4xl' : 'text-2xl'}`}>
+      <h2 className={`font-serif font-normal tracking-tight text-balance text-foreground ${featured ? 'text-3xl sm:text-4xl' : 'text-2xl'}`}>
         <Link href={`/journal/${slug}`}>
           <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
           <span className="relative z-10">{displayTitle}</span>
