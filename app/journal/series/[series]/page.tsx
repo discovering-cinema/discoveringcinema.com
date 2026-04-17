@@ -18,12 +18,15 @@ export async function generateMetadata({
   const s = all.find((x) => x.slug === seriesSlug);
   if (!s) return { title: 'Series | Discovering Cinema' };
 
+  const fullTitle = s.subtitle ? `${s.title}: ${s.subtitle}` : s.title;
+  const ogTitle = s.opengraph?.title ?? fullTitle;
+  const ogDescription = s.opengraph?.description ?? s.description;
   return {
-    title: `${s.name} | Discovering Cinema`,
-    description: s.description || `All articles in the "${s.name}" series.`,
+    title: `${fullTitle} | Discovering Cinema`,
+    description: s.description,
     openGraph: {
-      title: `${s.name} | Discovering Cinema`,
-      description: s.description || `All articles in the "${s.name}" series.`,
+      title: ogTitle,
+      description: ogDescription,
       type: 'website',
       url: `https://discoveringcinema.com/journal/series/${seriesSlug}`,
     },
@@ -49,8 +52,8 @@ export default async function SeriesPage({
   const jsonLd: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${s.name} | Discovering Cinema`,
-    description: s.description || `All articles in the "${s.name}" series.`,
+    name: `${s.title} | Discovering Cinema`,
+    description: s.description,
     url: `https://discoveringcinema.com/journal/series/${seriesSlug}`,
     mainEntity: {
       '@type': 'ItemList',
@@ -89,8 +92,8 @@ export default async function SeriesPage({
           </Link>
         </div>
         <TitleLockup>
-          <Title className="mb-4">{s.name}</Title>
-          {s.description && <Subtitle>{s.description}</Subtitle>}
+          <Title className="mb-4">{s.title}</Title>
+          {s.subtitle && <Subtitle>{s.subtitle}</Subtitle>}
         </TitleLockup>
       </header>
 

@@ -8,13 +8,13 @@ import { Metadata } from 'next';
 import { getAllPosts } from '@/app/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Journal | Discovering Cinema',
+  title: 'Film Journal: Articles on Cinema, Craft, and Preservation',
   description:
-    'A collection of articles about cinema, craft, and preservation.',
+    'Articles on film history, theory, preservation, and the business of cinema. Deep dives that go beyond the review.',
   openGraph: {
-    title: 'Journal | Discovering Cinema',
+    title: 'Film Journal: Articles on Cinema, Craft, and Preservation',
     description:
-      'A collection of articles about cinema, craft, and preservation.',
+      'Articles on film history, theory, preservation, and the business of cinema. Deep dives that go beyond the review.',
     type: 'website',
     url: 'https://discoveringcinema.com/journal',
   },

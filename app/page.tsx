@@ -7,6 +7,8 @@ import { Metadata } from 'next';
 import { getAllPosts, getAllEducationalContent } from '@/app/lib/posts';
 
 export const metadata: Metadata = {
+  description:
+    'Discovering Cinema is a research lab dedicated to film history, theory, and criticism — making complex ideas about cinema accessible to everyone.',
   alternates: {
     canonical: '/',
     types: {

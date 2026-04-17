@@ -32,12 +32,14 @@ export async function generateMetadata({
     );
     const { data: frontmatter } = matter(fs.readFileSync(filePath, 'utf8'));
 
+    const ogTitle = frontmatter?.opengraph?.title ?? frontmatter?.title;
+    const ogDescription = frontmatter?.opengraph?.description ?? frontmatter?.description;
     return {
       title: frontmatter?.title,
       description: frontmatter?.description,
       openGraph: {
-        title: frontmatter?.title,
-        description: frontmatter?.description,
+        title: ogTitle,
+        description: ogDescription,
         type: 'article',
         url: `https://discoveringcinema.com/concepts/${slug}`,
         ...(frontmatter?.image && {
@@ -46,8 +48,8 @@ export async function generateMetadata({
       },
       twitter: {
         card: 'summary_large_image',
-        title: frontmatter?.title,
-        description: frontmatter?.description,
+        title: ogTitle,
+        description: ogDescription,
         ...(frontmatter?.image && { images: [frontmatter.image] }),
       },
       alternates: {

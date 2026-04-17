@@ -1,5 +1,9 @@
-name: The Open Cinema Project
+title: The Open Cinema Project
+subtitle: Rethinking Film Discovery
 description: >
   An investigation into the infrastructure of film discovery. How do films
   find audiences, how do audiences find films, and what would a more open
   discovery system look like?
+opengraph:
+  title: "The Open Cinema Project: Rethinking Film Discovery"
+  description: An investigation into the infrastructure of film discovery. How do films find audiences, and what would a more open discovery system look like?

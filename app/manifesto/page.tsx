@@ -6,9 +6,9 @@ import { Subtitle } from '@/app/components/Subtitle';
 import { WebPage, WithContext } from 'schema-dts';
 
 export const metadata: Metadata = {
-  title: 'The Manifesto | Discovering Cinema',
+  title: 'The Manifesto: How and Why We Build Discovering Cinema',
   description:
-    'The guiding principles that shape our code, our design, and our data.',
+    'The principles that shape how we code, design, and curate data. What we believe about cinema and how those beliefs inform every decision we make.',
   alternates: {
     canonical: '/manifesto',
   },

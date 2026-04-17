@@ -13,6 +13,10 @@ export interface Post {
   series?: string;
   seriesSlug?: string;
   order?: number;
+  opengraph?: {
+    title?: string;
+    description?: string;
+  };
   faq?: { question: string; answer: string }[];
   dataset?: {
     name: string;
@@ -34,17 +38,22 @@ export interface Post {
   };
 }
 
-function readSeriesYml(
-  dir: string,
-): { name: string; description: string } | null {
+function readSeriesYml(dir: string): {
+  title: string;
+  subtitle?: string;
+  description: string;
+  opengraph?: { title?: string; description?: string };
+} | null {
   const filePath = path.join(dir, 'series.yml');
   if (!fs.existsSync(filePath)) return null;
   const raw = fs.readFileSync(filePath, 'utf8');
   const { data } = matter(`---\n${raw}\n---`);
-  if (!data.name) return null;
+  if (!data.title) return null;
   return {
-    name: data.name as string,
+    title: data.title as string,
+    subtitle: data.subtitle as string | undefined,
     description: (data.description as string | undefined)?.trim() ?? '',
+    opengraph: data.opengraph as { title?: string; description?: string } | undefined,
   };
 }
 
@@ -74,9 +83,10 @@ export function getAllPosts(): Post[] {
         description: frontmatter.description || '',
         tags: frontmatter.tags || [],
         image: frontmatter.image || '',
-        series: seriesData?.name ?? frontmatter.series,
+        series: seriesData?.title ?? frontmatter.series,
         seriesSlug,
         order: frontmatter.order,
+        opengraph: frontmatter.opengraph,
         faq: frontmatter.faq,
         dataset: frontmatter.dataset,
         softwareApplication: frontmatter.softwareApplication,
@@ -89,8 +99,10 @@ export function getAllPosts(): Post[] {
 }
 
 export function getAllSeries(): {
-  name: string;
+  title: string;
+  subtitle?: string;
   description: string;
+  opengraph?: { title?: string; description?: string };
   slug: string;
   posts: Post[];
 }[] {
@@ -113,8 +125,10 @@ export function getAllSeries(): {
       (
         s,
       ): s is {
-        name: string;
+        title: string;
+        subtitle?: string;
         description: string;
+        opengraph?: { title?: string; description?: string };
         slug: string;
         posts: Post[];
       } => s !== null,
@@ -129,6 +143,10 @@ export interface EducationalContent {
   tags: string[];
   urlPath: string;
   contentType: string;
+  opengraph?: {
+    title?: string;
+    description?: string;
+  };
 }
 
 export interface Concept extends EducationalContent {
@@ -152,6 +170,7 @@ export function getAllConcepts(): Concept[] {
         tags: data.tags || [],
         urlPath: `/concepts/${slug}`,
         contentType: 'concept',
+        opengraph: data.opengraph,
         faq: data.faq,
         relatedArticles: data.relatedArticles || [],
       };

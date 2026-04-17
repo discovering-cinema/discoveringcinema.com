@@ -40,7 +40,7 @@ export default function SeriesIndex() {
         '@type': 'ListItem',
         position: index + 1,
         url: `https://discoveringcinema.com/journal/series/${s.slug}`,
-        name: s.name,
+        name: s.title,
       })),
     },
   };
@@ -69,7 +69,7 @@ export default function SeriesIndex() {
                 {coverImage ? (
                   <Image
                     src={coverImage}
-                    alt={s.name}
+                    alt={s.title}
                     fill
                     sizes="(max-width: 640px) calc(100vw - 48px), (max-width: 672px) calc(50vw - 36px), 312px"
                     className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
@@ -88,7 +88,7 @@ export default function SeriesIndex() {
               <h2 className="font-serif text-2xl font-normal tracking-tight text-foreground">
                 <Link href={`/journal/series/${s.slug}`}>
                   <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
-                  <span className="relative z-10">{s.name}</span>
+                  <span className="relative z-10">{s.title}</span>
                 </Link>
               </h2>
               {s.description && (

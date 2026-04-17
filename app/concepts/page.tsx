@@ -8,13 +8,13 @@ import { Metadata } from 'next';
 import { getAllConcepts } from '@/app/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Concepts | Discovering Cinema',
+  title: 'Film Concepts: Key Ideas in Film History and Theory',
   description:
-    'Educational explainers on key ideas in film history, theory, and criticism.',
+    'Clear explainers on the ideas that film critics, historians, and theorists use to understand cinema — and what they reveal when applied.',
   openGraph: {
-    title: 'Concepts | Discovering Cinema',
+    title: 'Film Concepts: Key Ideas in Film History and Theory',
     description:
-      'Educational explainers on key ideas in film history, theory, and criticism.',
+      'Clear explainers on the ideas that film critics, historians, and theorists use to understand cinema — and what they reveal when applied.',
     type: 'website',
     url: 'https://discoveringcinema.com/concepts',
   },

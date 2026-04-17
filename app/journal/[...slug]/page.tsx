@@ -40,25 +40,27 @@ export async function generateMetadata({
     const fullTitle = frontmatter?.subtitle
       ? `${frontmatter.title}: ${frontmatter.subtitle}`
       : frontmatter?.title;
+    const ogTitle = frontmatter?.opengraph?.title ?? fullTitle;
+    const ogDescription = frontmatter?.opengraph?.description ?? frontmatter?.description;
     return {
       title: fullTitle,
       description: frontmatter?.description,
       openGraph: {
-        title: fullTitle,
-        description: frontmatter?.description,
+        title: ogTitle,
+        description: ogDescription,
         type: 'article',
         publishedTime: frontmatter?.date
           ? new Date(frontmatter.date).toISOString()
           : undefined,
         url: `https://discoveringcinema.com/journal/${slug}`,
         ...(frontmatter?.image && {
-          images: [{ url: frontmatter.image, alt: frontmatter.imageDescription || fullTitle }],
+          images: [{ url: frontmatter.image, alt: frontmatter.imageDescription || ogTitle }],
         }),
       },
       twitter: {
         card: 'summary_large_image',
-        title: fullTitle,
-        description: frontmatter?.description,
+        title: ogTitle,
+        description: ogDescription,
         ...(frontmatter?.image && { images: [frontmatter.image] }),
       },
       alternates: {

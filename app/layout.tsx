@@ -56,10 +56,10 @@ const merriweather = Merriweather({
 export const metadata: Metadata = {
   metadataBase: new URL('https://discoveringcinema.com'),
   title: 'Discovering Cinema',
-  description: 'Mapping the invisible creative families of cinema.',
+  description: 'Mapping the invisible creative families of cinema. Film history, theory, and criticism that goes beyond the review and the director.',
   openGraph: {
     title: 'Discovering Cinema',
-    description: 'Mapping the invisible creative families of cinema.',
+    description: 'Mapping the invisible creative families of cinema. Film history, theory, and criticism that goes beyond the review and the director.',
     type: 'website',
     url: 'https://discoveringcinema.com',
     siteName: 'Discovering Cinema',
