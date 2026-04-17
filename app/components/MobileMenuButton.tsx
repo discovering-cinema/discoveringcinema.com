@@ -63,13 +63,6 @@ export default function MobileMenuButton() {
           >
             Concepts
           </Link>
-          <Link
-            href="/timeline"
-            onClick={() => setOpen(false)}
-            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Timeline
-          </Link>
         </div>
       )}
     </div>

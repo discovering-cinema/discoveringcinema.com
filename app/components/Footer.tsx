@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer className="mt-24 border-t border-border">
       <div className="mx-auto max-w-5xl px-6 py-12">
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        <div className="grid grid-col gap-8 md:grid-cols-3">
           <div>
             <SectionLabel as="h3" accent="primary" className="mb-3">Journal</SectionLabel>
             <ul className="space-y-2">
