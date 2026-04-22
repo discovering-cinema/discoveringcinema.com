@@ -1,9 +1,6 @@
-import fs from 'fs';
-import path from 'path';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { DefinedTerm, FAQPage, BreadcrumbList, WithContext } from 'schema-dts';
-import matter from 'gray-matter';
 import Image from 'next/image';
 import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
@@ -16,6 +13,8 @@ import TableOfContents from '@/app/components/TableOfContents';
 import ArticleHeader from '@/app/components/ArticleHeader';
 import ConceptCard from '@/app/components/ConceptCard';
 import { SectionLabel } from '@/app/components/SectionLabel';
+import { allConcepts } from 'content-collections';
+import Mdx from '@/app/components/Mdx';
 
 export async function generateMetadata({
   params,
@@ -23,41 +22,44 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  try {
-    const filePath = path.join(
-      process.cwd(),
-      'content/concepts',
-      `${slug}.mdx`,
-    );
-    const { data: frontmatter } = matter(fs.readFileSync(filePath, 'utf8'));
+  const concept = allConcepts.find((c) => c.slug === slug);
 
-    const ogTitle = frontmatter?.opengraph?.title ?? frontmatter?.title;
-    const ogDescription = frontmatter?.opengraph?.description ?? frontmatter?.description;
-    return {
-      title: frontmatter?.title,
-      description: frontmatter?.description,
-      openGraph: {
-        title: ogTitle,
-        description: ogDescription,
-        type: 'article',
-        url: `https://discoveringcinema.com/concepts/${slug}`,
-        ...(frontmatter?.image && {
-          images: [{ url: frontmatter.image, alt: frontmatter.imageDescription || frontmatter.title }],
-        }),
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: ogTitle,
-        description: ogDescription,
-        ...(frontmatter?.image && { images: [frontmatter.image] }),
-      },
-      alternates: {
-        canonical: `/concepts/${slug}`,
-      },
-    };
-  } catch {
-    return { title: 'Concept' };
+  if (!concept) {
+    return { title: 'Concept Not Found' };
   }
+
+  const fullTitle = concept.subtitle
+    ? `${concept.title}: ${concept.subtitle}`
+    : concept.title;
+  const ogTitle = concept.opengraph?.title ?? fullTitle;
+  const ogDescription = concept.opengraph?.description ?? concept.description;
+
+  return {
+    title: fullTitle,
+    description: ogDescription || concept.description,
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+      type: 'article',
+      url: `https://discoveringcinema.com/concepts/${slug}`,
+      images: [
+        {
+          url: `/api/og?type=concept&slug=${encodeURIComponent(slug)}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: ogTitle,
+      description: ogDescription,
+      images: [`/api/og?type=concept&slug=${encodeURIComponent(slug)}`],
+    },
+    alternates: {
+      canonical: `/concepts/${slug}`,
+    },
+  };
 }
 
 export default async function Page({
@@ -66,47 +68,42 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const concept = allConcepts.find((c) => c.slug === slug);
 
-  const filePath = path.join(process.cwd(), 'content/concepts', `${slug}.mdx`);
-  if (!fs.existsSync(filePath)) {
+  if (!concept) {
     notFound();
   }
 
-  const fileContent = fs.readFileSync(filePath, 'utf8');
-  const { data: frontmatter } = matter(fileContent);
-
   const slugger = new GithubSlugger();
-  const headings = [...fileContent.matchAll(/^## (.+)$/gm)].map((m) => ({
+  // Using concept.body.raw to find headings
+  const headings = [...concept.body.raw.matchAll(/^## (.+)$/gm)].map((m) => ({
     text: m[1].trim(),
     id: slugger.slug(m[1].trim()),
   }));
 
-  const { default: Concept } = await import(`@/content/concepts/${slug}.mdx`);
-
   // Resolve related articles
-  const relatedArticleSlugs: string[] = frontmatter.relatedArticles || [];
+  const relatedArticleSlugs: string[] = concept.relatedArticles || [];
   const relatedPosts =
     relatedArticleSlugs.length > 0
       ? getAllPosts().filter((post) => relatedArticleSlugs.includes(post.slug))
       : [];
 
-  type Resource = { title: string; url: string; type?: string };
-  const resources: Resource[] = frontmatter.resources || [];
-  const otherConcepts = getAllConcepts().filter((c) => c.slug !== slug).slice(0, 3);
+  const resources = concept.resources || [];
+  const otherConcepts = getAllConcepts()
+    .filter((c) => c.slug !== slug)
+    .slice(0, 3);
 
-  const faq: FAQPage | null = frontmatter.faq
+  const faq: FAQPage | null = concept.faq
     ? {
         '@type': 'FAQPage',
-        mainEntity: frontmatter.faq.map(
-          (item: { question: string; answer: string }) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer,
-            },
-          }),
-        ),
+        mainEntity: concept.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
       }
     : null;
 
@@ -128,7 +125,7 @@ export default async function Page({
       {
         '@type': 'ListItem',
         position: 3,
-        name: frontmatter.title,
+        name: concept.title,
         item: `https://discoveringcinema.com/concepts/${slug}`,
       },
     ],
@@ -137,8 +134,8 @@ export default async function Page({
   const jsonLd: WithContext<DefinedTerm> = {
     '@context': 'https://schema.org',
     '@type': 'DefinedTerm',
-    name: frontmatter.title,
-    description: frontmatter.description,
+    name: concept.title,
+    description: concept.description,
     inDefinedTermSet: {
       '@type': 'DefinedTermSet',
       name: 'Discovering Cinema Concepts',
@@ -159,27 +156,27 @@ export default async function Page({
 
         <div className="mb-24">
           <ArticleHeader
-              title={frontmatter.title}
-              subtitle={frontmatter.subtitle}
-              author="Christopher Bray"
+            title={concept.title}
+            subtitle={concept.subtitle}
+            author="Christopher Bray"
           />
         </div>
 
-        {frontmatter?.image && (
+        {concept?.image && (
           <div className="relative mb-12">
             <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
               <Image
-                src={frontmatter.image}
-                alt={frontmatter.imageDescription || frontmatter.title || ''}
+                src={concept.image}
+                alt={(concept as any).imageDescription || concept.title || ''}
                 fill
                 sizes="(max-width: 1023px) calc(100vw - 48px), calc(min(100vw, 1024px) - 48px)"
                 className="object-cover"
                 priority
               />
             </div>
-            {frontmatter.imageDescription && (
+            { (concept as any).imageDescription && (
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed italic">
-                {frontmatter.imageDescription}
+                {(concept as any).imageDescription}
               </p>
             )}
           </div>
@@ -189,7 +186,7 @@ export default async function Page({
         <div className="lg:grid lg:grid-cols-3 lg:gap-12 lg:items-stretch">
           {/* Main column (2/3) */}
           <article className="prose max-w-none lg:col-span-2">
-            <Concept />
+            <Mdx code={concept.body.code} />
 
             {relatedPosts.length > 0 && (
               <div className="mt-16 not-prose">
@@ -215,48 +212,49 @@ export default async function Page({
           </article>
 
           {/* Sidebar (1/3) — desktop only */}
-          <aside
-            className="hidden lg:block"
-            aria-label="Sidebar"
-          >
+          <aside className="hidden lg:block" aria-label="Sidebar">
             <div className="sticky top-8 space-y-12">
               <TableOfContents headings={headings} />
             </div>
           </aside>
         </div>
 
-        {(frontmatter?.faq?.length > 0 || frontmatter?.tags?.length > 0) && (
+        {((concept?.faq?.length ?? 0) > 0 || (concept?.tags?.length ?? 0) > 0) && (
           <div className="mt-16 lg:grid lg:grid-cols-3 lg:gap-12 space-y-12 lg:space-y-0">
             <div className="space-y-12 lg:col-span-2">
-              {frontmatter?.faq && frontmatter.faq.length > 0 && (
+              {concept?.faq && concept.faq.length > 0 && (
                 <div>
-                  <SectionLabel className="mb-6">Frequently Asked Questions</SectionLabel>
-                  <QAndA items={frontmatter.faq} />
+                  <SectionLabel className="mb-6">
+                    Frequently Asked Questions
+                  </SectionLabel>
+                  <QAndA items={concept.faq} />
                 </div>
               )}
             </div>
 
-            {frontmatter?.tags && frontmatter.tags.length > 0 && (
+            {concept?.tags && concept.tags.length > 0 && (
               <aside className="flex flex-col gap-8">
                 {resources.length > 0 && (
                   <div>
-                    <SectionLabel className="mb-4">External resources</SectionLabel>
+                    <SectionLabel className="mb-4">
+                      External resources
+                    </SectionLabel>
                     <ul className="space-y-3">
                       {resources.map((resource) => (
                         <li key={resource.url}>
                           <a
-                              href={resource.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="group flex items-start gap-2 justify-between leading-snug"
+                            href={resource.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-start gap-2 justify-between leading-snug"
                           >
                             <span className="text-sm text-foreground group-hover:text-primary transition-colors leading-snug">
                               {resource.title}
                             </span>
                             {resource.type && (
-                                <span className="shrink-0 text-[10px] font-medium uppercase tracking-wide text-muted-foreground bg-muted rounded px-1 py-0.5">
-                                  {resource.type}
-                                </span>
+                              <span className="shrink-0 text-[10px] font-medium uppercase tracking-wide text-muted-foreground bg-muted rounded px-1 py-0.5">
+                                {resource.type}
+                              </span>
                             )}
                           </a>
                         </li>
@@ -265,9 +263,11 @@ export default async function Page({
                   </div>
                 )}
                 <div>
-                  <SectionLabel className="mb-4">Explore more on these topics</SectionLabel>
+                  <SectionLabel className="mb-4">
+                    Explore more on these topics
+                  </SectionLabel>
                   <div className="flex flex-wrap gap-2">
-                    {frontmatter.tags.map((tag: string) => (
+                    {concept.tags.map((tag: string) => (
                       <TagPill key={tag} tag={tag} />
                     ))}
                   </div>

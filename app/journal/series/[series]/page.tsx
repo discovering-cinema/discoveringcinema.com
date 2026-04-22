@@ -16,19 +16,33 @@ export async function generateMetadata({
   const { series: seriesSlug } = await params;
   const all = getAllSeries();
   const s = all.find((x) => x.slug === seriesSlug);
-  if (!s) return { title: 'Series | Discovering Cinema' };
+  if (!s) return { title: 'Series' };
 
   const fullTitle = s.subtitle ? `${s.title}: ${s.subtitle}` : s.title;
-  const ogTitle = s.opengraph?.title ?? fullTitle;
+  const ogTitle = s.opengraph?.title ?? `${fullTitle} | Discovering Cinema`;
   const ogDescription = s.opengraph?.description ?? s.description;
+
   return {
-    title: `${fullTitle} | Discovering Cinema`,
-    description: s.description,
+    title: fullTitle,
+    description: ogDescription || s.description,
     openGraph: {
       title: ogTitle,
       description: ogDescription,
       type: 'website',
       url: `https://discoveringcinema.com/journal/series/${seriesSlug}`,
+      images: [
+        {
+          url: `/api/og?type=series&slug=${encodeURIComponent(seriesSlug)}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: ogTitle,
+      description: ogDescription,
+      images: [`/api/og?type=series&slug=${encodeURIComponent(seriesSlug)}`],
     },
     alternates: {
       canonical: `/journal/series/${seriesSlug}`,

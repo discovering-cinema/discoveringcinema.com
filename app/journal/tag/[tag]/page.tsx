@@ -6,7 +6,12 @@ import { Title } from '@/app/components/Title';
 import { Subtitle } from '@/app/components/Subtitle';
 import { CollectionPage, WithContext } from 'schema-dts';
 import { Metadata } from 'next';
-import { getAllPosts, getAllTags, getTagDisplayName, tagToSlug } from '@/app/lib/posts';
+import {
+  getAllPosts,
+  getAllTags,
+  getTagDisplayName,
+  tagToSlug,
+} from '@/app/lib/posts';
 
 export function generateStaticParams() {
   return getAllTags().map((tag) => ({ tag }));
@@ -19,10 +24,31 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { tag } = await params;
   const displayName = getTagDisplayName(tag);
+  const title = `Articles tagged with "${displayName}"`;
+  const description = `Explore a curated collection of articles, research, and deep dives focused on ${displayName} in cinema history and theory.`;
 
   return {
-    title: `Articles tagged with "${displayName}" | Discovering Cinema`,
-    description: `A collection of articles about ${displayName} in cinema.`,
+    title,
+    description,
+    openGraph: {
+      title: `${title} | Discovering Cinema`,
+      description,
+      type: 'website',
+      url: `https://discoveringcinema.com/journal/tag/${tag}`,
+      images: [
+        {
+          url: `/api/og?type=journal-tag&tag=${encodeURIComponent(tag)}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | Discovering Cinema`,
+      description,
+      images: [`/api/og?type=journal-tag&tag=${encodeURIComponent(tag)}`],
+    },
     alternates: {
       canonical: `/journal/tag/${tag}`,
     },

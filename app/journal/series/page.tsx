@@ -9,15 +9,26 @@ import { Metadata } from 'next';
 import { getAllSeries } from '@/app/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Series | Discovering Cinema',
+  title: 'Series',
   description:
-    'Multi-part investigations into cinema, policy, and the moving image.',
+    'Explore multi-part investigations and deep dives into cinema history, film policy, and the evolving nature of the moving image.',
   openGraph: {
     title: 'Series | Discovering Cinema',
     description:
-      'Multi-part investigations into cinema, policy, and the moving image.',
+      'Explore multi-part investigations and deep dives into cinema history, film policy, and the evolving nature of the moving image.',
     type: 'website',
     url: 'https://discoveringcinema.com/journal/series',
+    images: [
+      {
+        url: '/api/og?title=Series&subtitle=Multi-part investigations into cinema and the moving image.&label=Journal',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/api/og?title=Series&subtitle=Multi-part investigations into cinema and the moving image.&label=Journal'],
   },
   alternates: {
     canonical: '/journal/series',

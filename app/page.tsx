@@ -9,6 +9,19 @@ import { getAllPosts, getAllEducationalContent } from '@/app/lib/posts';
 export const metadata: Metadata = {
   description:
     'Discovering Cinema is a research lab dedicated to film history, theory, and criticism — making complex ideas about cinema accessible to everyone.',
+  openGraph: {
+    images: [
+      {
+        url: '/api/og',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/api/og'],
+  },
   alternates: {
     canonical: '/',
     types: {

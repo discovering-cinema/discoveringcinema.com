@@ -9,6 +9,24 @@ export const metadata: Metadata = {
   title: 'The Manifesto: How and Why We Build Discovering Cinema',
   description:
     'The principles that shape how we code, design, and curate data. What we believe about cinema and how those beliefs inform every decision we make.',
+  openGraph: {
+    title: 'The Manifesto: How and Why We Build Discovering Cinema',
+    description:
+      'The principles that shape how we code, design, and curate data. What we believe about cinema and how those beliefs inform every decision we make.',
+    type: 'website',
+    url: 'https://discoveringcinema.com/manifesto',
+    images: [
+      {
+        url: '/api/og?title=The Manifesto&subtitle=What we believe about film literacy and the moving image.&label=About',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/api/og?title=The Manifesto&subtitle=What we believe about film literacy and the moving image.&label=About'],
+  },
   alternates: {
     canonical: '/manifesto',
   },

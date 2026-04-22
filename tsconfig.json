@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "content-collections": ["./.content-collections/generated"]
     }
   },
   "include": [
@@ -30,7 +31,8 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "docs/types/**/*.ts",
-    "docs/dev/types/**/*.ts"
+    "docs/dev/types/**/*.ts",
+    ".content-collections/generated"
   ],
   "exclude": ["node_modules"]
 }

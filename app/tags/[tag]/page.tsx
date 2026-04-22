@@ -25,12 +25,33 @@ export async function generateMetadata({
   const { tag } = await params;
   const displayName = getTagDisplayName(tag);
   const summary = getTagSummary(tag);
+  const description =
+    summary ??
+    `Explore everything tagged with "${displayName}" on Discovering Cinema, from foundational film theory to in-depth industrial analysis.`;
+  const title = `"${displayName}"`;
 
   return {
-    title: `"${displayName}" | Discovering Cinema`,
-    description:
-      summary ??
-      `Everything tagged with "${displayName}" on Discovering Cinema.`,
+    title,
+    description,
+    openGraph: {
+      title: `${title} | Discovering Cinema`,
+      description,
+      type: 'website',
+      url: `https://discoveringcinema.com/tags/${tag}`,
+      images: [
+        {
+          url: `/api/og?type=tag&tag=${encodeURIComponent(tag)}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | Discovering Cinema`,
+      description,
+      images: [`/api/og?type=tag&tag=${encodeURIComponent(tag)}`],
+    },
     alternates: {
       canonical: `/tags/${tag}`,
     },

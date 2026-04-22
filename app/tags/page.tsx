@@ -12,8 +12,27 @@ import { Title } from '@/app/components/Title';
 import { Subtitle } from '@/app/components/Subtitle';
 
 export const metadata: Metadata = {
-  title: 'Tags | Discovering Cinema',
-  description: 'Browse all topics and themes across Discovering Cinema.',
+  title: 'Tags',
+  description:
+    'Browse all topics and themes across Discovering Cinema. From film theory to preservation, explore our curated creative families.',
+  openGraph: {
+    title: 'Tags | Discovering Cinema',
+    description:
+      'Browse all topics and themes across Discovering Cinema. From film theory to preservation, explore our curated creative families.',
+    type: 'website',
+    url: 'https://discoveringcinema.com/tags',
+    images: [
+      {
+        url: '/api/og?title=Tags&subtitle=Browse all topics and themes across Discovering Cinema.&label=Discovery',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/api/og?title=Tags&subtitle=Browse all topics and themes across Discovering Cinema.&label=Discovery'],
+  },
   alternates: {
     canonical: '/tags',
   },

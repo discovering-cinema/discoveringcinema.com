@@ -10,13 +10,24 @@ import { getAllPosts } from '@/app/lib/posts';
 export const metadata: Metadata = {
   title: 'Film Journal: Articles on Cinema, Craft, and Preservation',
   description:
-    'Articles on film history, theory, preservation, and the business of cinema. Deep dives that go beyond the review.',
+    'Explore articles on film history, theory, and the business of cinema. Deep dives that go beyond the review to uncover the craft of the moving image.',
   openGraph: {
     title: 'Film Journal: Articles on Cinema, Craft, and Preservation',
     description:
-      'Articles on film history, theory, preservation, and the business of cinema. Deep dives that go beyond the review.',
+      'Explore articles on film history, theory, and the business of cinema. Deep dives that go beyond the review to uncover the craft of the moving image.',
     type: 'website',
     url: 'https://discoveringcinema.com/journal',
+    images: [
+      {
+        url: '/api/og?title=Film Journal&subtitle=Articles on Cinema, Craft, and Preservation.&label=Journal',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/api/og?title=Film Journal&subtitle=Articles on Cinema, Craft, and Preservation.&label=Journal'],
   },
   alternates: {
     canonical: '/journal',

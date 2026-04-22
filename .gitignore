@@ -44,3 +44,6 @@ next-env.d.ts
 # vale
 /bin/vale
 /styles/
+
+# content
+.content-collections

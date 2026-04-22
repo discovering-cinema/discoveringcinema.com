@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import {
@@ -7,10 +5,8 @@ import {
   BreadcrumbList,
   Dataset,
   FAQPage,
-  SoftwareApplication,
   WithContext,
 } from 'schema-dts';
-import matter from 'gray-matter';
 import GithubSlugger from 'github-slugger';
 import AuthorBio from '@/app/components/AuthorBio';
 import TableOfContents from '@/app/components/TableOfContents';
@@ -19,10 +15,11 @@ import JsonLd from '@/app/components/JsonLd';
 import Link from 'next/link';
 import TagPill from '@/app/components/TagPill';
 import ArticleHeader from '@/app/components/ArticleHeader';
-import { getAllPosts } from '@/app/lib/posts';
 import { readingTime } from '@/app/lib/utils';
 import RelatedArticles from '@/app/components/RelatedArticles';
 import { SectionLabel } from '@/app/components/SectionLabel';
+import { allPosts, allSeries } from 'content-collections';
+import Mdx from '@/app/components/Mdx';
 
 export async function generateMetadata({
   params,
@@ -31,47 +28,45 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug: slugArray } = await params;
   const slug = slugArray.join('/');
-  try {
-    const contentDir = path.join(process.cwd(), 'content/articles');
-    const filePath = path.join(contentDir, `${slug}.mdx`);
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    const { data: frontmatter } = matter(fileContent);
+  const post = allPosts.find((p) => p.slug === slug);
 
-    const fullTitle = frontmatter?.subtitle
-      ? `${frontmatter.title}: ${frontmatter.subtitle}`
-      : frontmatter?.title;
-    const ogTitle = frontmatter?.opengraph?.title ?? fullTitle;
-    const ogDescription = frontmatter?.opengraph?.description ?? frontmatter?.description;
-    return {
-      title: fullTitle,
-      description: frontmatter?.description,
-      openGraph: {
-        title: ogTitle,
-        description: ogDescription,
-        type: 'article',
-        publishedTime: frontmatter?.date
-          ? new Date(frontmatter.date).toISOString()
-          : undefined,
-        url: `https://discoveringcinema.com/journal/${slug}`,
-        ...(frontmatter?.image && {
-          images: [{ url: frontmatter.image, alt: frontmatter.imageDescription || ogTitle }],
-        }),
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: ogTitle,
-        description: ogDescription,
-        ...(frontmatter?.image && { images: [frontmatter.image] }),
-      },
-      alternates: {
-        canonical: `/journal/${slug}`,
-      },
-    };
-  } catch {
-    return {
-      title: 'Journal Entry',
-    };
+  if (!post) {
+    return { title: 'Journal Entry' };
   }
+
+  const fullTitle = post.subtitle
+    ? `${post.title}: ${post.subtitle}`
+    : post.title;
+  const ogTitle = post.opengraph?.title ?? fullTitle;
+  const ogDescription = post.opengraph?.description ?? post.description;
+
+  return {
+    title: fullTitle,
+    description: ogDescription || post.description,
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+      type: 'article',
+      publishedTime: post.date ? new Date(post.date).toISOString() : undefined,
+      url: `https://discoveringcinema.com/journal/${slug}`,
+      images: [
+        {
+          url: `/api/og?type=post&slug=${encodeURIComponent(slug)}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: ogTitle,
+      description: ogDescription,
+      images: [`/api/og?type=post&slug=${encodeURIComponent(slug)}`],
+    },
+    alternates: {
+      canonical: `/journal/${slug}`,
+    },
+  };
 }
 
 export default async function Page({
@@ -81,105 +76,77 @@ export default async function Page({
 }) {
   const { slug: slugArray } = await params;
   const slug = slugArray.join('/');
+  const post = allPosts.find((p) => p.slug === slug);
 
-  const contentDir = path.join(process.cwd(), 'content/articles');
-  const filePath = path.join(contentDir, `${slug}.mdx`);
-
-  if (!fs.existsSync(filePath)) {
+  if (!post) {
     notFound();
   }
 
-  const fileContent = fs.readFileSync(filePath, 'utf8');
-  const { data: frontmatter } = matter(fileContent);
-
   const slugger = new GithubSlugger();
-  const headings = [...fileContent.matchAll(/^## (.+)$/gm)].map((m) => ({
+  const headings = [...post.body.raw.matchAll(/^## (.+)$/gm)].map((m) => ({
     text: m[1].trim(),
     id: slugger.slug(m[1].trim()),
   }));
 
-  const { default: Post } = await import(`@/content/articles/${slug}.mdx`);
+  // Series logic
+  const seriesSlug = post.seriesSlug;
+  const series = allSeries.find((s) => s.slug === seriesSlug);
+  const seriesName = series?.title || post.series;
 
-  // Series logic — derive from posts.ts (series detected via series.yml in directory)
-  const currentPost = getAllPosts().find((p) => p.slug === slug);
   let seriesPosts: { title: string; slug: string; current: boolean }[] = [];
   let nextPost: { title: string; slug: string } | null = null;
-  const seriesName = currentPost?.series;
-  const seriesSlug = currentPost?.seriesSlug;
+
   if (seriesName && seriesSlug) {
-    const allPosts = getAllPosts();
     seriesPosts = allPosts
-      .filter((post) => post.seriesSlug === seriesSlug)
+      .filter((p) => p.seriesSlug === seriesSlug)
       .sort((a, b) => (a.order || 0) - (b.order || 0))
-      .map((post) => ({
-        title: post.subtitle ? `${post.title}: ${post.subtitle}` : post.title,
-        slug: post.slug,
-        current: post.slug === slug,
+      .map((p) => ({
+        title: p.subtitle ? `${p.title}: ${p.subtitle}` : p.title,
+        slug: p.slug,
+        current: p.slug === slug,
       }));
 
-    const currentIndex = seriesPosts.findIndex((post) => post.current);
+    const currentIndex = seriesPosts.findIndex((p) => p.current);
     if (currentIndex !== -1 && currentIndex < seriesPosts.length - 1) {
       nextPost = seriesPosts[currentIndex + 1];
     }
   }
 
-  const faq: FAQPage | null = frontmatter.faq
+  const faq: FAQPage | null = post.faq
     ? {
         '@type': 'FAQPage',
-        mainEntity: frontmatter.faq.map(
-          (item: { question: string; answer: string }) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer,
-            },
-          }),
-        ),
+        mainEntity: post.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
       }
     : null;
-  const dataset: Dataset | null = frontmatter.dataset
+
+  const dataset: Dataset | null = post.dataset
     ? {
         '@type': 'Dataset',
-        name: frontmatter.dataset.name,
-        description: frontmatter.dataset.description,
+        name: post.dataset.name,
+        description: post.dataset.description,
         creator: {
           '@type': 'Organization',
-          name: frontmatter.dataset.creator,
+          name: post.dataset.creator,
         },
-        variableMeasured: frontmatter.dataset.variableMeasured.map(
-          (v: { name: string; value: string }) => ({
-            '@type': 'PropertyValue',
-            name: v.name,
-            value: v.value,
-          }),
-        ),
-        distribution: frontmatter.dataset.distribution.map(
-          (d: { encodingFormat: string; contentUrl: string }) => ({
-            '@type': 'DataDownload',
-            encodingFormat: d.encodingFormat,
-            contentUrl: d.contentUrl,
-          }),
-        ),
+        variableMeasured: post.dataset.variableMeasured?.map((v) => ({
+          '@type': 'PropertyValue',
+          name: v.name,
+          value: v.value,
+        })) || [],
+        distribution: post.dataset.distribution?.map((d) => ({
+          '@type': 'DataDownload',
+          encodingFormat: d.encodingFormat,
+          contentUrl: d.contentUrl,
+        })) || [],
       }
     : null;
-  const softwareApplication: SoftwareApplication | null =
-    frontmatter.softwareApplication
-      ? {
-          '@type': 'SoftwareApplication',
-          name: frontmatter.softwareApplication.name,
-          operatingSystem: frontmatter.softwareApplication.operatingSystem,
-          applicationCategory:
-            frontmatter.softwareApplication.applicationCategory,
-          description: frontmatter.softwareApplication.description,
-          offers: {
-            '@type': 'Offer',
-            price: frontmatter.softwareApplication.offers.price,
-            priceCurrency: frontmatter.softwareApplication.offers.priceCurrency,
-          },
-          featureList: frontmatter.softwareApplication.featureList,
-        }
-      : null;
 
   const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
@@ -208,7 +175,7 @@ export default async function Page({
       {
         '@type': 'ListItem',
         position: 3 + (slugArray.length - 1),
-        name: frontmatter.title,
+        name: post.title,
         item: `https://discoveringcinema.com/journal/${slug}`,
       },
     ],
@@ -217,14 +184,12 @@ export default async function Page({
   const jsonLd: WithContext<BlogPosting> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: frontmatter.subtitle
-      ? `${frontmatter.title}: ${frontmatter.subtitle}`
-      : frontmatter.title,
-    description: frontmatter.description,
-    image: frontmatter.image,
-    datePublished: frontmatter.date
-      ? new Date(frontmatter.date).toISOString()
+    headline: post.subtitle ? `${post.title}: ${post.subtitle}` : post.title,
+    description: post.description,
+    image: post.image
+      ? `https://discoveringcinema.com${post.image}`
       : undefined,
+    datePublished: post.date ? new Date(post.date).toISOString() : undefined,
     author: {
       '@type': 'Person',
       name: 'Christopher Bray',
@@ -238,11 +203,7 @@ export default async function Page({
       '@type': 'WebPage',
       '@id': `https://discoveringcinema.com/journal/${slug}`,
       breadcrumb: breadcrumbList,
-      hasPart: [
-        ...(faq ? [faq] : []),
-        ...(dataset ? [dataset] : []),
-        ...(softwareApplication ? [softwareApplication] : []),
-      ],
+      hasPart: [...(faq ? [faq] : []), ...(dataset ? [dataset] : [])],
     },
   };
 
@@ -252,30 +213,30 @@ export default async function Page({
         <JsonLd data={jsonLd} />
 
         {/* ── Full-width title and hero ── */}
-        {frontmatter?.title && (
+        {post.title && (
           <ArticleHeader
-            title={frontmatter.title}
-            subtitle={frontmatter.subtitle}
+            title={post.title}
+            subtitle={post.subtitle}
             author="Christopher Bray"
-            date={frontmatter.date}
-            readingTime={readingTime(fileContent)}
+            date={post.date}
+            readingTime={readingTime(post.body.raw)}
           />
         )}
-        {frontmatter?.image && (
+        {post.image && (
           <div className="relative mb-12">
             <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
               <Image
-                src={frontmatter.image}
-                alt={frontmatter.imageDescription || frontmatter.title || ''}
+                src={post.image}
+                alt={post.imageDescription || post.title || ''}
                 fill
                 sizes="(max-width: 1023px) calc(100vw - 48px), calc(min(100vw, 1024px) - 48px)"
                 className="object-cover"
                 priority
               />
             </div>
-            {frontmatter.imageDescription && (
+            {post.imageDescription && (
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed italic">
-                {frontmatter.imageDescription}
+                {post.imageDescription}
               </p>
             )}
           </div>
@@ -301,24 +262,24 @@ export default async function Page({
                 </SectionLabel>
                 <nav>
                   <ol className="space-y-3">
-                    {seriesPosts.map((post, index) => (
+                    {seriesPosts.map((p, index) => (
                       <li
-                        key={post.slug}
+                        key={p.slug}
                         className="flex items-start gap-3 text-sm"
                       >
                         <span className="text-muted-foreground font-mono mt-0.5">
                           {String(index + 1).padStart(2, '0')}
                         </span>
-                        {post.current ? (
+                        {p.current ? (
                           <span className="font-medium text-primary">
-                            {post.title}
+                            {p.title}
                           </span>
                         ) : (
                           <Link
-                            href={`/journal/${post.slug}`}
+                            href={`/journal/${p.slug}`}
                             className="text-muted-foreground hover:text-primary transition-colors"
                           >
-                            {post.title}
+                            {p.title}
                           </Link>
                         )}
                       </li>
@@ -328,11 +289,13 @@ export default async function Page({
               </div>
             )}
 
-            <Post />
+            <Mdx code={post.body.code} />
 
             {nextPost && (
               <div className="mt-12 pl-6 border-l-2 border-primary not-prose">
-                <SectionLabel as="h3" className="mb-2">Next in series</SectionLabel>
+                <SectionLabel as="h3" className="mb-2">
+                  Next in series
+                </SectionLabel>
                 <Link
                   href={`/journal/${nextPost.slug}`}
                   className="group flex items-center justify-between gap-4"
@@ -356,14 +319,10 @@ export default async function Page({
                 </Link>
               </div>
             )}
-
           </article>
 
           {/* ── Sidebar (1/3) — desktop only ── */}
-          <aside
-            className="hidden lg:block"
-            aria-label="Sidebar"
-          >
+          <aside className="hidden lg:block" aria-label="Sidebar">
             <div className="sticky top-8">
               <TableOfContents headings={headings} />
             </div>
@@ -372,13 +331,15 @@ export default async function Page({
 
         <div className="mt-16 lg:grid lg:grid-cols-3 lg:gap-12">
           <div className="lg:col-span-2">
-            <AuthorBio lastWatched={frontmatter?.lastWatched} />
+            <AuthorBio lastWatched={post.lastWatched} />
           </div>
-          {frontmatter?.tags && frontmatter.tags.length > 0 && (
+          {post.tags && post.tags.length > 0 && (
             <aside className="mt-8 lg:mt-0">
-              <SectionLabel className="mb-4">Explore more on these topics</SectionLabel>
+              <SectionLabel className="mb-4">
+                Explore more on these topics
+              </SectionLabel>
               <div className="flex flex-wrap gap-2">
-                {frontmatter.tags.map((tag: string) => (
+                {post.tags.map((tag: string) => (
                   <TagPill key={tag} tag={tag} />
                 ))}
               </div>
@@ -386,12 +347,9 @@ export default async function Page({
           )}
         </div>
 
-        {frontmatter?.tags && frontmatter.tags.length > 0 && (
+        {post.tags && post.tags.length > 0 && (
           <div className="mt-16">
-            <RelatedArticles
-              currentSlug={slug}
-              currentTags={frontmatter.tags || []}
-            />
+            <RelatedArticles currentSlug={slug} currentTags={post.tags || []} />
           </div>
         )}
       </div>
@@ -400,8 +358,7 @@ export default async function Page({
 }
 
 export function generateStaticParams() {
-  const posts = getAllPosts();
-  return posts.map((post) => ({
+  return allPosts.map((post) => ({
     slug: post.slug.split('/'),
   }));
 }

@@ -1,3 +1,4 @@
+import { allPosts, allConcepts, allSeries } from 'content-collections';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -22,76 +23,28 @@ export interface Post {
     name: string;
     description: string;
     creator: string;
-    variableMeasured: { name: string; value: string }[];
-    distribution: { encodingFormat: string; contentUrl: string }[];
-  };
-  softwareApplication?: {
-    name: string;
-    operatingSystem: string;
-    applicationCategory: string;
-    description: string;
-    offers: {
-      price: string;
-      priceCurrency: string;
-    };
-    featureList: string[];
-  };
-}
-
-function readSeriesYml(dir: string): {
-  title: string;
-  subtitle?: string;
-  description: string;
-  opengraph?: { title?: string; description?: string };
-} | null {
-  const filePath = path.join(dir, 'series.yml');
-  if (!fs.existsSync(filePath)) return null;
-  const raw = fs.readFileSync(filePath, 'utf8');
-  const { data } = matter(`---\n${raw}\n---`);
-  if (!data.title) return null;
-  return {
-    title: data.title as string,
-    subtitle: data.subtitle as string | undefined,
-    description: (data.description as string | undefined)?.trim() ?? '',
-    opengraph: data.opengraph as { title?: string; description?: string } | undefined,
+    variableMeasured?: { name: string; value: string }[];
+    distribution?: { encodingFormat: string; contentUrl: string }[];
   };
 }
 
 export function getAllPosts(): Post[] {
-  const contentDir = path.join(process.cwd(), 'content/articles');
-  if (!fs.existsSync(contentDir)) return [];
-  const files = getFilesRecursively(contentDir);
-
-  return files
-    .filter((file) => file.endsWith('.mdx'))
-    .map((file) => {
-      const relativePath = path.relative(contentDir, file);
-      const slug = relativePath.replace(/\\/g, '/').replace(/\.mdx$/, '');
-      const fileContent = fs.readFileSync(file, 'utf8');
-      const { data: frontmatter } = matter(fileContent);
-
-      const parentDir = path.dirname(file);
-      const seriesData =
-        parentDir !== contentDir ? readSeriesYml(parentDir) : null;
-      const seriesSlug = seriesData ? path.basename(parentDir) : undefined;
-
-      return {
-        slug,
-        title: frontmatter.title || slug.split('/').pop() || '',
-        subtitle: frontmatter.subtitle,
-        date: frontmatter.date ? new Date(frontmatter.date) : null,
-        description: frontmatter.description || '',
-        tags: frontmatter.tags || [],
-        image: frontmatter.image || '',
-        series: seriesData?.title ?? frontmatter.series,
-        seriesSlug,
-        order: frontmatter.order,
-        opengraph: frontmatter.opengraph,
-        faq: frontmatter.faq,
-        dataset: frontmatter.dataset,
-        softwareApplication: frontmatter.softwareApplication,
-      };
-    })
+  return allPosts
+    .map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      subtitle: post.subtitle,
+      date: post.date ? new Date(post.date) : null,
+      description: post.description,
+      tags: post.tags,
+      image: post.image || '',
+      series: allSeries.find((s) => s.slug === post.seriesSlug)?.title || post.series,
+      seriesSlug: post.seriesSlug,
+      order: post.order,
+      opengraph: post.opengraph,
+      faq: post.faq,
+      dataset: post.dataset,
+    }))
     .sort((a, b) => {
       if (!a.date || !b.date) return 0;
       return b.date.getTime() - a.date.getTime();
@@ -106,33 +59,17 @@ export function getAllSeries(): {
   slug: string;
   posts: Post[];
 }[] {
-  const articlesDir = path.join(process.cwd(), 'content/articles');
-  if (!fs.existsSync(articlesDir)) return [];
-  const dirs = fs
-    .readdirSync(articlesDir, { withFileTypes: true })
-    .filter((d) => d.isDirectory());
-  const allPosts = getAllPosts();
-  return dirs
-    .map((d) => {
-      const yml = readSeriesYml(path.join(articlesDir, d.name));
-      if (!yml) return null;
-      const posts = allPosts
-        .filter((p) => p.seriesSlug === d.name)
-        .sort((a, b) => (a.order || 0) - (b.order || 0));
-      return { ...yml, slug: d.name, posts };
-    })
-    .filter(
-      (
-        s,
-      ): s is {
-        title: string;
-        subtitle?: string;
-        description: string;
-        opengraph?: { title?: string; description?: string };
-        slug: string;
-        posts: Post[];
-      } => s !== null,
-    );
+  const posts = getAllPosts();
+  return allSeries.map((series) => ({
+    title: series.title,
+    subtitle: series.subtitle,
+    description: series.description,
+    opengraph: series.opengraph,
+    slug: series.slug,
+    posts: posts
+      .filter((p) => p.seriesSlug === series.slug)
+      .sort((a, b) => (a.order || 0) - (b.order || 0)),
+  }));
 }
 
 export interface EducationalContent {
@@ -155,30 +92,25 @@ export interface Concept extends EducationalContent {
 }
 
 export function getAllConcepts(): Concept[] {
-  const conceptsDir = path.join(process.cwd(), 'content/concepts');
-  if (!fs.existsSync(conceptsDir)) return [];
-  return getFilesRecursively(conceptsDir)
-    .filter((file) => file.endsWith('.mdx'))
-    .map((file) => {
-      const slug = path.basename(file, '.mdx');
-      const { data } = matter(fs.readFileSync(file, 'utf8'));
-      return {
-        slug,
-        title: data.title || slug,
-        description: data.description || '',
-        image: data.image,
-        tags: data.tags || [],
-        urlPath: `/concepts/${slug}`,
-        contentType: 'concept',
-        opengraph: data.opengraph,
-        faq: data.faq,
-        relatedArticles: data.relatedArticles || [],
-      };
-    });
+  return allConcepts.map((concept) => ({
+    slug: concept.slug,
+    title: concept.title,
+    description: concept.description,
+    image: concept.image,
+    tags: concept.tags,
+    urlPath: `/concepts/${concept.slug}`,
+    contentType: 'concept',
+    opengraph: concept.opengraph,
+    faq: concept.faq,
+    relatedArticles: concept.relatedArticles,
+  }));
 }
 
 export function tagToSlug(tag: string): string {
-  return tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  return tag
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
 }
 
 export function getTagDisplayName(slug: string): string {
@@ -215,17 +147,3 @@ export function getAllEducationalContent(): EducationalContent[] {
   ];
 }
 
-function getFilesRecursively(dir: string): string[] {
-  let results: string[] = [];
-  const list = fs.readdirSync(dir);
-  list.forEach((file) => {
-    file = path.join(dir, file);
-    const stat = fs.statSync(file);
-    if (stat && stat.isDirectory()) {
-      results = results.concat(getFilesRecursively(file));
-    } else {
-      results.push(file);
-    }
-  });
-  return results;
-}

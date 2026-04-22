@@ -17,6 +17,17 @@ export const metadata: Metadata = {
       'Clear explainers on the ideas that film critics, historians, and theorists use to understand cinema — and what they reveal when applied.',
     type: 'website',
     url: 'https://discoveringcinema.com/concepts',
+    images: [
+      {
+        url: '/api/og?title=Concepts&subtitle=Key ideas in film theory, made accessible.&label=Film Concepts',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/api/og?title=Concepts&subtitle=Key ideas in film theory, made accessible.&label=Film Concepts'],
   },
   alternates: {
     canonical: '/concepts',
