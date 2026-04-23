@@ -9,10 +9,10 @@ export default function SeriesLabel({ series, seriesSlug }: SeriesLabelProps) {
   return (
     <Link
       href={`/journal/series/${seriesSlug}`}
-      className="relative z-10 bg-accent text-accent-foreground py-1 px-2 rounded inline-block hover:bg-accent/30 transition-colors"
+      className="relative z-10 bg-background text-accent-foreground py-1 px-2 inline-block hover:bg-accent/30 transition-colors"
     >
       <small>
-        Series: <span className="font-medium">{series}</span>
+        <span className="font-bold">Series:</span> <span className="font-medium">{series}</span>
       </small>
     </Link>
   );

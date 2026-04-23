@@ -45,7 +45,7 @@ export default function ArticlePreview({
             className="object-cover transition-all duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0"
             priority={priority}
           />
-          <div className="absolute right-2 bottom-2">
+          <div className="absolute -left-1 bottom-0">
             {series && seriesSlug && (
               <SeriesLabel series={series} seriesSlug={seriesSlug} />
             )}
