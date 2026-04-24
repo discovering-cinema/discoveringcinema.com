@@ -61,13 +61,13 @@ export async function generateOGImage({
   // Try to load fonts from a reliable CDN
   const [playfairData, loraData, montserratData] = await Promise.all([
     fetch(
-      'https://fonts.gstatic.com/l/font?kit=nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiunDXbtc&skey=f3b68f0152604ed9&v=v40',
+      'https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiukDQ.ttf',
     ).then((res) => (res.ok ? res.arrayBuffer() : null)),
     fetch(
-      'https://fonts.gstatic.com/l/font?kit=0QI6MX1D_JOuGQbT0gvTJPa787weuxJBkqk&skey=1d294b6d956fb8e&v=v37',
+      'https://fonts.gstatic.com/s/lora/v37/0QI6MX1D_JOuGQbT0gvTJPa787weuyJG.ttf',
     ).then((res) => (res.ok ? res.arrayBuffer() : null)),
     fetch(
-      'https://fonts.gstatic.com/l/font?kit=JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Hw5aX4&skey=7bc19f711c0de8f&v=v31',
+      'https://fonts.gstatic.com/s/montserrat/v31/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Ew-.ttf',
     ).then((res) => (res.ok ? res.arrayBuffer() : null)),
   ]).catch((err) => {
     console.error('Error loading fonts for OG image:', err);
