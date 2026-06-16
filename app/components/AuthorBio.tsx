@@ -54,9 +54,7 @@ export default function AuthorBio({ lastWatched }: AuthorBioProps) {
 
       <div className="flex-1 flex flex-col gap-3">
         <p className="text-sm leading-relaxed text-muted-foreground @sm:max-w-xl">
-          Engineering open algorithms to map the invisible connections of
-          cinema. I build discovery tools that look beyond streaming catalogs to
-          ensure film history isn&apos;t lost to the algorithm.
+          I write and edit long-form essays on film history, theory, and the business of cinema — who makes films, who owns them, and what survives.
         </p>
 
         {lastWatched && (
