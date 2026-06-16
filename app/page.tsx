@@ -40,7 +40,7 @@ export default function Home() {
   const jsonLd: WithContext<WebSite> = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Discovering Cinema',
+    name: 'Discovering Cinema | Film History, Theory & Criticism',
     url: 'https://discoveringcinema.com',
     description: 'A research lab dedicated to the history of film.',
   };
